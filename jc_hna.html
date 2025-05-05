@@ -238,7 +238,7 @@
     map.on("load", () => {      
         map.addSource("tracts", {    
             type: "geojson",
-            data: "https://raw.githubusercontent.com/emtzot/mapSources/refs/heads/main/jc_hna.geojson",
+            data: "https://raw.githubusercontent.com/CommunityScale/JohnsonCounty/main/iowaTracts_hna.geojson",
             promoteId: "GEOID"
         })
    
@@ -502,7 +502,7 @@
         });
 
         if (selectedGeo) {
-            const pctOwned30 = selectedGeo.properties.pctOwned;
+            const pctOwned30 = selectedGeo.properties.pctOwned30;
             const roundedPctOwned30 = Math.round(pctOwned30 * 1000) / 10
             const displayPctOwned30 = pctOwned30 === null || pctOwned30 === undefined ? 'No available data' : `${roundedPctOwned30}% of homeowners in ${selectedGeo.properties.NAME} spend more than 30% of income on housing costs.`;
 
@@ -541,15 +541,23 @@
     }});
 
 
+    const dataLayers = [
+        'tracts-medIncome', 
+        'tracts-pctCostBurdenedRenters', 
+        'tracts-pctCostBurdenedOwners',
+        'tracts-pctHH',
+        'tracts-layer']
+
     const dropdown = document.getElementById('layer-dropdown');
 
     dropdown.addEventListener('change', function() {
         const selectedLayer = dropdown.value;
-        map.getStyle().layers.forEach(layer => {
-            if (layer.id !== selectedLayer) {
-            map.setLayoutProperty(layer.id, 'visibility', 'none');
-            }});
-
+        dataLayers.forEach(layerId => {
+            if (layerId !== selectedLayer && map.getLayer(layerId)) {
+            map.setLayoutProperty(layerId, 'visibility', 'none');
+        }
+    });
+        
         map.setLayoutProperty(selectedLayer, 'visibility', 'visible');
         map.setLayoutProperty("road-label", 'visibility', 'visible');
         map.setLayoutProperty("settlement-major-label", 'visibility', 'visible');
