@@ -135,7 +135,7 @@
             <option value="tracts-medIncome">Median Annual Household Income</option> 
             <option value="tracts-pctCostBurdenedRenters">Percent of Renters, Cost Burdened</option> 
             <option value="tracts-pctCostBurdenedOwners">Percent of Homeowners, Cost Burdened</option> 
-            <option value="tracts-pctHH">Percent Change in Households (2010-2023)</option>
+            <option value="tracts-pctHH">Percent Change in Households (2013-2023)</option>
             <option value="tracts-layer">Johnson County</option>
         </select>
         <div id="medIncomeLegend" class="legend" style="display: block;">
@@ -166,7 +166,7 @@
             <div><span style="background-color: #425A7030"></span>No data</div>
         </div>
         <div id="pctHHLegend" class="legend" style="display: none;">
-            <h4>Percent Change in Households (2010-2023)</h4>
+            <h4>Percent Change in Households (2013-2023)</h4>
             <div><span style="background-color: #1b7837"></span>50%+</div>
             <div><span style="background-color: #7fbf7b"></span></div>
             <div><span style="background-color: #d9f0d3"></span></div>
@@ -180,10 +180,18 @@
 </div>
 
 <script>
-    const INITIAL_LOC = [-91.58, 41.68] 
-    const INITIAL_ZOOM = 9.5 //set initial zoom (zoom levels 9-12 best for cities depending on size)
+    const INITIAL_LOC = [-91.58, 41.67] 
+    const INITIAL_ZOOM = 9.75 //set initial zoom (zoom levels 9-12 best for cities depending on size)
     const communityScaleGray = "#425A70" //could replace with different accent color, I personally like this branding 
     const placeOfInterest = "Johnson County"
+    const citiesOfInterest = [
+                "Hills",
+                "Lone Tree",
+                "Oxford",
+                "Shueyville",
+                "Solon",
+                "Swisher"
+            ]
     const medIncomePalette = [ //Sequential colorBrewer Purple/Red ramp
                 '#f1eef6',
                 '#d7b5d8',
@@ -242,7 +250,17 @@
             promoteId: "GEOID"
         })
    
+        map.addSource("cities", {    
+            type: "geojson",
+            data: "https://raw.githubusercontent.com/CommunityScale/JohnsonCounty/main/jc_politicalBoundaries.geojson",
+            promoteId: "OBJECTID"
+        })
 
+        map.addSource("counties", {    
+            type: "geojson",
+            data: "https://raw.githubusercontent.com/CommunityScale/JohnsonCounty/main/iaCounties.geojson",
+            promoteId: "GEOID"
+        })
 
 
         map.addLayer({
@@ -430,6 +448,42 @@
         "settlement-minor-label"
     )
 
+    map.addLayer({
+            id: "smallCities-layer",
+            type: "line",
+            source: "cities",
+            paint: {
+                "line-color": "#ffce0a",
+                "line-opacity": 0.8,
+                "line-width": 3
+                },
+            layout: {
+                visibility: "visible"
+                },
+            filter: ["in", "NAME", ...citiesOfInterest]},
+            "settlement-major-label", 
+             "settlement-subdivision-label", 
+            "settlement-minor-label"
+        )
+    
+        map.addLayer({
+            id: "county-layer",
+            type: "line",
+            source: "counties",
+            paint: {
+                "line-color": communityScaleGray,
+                "line-opacity": 0.8,
+                "line-width": 3
+                },
+            layout: {
+                visibility: "visible"
+                },
+            filter: ["==", "NAME", placeOfInterest]},
+            "settlement-major-label", 
+             "settlement-subdivision-label", 
+            "settlement-minor-label"
+        );
+
 
     //defaultView
     adjustMapSize();
@@ -526,7 +580,7 @@
         if (selectedGeo) {
             const pctChangeHH = selectedGeo.properties.pctChangeHH;
             const roundedPctChangeHH = Math.round(pctChangeHH * 1000) / 10
-            const displayPctChangeHH = pctChangeHH === null || pctChangeHH === undefined ? 'No available data' : `${selectedGeo.properties.NAME} saw a ${roundedPctChangeHH}% change in the number of households (2010-2023).`;
+            const displayPctChangeHH = pctChangeHH === null || pctChangeHH === undefined ? 'No available data' : `${selectedGeo.properties.NAME} saw a ${roundedPctChangeHH}% change in the number of households (2013-2023).`;
 
             new mapboxgl.Popup({ closeButton: true }, { clickToClose: true })
             .setLngLat(selectedGeo.geometry.coordinates[0][0])
@@ -546,7 +600,7 @@
         'tracts-pctCostBurdenedRenters', 
         'tracts-pctCostBurdenedOwners',
         'tracts-pctHH',
-        'tracts-layer']
+        'tracts-layer'];
 
     const dropdown = document.getElementById('layer-dropdown');
 
@@ -559,6 +613,8 @@
     });
         
         map.setLayoutProperty(selectedLayer, 'visibility', 'visible');
+        map.setLayoutProperty("smallCities-layer", 'visibility', 'visible');
+        map.setLayoutProperty("county-layer", 'visibility', 'visible');
         map.setLayoutProperty("road-label", 'visibility', 'visible');
         map.setLayoutProperty("settlement-major-label", 'visibility', 'visible');
         map.setLayoutProperty("settlement-subdivision-label", 'visibility', 'visible');
