@@ -1,0 +1,26 @@
+{
+"type": "FeatureCollection",
+"name": "mobileHomes_jcia",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "NAME": "Iowa City Regency Mobile Home Community", "ADDRESS1": "4455 Oak Crest Hill Rd SE", "CITY": "Iowa City", "ZIPCODE": "52240", "LABEL": "Regency Iowa City" }, "geometry": { "type": "Point", "coordinates": [ -91.543740630624569, 41.60785266049426 ] } },
+{ "type": "Feature", "properties": { "NAME": "Lake Ridge", "ADDRESS1": "893 Spring Ridge Ave", "CITY": "Iowa City", "ZIPCODE": "52246", "LABEL": "Lake Ridge" }, "geometry": { "type": "Point", "coordinates": [ -91.55237841666974, 41.628664139775509 ] } },
+{ "type": "Feature", "properties": { "NAME": "Parkview Mobile Home Court", "ADDRESS1": "1813 Lower Old Highway 6 Rd NW", "CITY": "Oxford", "ZIPCODE": "52322", "LABEL": "Parkview" }, "geometry": { "type": "Point", "coordinates": [ -91.752663073269929, 41.723486850423882 ] } },
+{ "type": "Feature", "properties": { "NAME": "Clear Creek Mobile Home Park", "ADDRESS1": "East St Lot 36", "CITY": "Tiffin", "ZIPCODE": "52340", "LABEL": "Clear Creek" }, "geometry": { "type": "Point", "coordinates": [ -91.663700912156727, 41.702680337481922 ] } },
+{ "type": "Feature", "properties": { "NAME": "Western Hills Estates", "ADDRESS1": "3701 2nd St", "CITY": "Coralville", "ZIPCODE": "52241", "LABEL": "Western Hills" }, "geometry": { "type": "Point", "coordinates": [ -91.63084779933925, 41.705227145442414 ] } },
+{ "type": "Feature", "properties": { "NAME": "Cole's Mobile Home Court", "ADDRESS1": "2128 S Riverside Dr", "CITY": "Iowa City", "ZIPCODE": "52246", "LABEL": "Cole's" }, "geometry": { "type": "Point", "coordinates": [ -91.536159126477855, 41.632170323854012 ] } },
+{ "type": "Feature", "properties": { "NAME": "Cole's Community", "ADDRESS1": "2254 S Riverside Dr", "CITY": "Iowa City", "ZIPCODE": "52246", "LABEL": "Cole's Community" }, "geometry": { "type": "Point", "coordinates": [ -91.535890428934763, 41.630359305751696 ] } },
+{ "type": "Feature", "properties": { "NAME": "Hilltop Mobile Home Park", "ADDRESS1": "2018 Waterfront Dr", "CITY": "Iowa City", "ZIPCODE": "52240", "LABEL": "Hilltop" }, "geometry": { "type": "Point", "coordinates": [ -91.528782079356787, 41.6393835828326 ] } },
+{ "type": "Feature", "properties": { "NAME": "Bon-Aire Mobile Home Lodge", "ADDRESS1": "2801 Highway 6 E", "CITY": "Iowa City", "ZIPCODE": "52240", "LABEL": "Bon-Airea" }, "geometry": { "type": "Point", "coordinates": [ -91.494776132430815, 41.630033164011358 ] } },
+{ "type": "Feature", "properties": { "NAME": "Saddlebrook", "ADDRESS1": "2871 Heinz Rd", "CITY": "Iowa City", "ZIPCODE": "52240", "LABEL": "Saddlebrook" }, "geometry": { "type": "Point", "coordinates": [ -91.494574232576355, 41.626539479612823 ] } },
+{ "type": "Feature", "properties": { "NAME": "Sunrise Village", "ADDRESS1": "2100 S Scott Blvd", "CITY": "Iowa City", "ZIPCODE": "52240", "LABEL": "Sunrise Village" }, "geometry": { "type": "Point", "coordinates": [ -91.48118840536128, 41.638524020029863 ] } },
+{ "type": "Feature", "properties": { "NAME": "Modern Manor", "ADDRESS1": "2 Apollo Dr", "CITY": "Iowa City", "ZIPCODE": "52240", "LABEL": "Modern Manor" }, "geometry": { "type": "Point", "coordinates": [ -91.481035805369359, 41.642839195062464 ] } },
+{ "type": "Feature", "properties": { "NAME": "Breckenridge Estates", "ADDRESS1": "4494 Taft Ave SE", "CITY": "Iowa City", "ZIPCODE": "52240", "LABEL": "Breckenridge Estates" }, "geometry": { "type": "Point", "coordinates": [ -91.4613037734714, 41.606240544543034 ] } },
+{ "type": "Feature", "properties": { "NAME": "Michael F Camp Properties", "ADDRESS1": "1515 Prairie Du Chien Rd", "CITY": "Iowa City", "ZIPCODE": "52245", "LABEL": "Michael F Camp Properties" }, "geometry": { "type": "Point", "coordinates": [ -91.521912397060134, 41.682434032850928 ] } },
+{ "type": "Feature", "properties": { "NAME": "Golfview Mobile Home Court", "ADDRESS1": "1 Golfview Ct", "CITY": "North Liberty", "ZIPCODE": "52317", "LABEL": "Golfview" }, "geometry": { "type": "Point", "coordinates": [ -91.604798800376585, 41.734770878445943 ] } },
+{ "type": "Feature", "properties": { "NAME": "Holiday Mobile Home Court", "ADDRESS1": "1 Holiday Lodge Rd", "CITY": "North Liberty", "ZIPCODE": "52317", "LABEL": "Holiday Lodge" }, "geometry": { "type": "Point", "coordinates": [ -91.605247685118954, 41.739024281419148 ] } },
+{ "type": "Feature", "properties": { "NAME": "Beyonder Getaway at Sleepy Hollow", "ADDRESS1": "3340 Black Hawk Ave NW", "CITY": "Oxford", "ZIPCODE": "52322", "LABEL": "Beyonder Getaway" }, "geometry": { "type": "Point", "coordinates": [ -91.801962069978146, 41.690622465823523 ] } },
+{ "type": "Feature", "properties": { "NAME": "Knollwood Mobile Home Park", "ADDRESS1": "3036 Highway 1 NE", "CITY": "Iowa City", "ZIPCODE": "52240", "LABEL": "Knollwood" }, "geometry": { "type": "Point", "coordinates": [ -91.480392011279292, 41.711660275675804 ] } },
+{ "type": "Feature", "properties": { "NAME": "Louis and Evelyn Kral", "ADDRESS1": "101 E North St", "CITY": "Solon", "ZIPCODE": "52333", "LABEL": "Kral Mobile Home Court" }, "geometry": { "type": "Point", "coordinates": [ -91.494999772507001, 41.80782083276862 ] } }
+]
+}
