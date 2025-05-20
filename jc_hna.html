@@ -90,7 +90,7 @@
             font-size: 14px;
             display: flex;
             flex-shrink: 1;
-            border-radius: 2;
+            border-radius: 4px;
             opacity: 0.95;
             border: #80808090;
         }
@@ -146,7 +146,7 @@
         <select id="layer-dropdown">
             <option value="tracts-medIncome">Median Annual Household Income</option> 
             <option value="tracts-pctCostBurdenedRenters">Percent of Renters, Cost Burdened</option> 
-            <option value="tracts-pctCostBurdenedOwners">Percent of Homeowners, Cost Burdened</option>
+            <option value="tracts-pctCostBurdenedOwners">Percent of Homeowners, Cost Burdened</option> 
             <option value="parcels-landuse">Property Class</option> 
             <option value="parcels-ownership">Property Tax Credits</option>
             <option value="parcels-pctLV">Land Value as Percent of Assessed Value</option>
@@ -248,7 +248,7 @@
             <div><span style="background-color: #e4ac28"></span>HMST, MIL</div>
             <div><span style="background-color: #a7d96d"></span>HMST, AG</div>
             <div><span style="background-color: #8b63ba"></span>HMST, MIL, AG</div>
-            <div><span style="background-color: #425A7030"></span>None</div>
+            <div><span style="background-color: #bdc9e1"></span>None</div>
         </div>
 
     <div id="map"></div>
@@ -328,7 +328,7 @@
                 '#e4ac28',
                 '#a7d96d',
                 '#8b63ba',
-                '#425A70'
+                '#bdc9e1'
             ]
     const landUsePalette = [
                 "#24910a", //Agriculture
@@ -542,7 +542,7 @@
     )
 
     map.addLayer({
-                id: "parcels-landuse",
+                id: "parcels-landuse", //update with parcel types!!
                 type: "fill",
                 source: "parcels",
                 //"source-layer": "parcels_jcia-7q1vz4", 
@@ -622,6 +622,7 @@
                 type: 'circle',
                 source: 'mobileHomeParks',
                 paint: {
+                    // Make circles larger as the user zooms from z12 to z22.
                     'circle-radius': {
                         'base': 2,
                         'stops': [
@@ -650,7 +651,7 @@
                         "HMST,MIL", ownershipPalette[4],
                         "HMST,AG,MI", ownershipPalette[6],
                         "NONE", ownershipPalette[7],
-                        communityScaleGray
+                        ownershipPalette[7]
                         ],
                 "fill-outline-color": "#545453",
                 "fill-opacity": [
@@ -903,6 +904,30 @@
 
     map.on('click', (e) => {
         const [selectedGeo] = map.queryRenderedFeatures(e.point, {               
+            layers: ["parcels-pctLV"]
+        });
+
+        if (selectedGeo) {
+            const name = selectedGeo.properties.SiteAddress;
+            const displayName = name == null || name == undefined ? `Address unavailable` : `${name}`;
+            const pctLandValue = selectedGeo.properties.pctLandVal;
+            const roundedPctLV = Math.round(pctLandValue * 1000) / 10
+            const displayPctLV = pctLandValue === null || pctLandValue === undefined ? 'No available data.' : ` Land value accounts for ${roundedPctLV}% of Parcel #${selectedGeo.properties.PARCEL_C}'s total assessed value.`;
+
+            new mapboxgl.Popup({ closeButton: true }, { clickToClose: true })
+            .setLngLat(selectedGeo.geometry.coordinates[0][0])
+            .setHTML(`
+                <div class="mapboxgl-popup">
+                <div class="mapboxgl-popup-close-button">x</div>
+                <div class="mapboxgl-popup-header">${displayName}</div>
+                <div class="mapboxgl-popup-content">${displayPctLV}
+                </div>
+            </div>`)
+            .addTo(map);
+    }});
+
+    map.on('click', (e) => {
+        const [selectedGeo] = map.queryRenderedFeatures(e.point, {               
             layers: ["tracts-pctHH"]
         });
 
@@ -918,6 +943,30 @@
                 <div class="mapboxgl-popup-close-button">x</div>
                 <div class="mapboxgl-popup-header">${selectedGeo.properties.NAME}</div>
                 <div class="mapboxgl-popup-content">${displayPctChangeHH}
+                </div>
+            </div>`)
+            .addTo(map);
+    }});
+
+    map.on('click', (e) => {
+        const [selectedGeo] = map.queryRenderedFeatures(e.point, {              
+            layers: ["parcels-value"]
+        });
+
+        if (selectedGeo) {
+            const name = selectedGeo.properties.SiteAddress;
+            const displayName = name == null || name == undefined ? `Address unavailable` : `${name}`;
+            const normVal = Math.round(selectedGeo.properties.acreVal * 100/100);
+            const av = selectedGeo.properties.TotalValue;
+            const displayVal = normVal === null || normVal === undefined ? 'No available data.' : `Assessed value per acre: $${normVal.toLocaleString('en-US')}.`;
+            const displayAV = av === null || av === undefined ? `No available data.` : `Total assessed value: $${av.toLocaleString('en-US')}.`
+            new mapboxgl.Popup({ closeButton: true }, { clickToClose: true })
+            .setLngLat(selectedGeo.geometry.coordinates[0][0])
+            .setHTML(`
+                <div class="mapboxgl-popup">
+                <div class="mapboxgl-popup-close-button">x</div>
+                <div class="mapboxgl-popup-header">${displayName}</div>
+                <div class="mapboxgl-popup-content">${displayVal}<br>${displayAV}
                 </div>
             </div>`)
             .addTo(map);
@@ -976,6 +1025,8 @@
         document.getElementById('cbRentersLegend').style.display = 'block';
         }   else if (selectedLayer === 'tracts-pctCostBurdenedOwners') {
         document.getElementById('cbOwnersLegend').style.display = 'block';
+        }   else if (selectedLayer === 'tracts-pctCostBurdenedOwners') {
+        document.getElementById('cbOwnersLegend').style.display = 'block'; //replace
         }   else if (selectedLayer === 'parcels-pctLV') { 
         document.getElementById('pctLVLegend').style.display = 'block';
         }   else if (selectedLayer === 'parcels-landuse') { 
