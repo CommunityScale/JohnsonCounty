@@ -146,8 +146,7 @@
         <select id="layer-dropdown">
             <option value="tracts-medIncome">Median Annual Household Income</option> 
             <option value="tracts-pctCostBurdenedRenters">Percent of Renters, Cost Burdened</option> 
-            <option value="tracts-pctCostBurdenedOwners">Percent of Homeowners, Cost Burdened</option> 
-            <option value="tracts-pctHH">Percent Change in Households (2013-2023)</option>
+            <option value="tracts-pctCostBurdenedOwners">Percent of Homeowners, Cost Burdened</option>
             <option value="parcels-landuse">Property Class</option> 
             <option value="parcels-ownership">Property Tax Credits</option>
             <option value="parcels-pctLV">Land Value as Percent of Assessed Value</option>
@@ -956,7 +955,6 @@
         
         map.setLayoutProperty(selectedLayer, 'visibility', 'visible');
         map.setLayoutProperty("smallCities-layer", 'visibility', 'visible');
-        map.setLayoutProperty("excludedCities-layer", 'visibility', 'visible');
         map.setLayoutProperty("mobileHomes", 'visibility', 'visible');
         map.setLayoutProperty("county-layer", 'visibility', 'visible');
         map.setLayoutProperty("road-label", 'visibility', 'visible');
