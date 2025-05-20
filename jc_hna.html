@@ -634,7 +634,7 @@
                 visibility: "visible"
             }})
 
-    map.addLayer({ 
+     map.addLayer({ 
             id: "parcels-ownership",  
             type: "fill",
             source: "parcels",
@@ -654,13 +654,10 @@
                         ownershipPalette[7]
                         ],
                 "fill-outline-color": "#545453",
-                "fill-opacity": [
-                    "case", ["==", ["get", "credits"], "NONE"], 0.3,
-                    ["case",
+                "fill-opacity": ["case",
                     ["boolean", ["feature-state", "hover"], false],
                     0.95,
-                    0.6
-            ]]
+                    0.6]
              },
              layout: {
                 visibility: "none"
