@@ -95,6 +95,18 @@
             border: #80808090;
         }
 
+        #layer-controls {
+            position: absolute;
+            top: 25px;
+            right: 30px;
+            background: white;
+            padding: 10px;
+            font: 14px 'Roboto', sans-serif;
+            z-index: 2;
+            border-radius: 4px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+        }
+
         .legend {
             background-color: #fff;
             border-radius: 4px;
@@ -136,8 +148,26 @@
             <option value="tracts-pctCostBurdenedRenters">Percent of Renters, Cost Burdened</option> 
             <option value="tracts-pctCostBurdenedOwners">Percent of Homeowners, Cost Burdened</option> 
             <option value="tracts-pctHH">Percent Change in Households (2013-2023)</option>
+            <option value="parcels-landuse">Property Class</option> 
+            <option value="parcels-ownership">Property Tax Credits</option>
+            <option value="parcels-pctLV">Land Value as Percent of Assessed Value</option>
+            <option value="parcels-value">Parcel Value Per Acre</option>
             <option value="tracts-layer">Johnson County</option>
         </select>
+        <div id="opacity-control" style="position: absolute; top: 75px; left: 30px; z-index: 10; background: #f2f0ef; padding: 8px; border-radius: 4px; font-family: Roboto, sans-serif; font-size: 14px;">
+            <label for="opacitySlider">Layer Opacity:</label>
+            <input type="range" id="opacitySlider" min="0" max="1" step="0.05" value="0.6">
+        </div>
+        <div id="basemap-toggle" style="position: absolute; top: 120px; left: 30px; z-index: 10; background: #f2f0ef; padding: 8px; border-radius: 4px; font-family: Roboto, sans-serif; font-size: 14px;">
+          <label for="basemapStyle">Basemap:</label>
+          <select id="basemapStyle">
+              <option value="gray">Gray</option>
+              <option value="satellite">Satellite</option>
+          </select>
+      </div>
+      <div id="layer-controls">
+        <label><input type="checkbox" class="layer-toggle" value="excludedCities-layer" checked>Excluded cities</label>
+        </div>
         <div id="medIncomeLegend" class="legend" style="display: block;">
             <h4>Median Annual Household Income (2023, USD)</h4>
             <div><span style="background-color: #980043"></span>$130,000 or more</div>
@@ -146,6 +176,18 @@
             <div><span style="background-color: #d7b5d8"></span></div>
             <div><span style="background-color: #f1eef6"></span>$15,000 or less</div>
             <div><span style="background-color: #425A7030"></span>No data</div>
+        </div>
+        <div id="landUseLegend" class="legend" style="display: none;"> 
+            <h4>Land Use</h4>
+            <div><span style="background-color: #24910a"></span>Agriculture</div>
+            <div><span style="background-color: #d4f088"></span>Agricultural/residential</div>
+            <div><span style="background-color: #fff8bf"></span>Residential</div>
+            <div><span style="background-color: #ffa734"></span>Multifamily</div>
+            <div><span style="background-color: #da6262"></span>Commercial</div>
+            <div><span style="background-color: #b560bb"></span>Mixed use</div>
+            <div><span style="background-color: #323052"></span>Industrial</div>
+            <div><span style="background-color: #425A70"></span>Exempt</div>
+            <div><span style="background-color: #bdc9e1"></span>Unknown</div>
         </div>
         <div id="cbRentersLegend" class="legend" style="display: none;">
             <h4>Cost Burdened Renters (2023)</h4>
@@ -176,12 +218,46 @@
             <div><span style="background-color: #762a83"></span>-15%+</div>
             <div><span style="background-color: #425A7030"></span>No data</div>
         </div>
+        <div id="ncLegend" class="legend" style="display: none">
+            <h4>Neighborhood Conditions Index</h4>
+            <div><img src="https://raw.githubusercontent.com/CommunityScale/Muskogee/main/images/neighborhoodConditionsLegend.png" 
+                alt="Legend for Neighborhood Conditions Index"
+                style="max-width: 100%; height: auto; display: block;" ></div>
+        </div>
+        <div id="pctLVLegend" class="legend" style="display: none;">
+            <h4>Land Value as Percent of Assessed Value</h4>
+            <div><span style="background-color: #045a8d"></span>3% or less</div>
+            <div><span style="background-color: #2b8cbe"></span></div>
+            <div><span style="background-color: #74a9cf"></span>35%</div>
+            <div><span style="background-color: #bdc9e1"></span></div>
+            <div><span style="background-color: #f1eef6"></span>90% or more</div>
+        </div>
+        <div id="parcelValueLegend" class="legend" style="display: none;">
+            <h4>Assessed Value Per Acre</h4>
+            <div><span style="background-color: #f2f0f7"></span>$24,000 or less</div>
+            <div><span style="background-color: #cbc9e2"></span></div>
+            <div><span style="background-color: #9e9ac8"></span>$327,000</div>
+            <div><span style="background-color: #756bb1"></span></div>
+            <div><span style="background-color: #54278f"></span>$850,000 or more</div>
+        </div>
+        <div id="ownershipLegend" class="legend" style="display: none;">
+            <h4>Tax Credits by Parcel</h4> 
+            <div><span style="background-color: #f2e22c"></span>Homestead Deduction (HMST)</div>
+            <div><span style="background-color: #fa2173"></span>Military (MIL)</div>
+            <div><span style="background-color: #559428"></span>Agricultural Land (AG)</div>
+            <div><span style="background-color: #79a8f2"></span>Section 42(h)</div>
+            <div><span style="background-color: #e4ac28"></span>HMST, MIL</div>
+            <div><span style="background-color: #a7d96d"></span>HMST, AG</div>
+            <div><span style="background-color: #8b63ba"></span>HMST, MIL, AG</div>
+            <div><span style="background-color: #425A7030"></span>None</div>
+        </div>
+
     <div id="map"></div>
 </div>
 
 <script>
     const INITIAL_LOC = [-91.58, 41.67] 
-    const INITIAL_ZOOM = 9.75 //set initial zoom (zoom levels 9-12 best for cities depending on size)
+    const INITIAL_ZOOM = 9.5 //set initial zoom (zoom levels 9-12 best for cities depending on size)(this is set to 13 to accomodate the tileset that will need to be uploaded via CLI)
     const communityScaleGray = "#425A70" //could replace with different accent color, I personally like this branding 
     const placeOfInterest = "Johnson County"
     const citiesOfInterest = [
@@ -191,6 +267,13 @@
                 "Shueyville",
                 "Solon",
                 "Swisher"
+            ]
+    const excludedCities = [
+                "Iowa City",
+                "Coralville",
+                "North Liberty",
+                "Tiffin",
+                "University Heights"
             ]
     const medIncomePalette = [ //Sequential colorBrewer Purple/Red ramp
                 '#f1eef6',
@@ -223,15 +306,58 @@
                 '#1b7837'
             ]
 
+    const landValuePalette = [ //Sequential colorBrewer Blu ramp
+                '#f1eef6',
+                '#bdc9e1',
+                '#74a9cf',
+                '#2b8cbe',
+                '#045a8d'
+            ]
+    const parcelValuePalette = [ //colorBrewer purples 
+                '#f2f0f7',
+                '#cbc9e2',
+                '#9e9ac8',
+                '#756bb1',
+                '#54278f'
+            ]
 
+    const ownershipPalette = [ //categorical palette for tax credits -- update!!
+                '#f2e22c',
+                '#fa2a73',
+                '#559428',
+                '#79a8f2',
+                '#e4ac28',
+                '#a7d96d',
+                '#8b63ba',
+                '#425A70'
+            ]
+    const landUsePalette = [
+                "#24910a", //Agriculture
+                "#d4f088", //Agricultural/residential
+                "#fff8bf", //Residential
+                "#ffa734", //Multifamily
+                "#da6262", //Commercial
+                "#b560bb", //Mixed use
+                "#323052", //Industrial
+                "#425A70", //Exempt
+                "#bdc9e1" //Unknown
+            ]
 
     mapboxgl.accessToken = 'pk.eyJ1IjoiZW10em90MDEiLCJhIjoiY20zZ2kyd3RpMDRnajJscHoyMG5neGJldyJ9.poXi4pgd2CoXKV2B4kg1Cw ';
-    const map = new mapboxgl.Map({
-        container: 'map', 
-        style: 'mapbox://styles/emtzot01/cm6a8mjb5004g01qrd7cv07mq', 
-        center: INITIAL_LOC, 
-        zoom: INITIAL_ZOOM 
-    });
+    let map;
+    const BASEMAP_STYLES = {
+      gray: 'mapbox://styles/emtzot01/cm6a8mjb5004g01qrd7cv07mq',
+      satellite: 'mapbox://styles/mapbox/satellite-streets-v12'
+    };
+
+    function initializeMap(styleKey = 'gray') {
+      map = new mapboxgl.Map({
+        container: 'map',
+        style: BASEMAP_STYLES[styleKey],
+        center: INITIAL_LOC,
+        zoom: INITIAL_ZOOM
+      });
+
 
     function adjustMapSize() {
         const sidebarWidth = document.getElementById('sidebar').width;
@@ -262,6 +388,18 @@
             promoteId: "GEOID"
         })
 
+        map.addSource("parcels", {
+            type: "geojson",
+            data: 'https://raw.githubusercontent.com/CommunityScale/JohnsonCounty/main/uninc_parcels_jcia.geojson',
+            //url: "mapbox://emtzot01.06wm5jay",
+            promoteId: "PPN"
+        })
+
+        map.addSource("mobileHomeParks", {
+            type: "geojson",
+            data: "https://raw.githubusercontent.com/CommunityScale/JohnsonCounty/refs/heads/main/mobileHomes_jcia.geojson",
+            promoteId: "NAME"
+        })
 
         map.addLayer({
                 id: "tracts-layer",  
@@ -319,7 +457,7 @@
              layout: {
                 visibility: "visible"
              }
-        },"road-label", 
+        },
         "settlement-major-label", 
         "settlement-subdivision-label", 
         "settlement-minor-label"
@@ -358,7 +496,7 @@
              layout: {
                 visibility: "none"
              }
-        },"road-label", 
+        },
         "settlement-major-label", 
         "settlement-subdivision-label", 
         "settlement-minor-label"
@@ -398,12 +536,139 @@
              layout: {
                 visibility: "none"
              }
+        },
+        "settlement-major-label", 
+        "settlement-subdivision-label", 
+        "settlement-minor-label"
+    )
+
+    map.addLayer({
+                id: "parcels-landuse",
+                type: "fill",
+                source: "parcels",
+                //"source-layer": "parcels_jcia-7q1vz4", 
+                paint: {
+                    "fill-color": [
+                        "match",
+                        ["get", "PropClass"],
+                        "A", landUsePalette[0],
+                        "A,AD", landUsePalette[1],
+                        "C", landUsePalette[4],
+                        "C,M", landUsePalette[5],
+                        "C,R", landUsePalette[5],
+                        "E", landUsePalette[7],
+                        "I", landUsePalette[6],
+                        "R", landUsePalette[2],
+                        "M", landUsePalette[3],
+                        landUsePalette[8]
+                    ],
+                    "fill-outline-color": communityScaleGray,
+                    "fill-opacity": [
+                        "case",
+                        ["boolean", ["feature-state", "hover"], false],
+                        0.7,
+                        0.5
+                    ]
+                },
+                layout: {
+                    visibility: "none"
+                }
+            }, 
+            "settlement-major-label", 
+            "settlement-subdivision-label", 
+            "settlement-minor-label")
+
+    map.addLayer({ 
+            id: "parcels-pctLV",  
+            type: "fill",
+            source: "parcels",
+            //"source-layer": "parcels_jcia-7q1vz4", 
+            paint: {
+                "fill-color": [
+                    "case", ["==", ["get", "pctLandVal"], null], communityScaleGray,
+                    ["interpolate", 
+                    ["linear"],
+                    ["get", "pctLandVal"],
+                    0.03,
+                    landValuePalette[4], 
+                    0.15,
+                    landValuePalette[3],
+                    0.35,
+                    landValuePalette[2],
+                    0.65,
+                    landValuePalette[1],
+                    0.90,
+                    landValuePalette[0]]],
+                "fill-outline-color": "#545453",
+                "fill-opacity": [
+                    "case", ["==", ["get", "pctLandVal"], null], 0.3,
+                    ["case",
+                    ["boolean", ["feature-state", "hover"], false],
+                    0.95,
+                    0.6
+            ]]
+             },
+             layout: {
+                visibility: "none"
+             }
         },"road-label", 
         "settlement-major-label", 
         "settlement-subdivision-label", 
         "settlement-minor-label"
     )
 
+    map.addLayer(
+            {
+                id: 'mobileHomes',
+                type: 'circle',
+                source: 'mobileHomeParks',
+                paint: {
+                    'circle-radius': {
+                        'base': 2,
+                        'stops': [
+                            [12, 4],
+                            [22, 180]
+                    ]},
+                    'circle-color': "#249bd6"}, 
+            layout: {
+                visibility: "visible"
+            }})
+
+    map.addLayer({ 
+            id: "parcels-ownership",  
+            type: "fill",
+            source: "parcels",
+            //"source-layer": "parcels_jcia-7q1vz4", //filter by residential??
+            paint: {
+                "fill-color": [
+                    "match",
+                    ["get", "credits"], //update palette
+                        "HMST", ownershipPalette[0], 
+                        "AG", ownershipPalette[2],
+                        "MIL", ownershipPalette[1], 
+                        "S42", ownershipPalette[3],
+                        "HMST,AG", ownershipPalette[5],
+                        "HMST,MIL", ownershipPalette[4],
+                        "HMST,AG,MI", ownershipPalette[6],
+                        "NONE", ownershipPalette[7],
+                        communityScaleGray
+                        ],
+                "fill-outline-color": "#545453",
+                "fill-opacity": [
+                    "case", ["==", ["get", "credits"], "NONE"], 0.3,
+                    ["case",
+                    ["boolean", ["feature-state", "hover"], false],
+                    0.95,
+                    0.6
+            ]]
+             },
+             layout: {
+                visibility: "none"
+            }},
+            "settlement-major-label", 
+            "settlement-subdivision-label", 
+            "settlement-minor-label"
+    ) 
 
     map.addLayer({     
             id: "tracts-pctHH",  
@@ -441,12 +706,49 @@
              },
              layout: {
                 visibility: "none"
-             }
-        },"road-label", 
-        "settlement-major-label", 
-        "settlement-subdivision-label", 
-        "settlement-minor-label"
+        }},
+            "settlement-major-label", 
+            "settlement-subdivision-label", 
+            "settlement-minor-label"
     )
+
+    map.addLayer({ 
+            id: "parcels-value", 
+            type: "fill",
+            source: "parcels",
+            //"source-layer": "parcels_jcia-7q1vz4", 
+            paint: {
+                "fill-color": [
+                    "case", ["==", ["get", "acreVal"], null], communityScaleGray,
+                    ["interpolate", 
+                    ["linear"],
+                    ["get", "acreVal"],
+                    24000,
+                    parcelValuePalette[0], 
+                    175000,
+                    parcelValuePalette[1],
+                    327000,
+                    parcelValuePalette[2],
+                    575000,
+                    parcelValuePalette[3],
+                    850000,
+                    parcelValuePalette[4]]],
+                "fill-outline-color": "#545453",
+                "fill-opacity": [
+                    "case", ["==", ["get", "acreVal"], null], 0.3,
+                    ["case",
+                    ["boolean", ["feature-state", "hover"], false],
+                    0.95,
+                    0.6
+            ]]
+             },
+             layout: {
+                visibility: "none"
+             }},
+            "settlement-major-label", 
+            "settlement-subdivision-label", 
+            "settlement-minor-label"
+    ) 
 
     map.addLayer({
             id: "smallCities-layer",
@@ -460,13 +762,28 @@
             layout: {
                 visibility: "visible"
                 },
-            filter: ["in", "NAME", ...citiesOfInterest]},
+            filter: ["in", "NAME", ...citiesOfInterest]}
+        )
+
+    map.addLayer({
+            id: "excludedCities-layer",
+            type: "fill",
+            source: "cities",
+            paint: {
+                "fill-color": '#d6d6d6',
+                "fill-opacity": 1,
+                },
+            layout: {
+                visibility: "visible"
+                },
+            filter: ["in", "NAME", ...excludedCities]},
+            "mobileHomes",
             "settlement-major-label", 
-             "settlement-subdivision-label", 
+            "settlement-subdivision-label", 
             "settlement-minor-label"
         )
     
-        map.addLayer({
+    map.addLayer({
             id: "county-layer",
             type: "line",
             source: "counties",
@@ -478,10 +795,7 @@
             layout: {
                 visibility: "visible"
                 },
-            filter: ["==", "NAME", placeOfInterest]},
-            "settlement-major-label", 
-             "settlement-subdivision-label", 
-            "settlement-minor-label"
+            filter: ["==", "NAME", placeOfInterest]}
         );
 
 
@@ -491,6 +805,22 @@
 
     window.addEventListener('resize', adjustMapSize);
 
+    const checkboxes = document.querySelectorAll('.layer-toggle');
+
+    checkboxes.forEach((checkbox) => {
+    checkbox.addEventListener('change', () => {
+        const layerId = checkbox.value;
+        const visibility = checkbox.checked ? 'visible' : 'none';
+        if (map.getLayer(layerId)) {
+            map.setLayoutProperty(layerId, 'visibility', visibility);
+            map.setLayoutProperty("smallCities-layer", 'visibility', 'visible');
+            map.setLayoutProperty("mobileHomes", 'visibility', 'visible');
+            map.setLayoutProperty("county-layer", 'visibility', 'visible');
+            map.setLayoutProperty("road-label", 'visibility', 'visible');
+            map.setLayoutProperty("settlement-major-label", 'visibility', 'visible');
+            map.setLayoutProperty("settlement-subdivision-label", 'visibility', 'visible');
+            map.setLayoutProperty("settlement-minor-label", 'visibility', 'visible');;
+        }})})
   
     map.on('click', (e) => {
         const [selectedGeo] = map.queryRenderedFeatures(e.point, {               
@@ -600,9 +930,21 @@
         'tracts-pctCostBurdenedRenters', 
         'tracts-pctCostBurdenedOwners',
         'tracts-pctHH',
-        'tracts-layer'];
+        'tracts-layer',
+        'parcels-landuse',
+        'parcels-pctLV',
+        'parcels-value',
+        'parcels-ownership'
+        ];
 
     const dropdown = document.getElementById('layer-dropdown');
+
+    document.getElementById("opacitySlider").addEventListener("input", function (e) {
+        const newOpacity = parseFloat(e.target.value);
+        dataLayers.forEach(layerId => {
+        map.setPaintProperty(layerId, "fill-opacity", newOpacity);
+        });
+    });
 
     dropdown.addEventListener('change', function() {
         const selectedLayer = dropdown.value;
@@ -614,6 +956,8 @@
         
         map.setLayoutProperty(selectedLayer, 'visibility', 'visible');
         map.setLayoutProperty("smallCities-layer", 'visibility', 'visible');
+        map.setLayoutProperty("excludedCities-layer", 'visibility', 'visible');
+        map.setLayoutProperty("mobileHomes", 'visibility', 'visible');
         map.setLayoutProperty("county-layer", 'visibility', 'visible');
         map.setLayoutProperty("road-label", 'visibility', 'visible');
         map.setLayoutProperty("settlement-major-label", 'visibility', 'visible');
@@ -634,10 +978,30 @@
         document.getElementById('cbRentersLegend').style.display = 'block';
         }   else if (selectedLayer === 'tracts-pctCostBurdenedOwners') {
         document.getElementById('cbOwnersLegend').style.display = 'block';
+        }   else if (selectedLayer === 'parcels-pctLV') { 
+        document.getElementById('pctLVLegend').style.display = 'block';
+        }   else if (selectedLayer === 'parcels-landuse') { 
+        document.getElementById('landUseLegend').style.display = 'block';
+        }   else if (selectedLayer === 'parcels-ownership') { 
+        document.getElementById('ownershipLegend').style.display = 'block';
+        }   else if (selectedLayer === 'parcels-value') { 
+        document.getElementById('parcelValueLegend').style.display = 'block';
         }   else if (selectedLayer === 'tracts-pctHH') {
         document.getElementById('pctHHLegend').style.display = 'block';
         }});
 
+
+    document.getElementById("basemapStyle").addEventListener("change", function (e) {
+    const newStyle = e.target.value;
+    const center = map.getCenter();
+    const zoom = map.getZoom();
+        map.remove();
+        initializeMap(newStyle);
+        setTimeout(() => {
+            map.setCenter(center);
+            map.setZoom(zoom);
+        }, 500);
+    });
 
         let hoveredGeoId = null;
 
@@ -646,7 +1010,11 @@
             { id: 'tracts-pctCostBurdenedRenters', source: 'tracts'},
             { id: 'tracts-pctCostBurdenedOwners', source: 'tracts' },
             { id: 'tracts-pctHH', source: 'tracts' },
-            { id: 'tracts-layer', source: 'tracts' }
+            { id: 'tracts-layer', source: 'tracts' },
+            { id: 'parcels-landuse', source: 'parcels'},
+            { id: 'parcels-value', source: 'parcels'},
+            { id: 'parcels-pctLV', source: 'parcels'},
+            { id: 'parcels-ownership', source: 'parcels'}
         ];
 
         hoverLayers.forEach(({ id, source }) => {
@@ -675,7 +1043,9 @@
                 }
                 hoveredGeoId = null;
             });
-        });
+        })};
+
+        initializeMap();
 
         </script>
     </body>
