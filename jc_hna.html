@@ -90,7 +90,7 @@
             font-size: 14px;
             display: flex;
             flex-shrink: 1;
-            border-radius: 4px;
+            border-radius: 2;
             opacity: 0.95;
             border: #80808090;
         }
@@ -912,7 +912,7 @@
             const displayName = name == null || name == undefined ? `Address unavailable` : `${name}`;
             const pctLandValue = selectedGeo.properties.pctLandVal;
             const roundedPctLV = Math.round(pctLandValue * 1000) / 10
-            const displayPctLV = pctLandValue === null || pctLandValue === undefined ? 'No available data.' : ` Land value accounts for ${roundedPctLV}% of Parcel #${selectedGeo.properties.PARCEL_C}'s total assessed value.`;
+            const displayPctLV = pctLandValue === null || pctLandValue === undefined ? 'No available data.' : ` Land value accounts for ${roundedPctLV}% of Parcel #${selectedGeo.properties.PPN}'s total assessed value.`;
 
             new mapboxgl.Popup({ closeButton: true }, { clickToClose: true })
             .setLngLat(selectedGeo.geometry.coordinates[0][0])
