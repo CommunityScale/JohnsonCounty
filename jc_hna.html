@@ -160,8 +160,6 @@
             <option value="tracts-medIncome">Median Annual Household Income</option> 
             <option value="tracts-pctCostBurdenedRenters">Percent of Renters, Cost Burdened</option> 
             <option value="tracts-pctCostBurdenedOwners">Percent of Homeowners, Cost Burdened</option> 
-            <option value="tracts-pctHH">Percent Change in Households (2013-2023)</option>
-            <option value="tracts-conditions">Neighborhood Conditions</option>
             <option value="parcels-landuse">Property Class</option> 
             <option value="parcels-ownership">Property Tax Credits</option>
             <option value="parcels-pctLV">Land Value as Percent of Assessed Value</option>
@@ -365,8 +363,6 @@
                 "#bdc9e1" //Unknown
             ]
 
-    //import * as turf from '@turf/turf';
-
     mapboxgl.accessToken = 'pk.eyJ1IjoiZW10em90MDEiLCJhIjoiY20zZ2kyd3RpMDRnajJscHoyMG5neGJldyJ9.poXi4pgd2CoXKV2B4kg1Cw ';
     let map;
     const BASEMAP_STYLES = {
@@ -420,7 +416,6 @@
         map.addSource("parcels", {
             type: "geojson",
             data: 'https://raw.githubusercontent.com/CommunityScale/JohnsonCounty/main/uninc_parcels_jcia.geojson',
-            //url: "mapbox://emtzot01.06wm5jay",
             promoteId: "PPN"
         })
 
@@ -584,10 +579,9 @@
     )
 
     map.addLayer({
-                id: "parcels-landuse", //update with parcel types!!
+                id: "parcels-landuse", 
                 type: "fill",
                 source: "parcels",
-                //"source-layer": "parcels_jcia-7q1vz4", 
                 paint: {
                     "fill-color": [
                         "match",
@@ -623,7 +617,6 @@
             id: "parcels-pctLV",  
             type: "fill",
             source: "parcels",
-            //"source-layer": "parcels_jcia-7q1vz4", 
             paint: {
                 "fill-color": [
                     "case", ["==", ["get", "pctLandVal"], null], communityScaleGray,
@@ -664,12 +657,11 @@
                 type: 'circle',
                 source: 'manufacturedHomeParks',
                 paint: {
-                    // Make circles larger as the user zooms from z12 to z22.
                     'circle-radius': {
                         'base': 2,
                         'stops': [
                             [12, 4],
-                            [22, 180]
+                            [22, 18]
                     ]},
                     'circle-color': "#249bd6"}, 
             layout: {
@@ -688,8 +680,7 @@
                             [12, 3],
                             [22, 18]
                     ]},
-                    'circle-color': "#82ac22", //"#D1CBC1" agreeable gray a la Sherwin Williams, add color to legend 
-                       
+                    'circle-color': "#82ac22",     
                 }, 
             layout: {
                 visibility: "visible"
@@ -709,8 +700,7 @@
                             [12, 3],
                             [22, 18]
                     ]},
-                    'circle-color': "#cddea8", 
-                       
+                    'circle-color': "#cddea8",         
                 }, 
             layout: {
                 visibility: "visible"
@@ -722,7 +712,6 @@
             id: "parcels-ownership",  
             type: "fill",
             source: "parcels",
-            //"source-layer": "parcels_jcia-7q1vz4", //filter by residential??
             paint: {
                 "fill-color": [
                     "match",
@@ -751,53 +740,11 @@
             "settlement-minor-label"
     ) 
 
-    map.addLayer({     
-            id: "tracts-pctHH",  
-            type: "fill",
-            source: "tracts",
-            paint: {
-                "fill-color": [
-                    "case", ["==", ["get", "pctChangeHH"], null], communityScaleGray,
-                    ["interpolate",
-                    ["linear"],
-                    ["get", "pctChangeHH"],
-                    -0.15,
-                    hhChangePalette[0],
-                    -0.07, 
-                    hhChangePalette[1],
-                    -0.01,
-                    hhChangePalette[2],
-                    0,
-                    hhChangePalette[3], 
-                    0.1,
-                    hhChangePalette[4],
-                    0.2,
-                    hhChangePalette[5],
-                    0.5,
-                    hhChangePalette[6]
-                ]],
-                "fill-outline-color": "white",
-                "fill-opacity": [
-                    "case", ["==", ["get", "pctChangeHH"], null], 0.3,
-                    ["case",
-                    ["boolean", ["feature-state", "hover"], false],
-                    0.95,
-                    0.6
-            ]]
-             },
-             layout: {
-                visibility: "none"
-        }},
-            "settlement-major-label", 
-            "settlement-subdivision-label", 
-            "settlement-minor-label"
-    )
 
     map.addLayer({ 
             id: "parcels-value", 
             type: "fill",
             source: "parcels",
-            //"source-layer": "parcels_jcia-7q1vz4", 
             paint: {
                 "fill-color": [
                     "case", ["==", ["get", "acreVal"], null], communityScaleGray,
@@ -921,9 +868,6 @@
         const visibility = checkbox.checked ? 'visible' : 'none';
         if (map.getLayer(layerId)) {
             map.setLayoutProperty(layerId, 'visibility', visibility);
-          //  map.setLayoutProperty("smallCities-layer", 'visibility', 'visible');
-          //  map.setLayoutProperty("villages-layer", 'visibility', 'visible');
-          //  map.setLayoutProperty("mobileHomes", 'visibility', 'visible');
             map.setLayoutProperty("county-layer", 'visibility', 'visible');
             map.setLayoutProperty("road-label", 'visibility', 'visible');
             map.setLayoutProperty("settlement-major-label", 'visibility', 'visible');
