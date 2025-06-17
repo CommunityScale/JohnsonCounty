@@ -186,7 +186,7 @@
         <label><input type="checkbox" class="layer-toggle" value="parcels-newPermits2010" checked><span class="overlay-span" style="background-color: #cddea8"></span>New build permits, 2010-2019</label><br>
         <label><input type="checkbox" class="layer-toggle" value="parcels-newPermits2020" checked><span class="overlay-span" style="background-color: #82ac22"></span>New build permits, 2020-present</label><br>
         <label><input type="checkbox" class="layer-toggle" value="manufacturedHomes" checked><span class="overlay-span" style="background-color: #249bd6"></span>Manufactured home parks</label><br>
-        <label><input type="checkbox" class="layer-toggle" value="excludedCities-layer"><span class="overlay-span"></span>Hide surrounding counties</label> <!--replace layer-->
+        <label><input type="checkbox" id="toggleCounty" class="layer-toggle"><span class="overlay-span"></span>Hide surrounding counties</label> <!--replace layer-->
         </div>
         <div id="medIncomeLegend" class="legend" style="display: block;">
             <h4 class="section-heading">Median Annual Household Income (2023, USD)</h4>
@@ -874,6 +874,26 @@
             map.setLayoutProperty("settlement-subdivision-label", 'visibility', 'visible');
             map.setLayoutProperty("settlement-minor-label", 'visibility', 'visible');;
         }})})
+
+    const countyFIPS = "103"; // Johnson County fips code
+    const tractLayerIds = [
+        "tracts-layer",
+        "tracts-medIncome",
+        "tracts-pctCostBurdenedRenters",
+        "tracts-pctCostBurdenedOwners",
+        //add in as need be 
+    ];
+
+    document.getElementById("toggleCounty").addEventListener("change", (e) => {
+        const showOnlyCounty = e.target.checked;
+        const filter = showOnlyCounty
+            ? ["==", ["get", "COUNTY"], countyFIPS]
+            : null;
+
+        tractLayerIds.forEach(id => {
+            map.setFilter(id, filter);
+        });
+    });
   
     map.on('click', (e) => {
         const [selectedGeo] = map.queryRenderedFeatures(e.point, {               
