@@ -95,35 +95,35 @@
   <!-- Hidden content -->
   <div id="overlay-content" class="hidden px-2 py-2 space-y-2 bg-white">
     <label class="flex items-center gap-2">
-      <input type="checkbox" class="overlay-toggle" data-layer="excludedCities-layer" checked />
+      <input type="checkbox" class="overlay-toggle" value="excludedCities-layer" checked />
       <span>Excluded cities</span>
     </label>
     <label class="flex items-center gap-2">
-      <input type="checkbox" class="overlay-toggle" data-layer="smallCities-layer" checked />
+      <input type="checkbox" class="overlay-toggle" value="smallCities-layer" checked />
       <span>Small cities</span>
     </label>
     <label class="flex items-center gap-2">
-        <input type="checkbox" class="overlay-toggle" data-layer="villages-layer" checked />
+        <input type="checkbox" class="overlay-toggle" value="villages-layer" checked />
         <span>Villages</span>
     </label>
     <label class="flex items-center gap-2">
-        <input type="checkbox" class="overlay-toggle" data-layer="targetedGrowth-layer" checked />
+        <input type="checkbox" class="overlay-toggle" value="targetedGrowth-layer" checked />
         <span>Targeted economic growth areas</span>
     </label>
     <label class="flex items-center gap-2">
-        <input type="checkbox" class="overlay-toggle" data-layer="parcels-newPermits2010" />
+        <input type="checkbox" class="overlay-toggle" value="parcels-newPermits2010" />
         <span>New build permits, 2010-2019</span>
     </label>
     <label class="flex items-center gap-2">
-        <input type="checkbox" class="overlay-toggle" data-layer="parcels-newPermits2020" />
+        <input type="checkbox" class="overlay-toggle" value="parcels-newPermits2020" />
         <span>New build permits, 2020-present</span>
     </label>
     <label class="flex items-center gap-2">
-        <input type="checkbox" class="overlay-toggle" data-layer="manufacturedHomes" checked />
+        <input type="checkbox" class="overlay-toggle" value="manufacturedHomes" checked />
         <span>Manufactured home parks</span>
     </label>
     <label class="flex items-center gap-2">
-        <input type="checkbox" id="toggleCounty" class="overlay-toggle" data-layer="parcels-newPermits2010"/>
+        <input type="checkbox" id="toggleCounty" class="overlay-toggle" value="parcels-newPermits2010"/>
         <span>Hide surrounding counties</span>
     </label>
     <!-- edit javascript to make it all work!!, add in colors/to legend via js?? -->
@@ -149,7 +149,7 @@
   <!-- Hidden content -->
   <div id="info-content" class="hidden px-2 py-2 space-y-2 bg-white">
     <label class="flex items-center gap-2"> <!--change this!! needs to be paragraph formatted-->
-      <input type="checkbox" class="overlay-toggle" data-layer="town-layer" checked />
+      <input type="checkbox" class="overlay-toggle" value="town-layer" checked />
       <span><p>Community boundaries</p></span>
     </label>
     <!-- Add more overlays here!1 + edit javascript to make it all work!! -->
@@ -175,7 +175,7 @@
   <!-- Hidden content -->
   <div id="data-content" class="hidden px-2 py-2 space-y-2 bg-white">
     <label class="flex items-center gap-2">
-      <input type="checkbox" class="overlay-toggle" data-layer="town-layer" checked />
+      <input type="checkbox" class="overlay-toggle" value="town-layer" checked />
       <span><p>Community boundaries</p></span> <!--blurb that changes dyamically!! based on data source --probably to include in layers-->
     </label>
   </div>
@@ -1108,7 +1108,7 @@ map.on('load', () => {
 
     checkboxes.forEach((checkbox) => {
     checkbox.addEventListener('change', () => {
-        const layerId = checkbox.data-layer;
+        const layerId = checkbox.value;
         const visibility = checkbox.checked ? 'visible' : 'none';
         if (map.getLayer(layerId)) {
             map.setLayoutProperty(layerId, 'visibility', visibility);
