@@ -1392,10 +1392,10 @@ map.on('load', () => {
       return layer && map.getLayoutProperty(id, 'visibility') === 'visible';
     });
 
-    // ✅ Switch basemap
+    // Switch basemap
     map.setStyle(`mapbox://styles/${style}`);
 
-    // ✅ Restore layers and visibility once style loads
+    // Restore layers and visibility once style loads --> take out med income as always visible layer??
     map.once('style.load', () => {
       addData();
 
