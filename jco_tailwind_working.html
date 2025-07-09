@@ -1,0 +1,1540 @@
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Johnson County draft - tailwind, v2</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com"></script>
+
+<!-- Mapbox GL JS -->
+<script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
+<link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet" />
+
+<!--Material UI icons-->
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<style>
+  /* Additional styling to match the original SVG appearance */
+  .material-icons-outlined {
+    font-size: 1.25rem;
+    /* Equivalent to h-5 w-5 */
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
+  /* Critical CSS for performance */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-display: swap;
+  }
+</style>
+
+<style>
+  body { margin: 0; }
+  #map { width: 100%; height: 100%; }
+</style>
+</head>
+<body class="overflow-hidden">
+
+<div class="flex h-screen w-screen">
+  <!-- Sidebar (now on the LEFT) -->
+  <div id="sidebar" class="w-80 bg-white border-r border-gray-300 shadow-xl p-4 overflow-y-auto z-10">
+      <div class="flex flex-col h-full">
+          <h2 class="text-xl font-semibold mb-5">[Map title - generic or?]</h2>
+          <div class="overflow-y-auto flex-grow">
+    
+    <!-- Layer Toggle -->
+    <div class="mb-4">
+      <label class="block mb-1 font-medium">Select layer</label>
+      <select id="layer-select">
+        <option value="tracts-medIncome">Median Annual Household Income</option> 
+        <option value="tracts-pctCostBurdenedRenters">Percent of Renters, Cost Burdened</option> 
+        <option value="tracts-pctCostBurdenedOwners">Percent of Homeowners, Cost Burdened</option> 
+        <!--<option value="tracts-pctHH">Percent Change in Households (2013-2023)</option>-->
+        <!--<option value="tracts-conditions">Neighborhood Conditions</option>-->
+        <option value="parcels-landuse">Property Class</option> 
+        <option value="parcels-ownership">Property Tax Credits</option>
+        <option value="parcels-pctLV">Land Value as Percent of Assessed Value</option>
+        <option value="parcels-value">Parcel Value Per Acre</option>
+        <option value="admin-layer">Johnson County</option> <!--maybe just use outlines here?? add as toggle?? idk -->
+    </select>
+      </select>
+    </div>
+
+    <!-- Legend -->
+    <div id="legend" class="mt-4 pb-4">
+      <h3 class="font-medium mb-2">Legend</h3>
+      <div id="legend-content" class="space-y-1 text-sm text-gray-700">
+        <p class="italic text-gray-500">Select a layer to view legend</p>
+      </div>
+    </div>
+
+<!-- Collapsible Overlays Section -->
+<div id="overlay-wrapper" class="border-t border-gray-300 w-full">
+
+  <!-- Header -->
+  <button
+  id="overlay-toggle"
+  class="w-full px-2 py-2 flex items-center justify-between bg-gray-100 hover:bg-gray-200 font-medium"
+  >
+
+  <span class="flex items-center gap-1">
+      <span class="material-icons align-text-bottom">library_add</span>
+      Overlays
+    </span>
+    <svg id="overlay-arrow" class="w-4 h-4 transition-transform transform" xmlns="http://www.w3.org/2000/svg" fill="none"
+      viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+    </svg>
+  </button>
+
+  <!-- Hidden content -->
+  <div id="overlay-content" class="hidden px-2 py-2 space-y-2 bg-white">
+    <label class="flex items-center gap-2">
+      <input type="checkbox" class="overlay-toggle" data-layer="excludedCities-layer" checked />
+      <span>Excluded cities</span>
+    </label>
+    <label class="flex items-center gap-2">
+      <input type="checkbox" class="overlay-toggle" data-layer="smallCities-layer" checked />
+      <span>Small cities</span>
+    </label>
+    <label class="flex items-center gap-2">
+        <input type="checkbox" class="overlay-toggle" data-layer="villages-layer" checked />
+        <span>Villages</span>
+    </label>
+    <label class="flex items-center gap-2">
+        <input type="checkbox" class="overlay-toggle" data-layer="targetedGrowth-layer" checked />
+        <span>Targeted economic growth areas</span>
+    </label>
+    <label class="flex items-center gap-2">
+        <input type="checkbox" class="overlay-toggle" data-layer="parcels-newPermits2010" />
+        <span>New build permits, 2010-2019</span>
+    </label>
+    <label class="flex items-center gap-2">
+        <input type="checkbox" class="overlay-toggle" data-layer="parcels-newPermits2020" />
+        <span>New build permits, 2020-present</span>
+    </label>
+    <label class="flex items-center gap-2">
+        <input type="checkbox" class="overlay-toggle" data-layer="manufacturedHomes" checked />
+        <span>Manufactured home parks</span>
+    </label>
+    <label class="flex items-center gap-2">
+        <input type="checkbox" id="toggleCounty" class="overlay-toggle" data-layer="parcels-newPermits2010"/>
+        <span>Hide surrounding counties</span>
+    </label>
+    <!-- edit javascript to make it all work!!, add in colors/to legend via js?? -->
+  </div>
+</div>
+
+<div id="info-wrapper" class="border-t border-gray-300 w-full"> <!--took out margin border here-->
+  <!-- Header -->
+  <button
+  id="info-toggle"
+  class="w-full px-2 py-2 flex items-center justify-between bg-gray-100 hover:bg-gray-200 font-medium"
+  >
+  <span class="flex items-center gap-1">
+      <span class="material-icons align-text-bottom">info</span>
+      Layer information
+    </span>
+    <svg id="info-arrow" class="w-4 h-4 transition-transform transform" xmlns="http://www.w3.org/2000/svg" fill="none"
+      viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+    </svg>
+  </button>
+
+  <!-- Hidden content -->
+  <div id="info-content" class="hidden px-2 py-2 space-y-2 bg-white">
+    <label class="flex items-center gap-2"> <!--change this!! needs to be paragraph formatted-->
+      <input type="checkbox" class="overlay-toggle" data-layer="town-layer" checked />
+      <span><p>Community boundaries</p></span>
+    </label>
+    <!-- Add more overlays here!1 + edit javascript to make it all work!! -->
+  </div>
+</div>
+<!--Data!!-->
+<div id="data-wrapper" class="border-t border-gray-300 w-full"> <!--took out margin border here-->
+  <!-- Header -->
+  <button
+  id="data-toggle"
+  class="w-full px-2 py-2 flex items-center justify-between bg-gray-100 hover:bg-gray-200 font-medium"
+  >
+  <span class="flex items-center gap-1">
+      <span class="material-icons align-text-bottom">data_array</span>
+      Data
+    </span>
+    <svg id="data-arrow" class="w-4 h-4 transition-transform transform" xmlns="http://www.w3.org/2000/svg" fill="none"
+      viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+    </svg>
+  </button>
+
+  <!-- Hidden content -->
+  <div id="data-content" class="hidden px-2 py-2 space-y-2 bg-white">
+    <label class="flex items-center gap-2">
+      <input type="checkbox" class="overlay-toggle" data-layer="town-layer" checked />
+      <span><p>Community boundaries</p></span> <!--blurb that changes dyamically!! + maybe relocate/re-order closer to legend/before overlays-->
+    </label>
+  </div>
+</div>
+</div>
+<!-- Basemap Settings Toggle (always visible) actually relocate this in the scrollable part (but still have the panel open towards the top) -->
+<div id="basemap-toggle" class="border-t border-gray-300 mt-4 pt-2">
+  <button
+    class="w-full flex items-center justify-between px-2 py-2 hover:bg-gray-100 text-sm font-medium"
+    onclick="toggleBasemapSettings()"
+  >
+  <span class="flex items-center gap-1">
+      <span class="material-icons align-text-bottom">layers</span>
+      Settings
+    </span> <!--add icon-->
+    <svg id="basemap-arrow" class="w-4 h-4 transform transition-transform" xmlns="http://www.w3.org/2000/svg" fill="none"
+      viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+    </svg>
+  </button>
+</div>
+
+<!-- Basemap Settings Panel (initially hidden) -->
+<div id="basemap-settings" class="hidden mt-2 space-y-3 text-sm text-gray-700">
+  <div>
+    <div>
+        <label class="block mb-1 font-medium">Basemap style</label>
+        <div id="basemap-style-thumbnails" class="flex flex-wrap md:flex-nowrap gap-2 overflow-x-auto">
+          <button data-style="communityscale/cmcuwuwcv00xz01s1gn7xccqi" class="group border border-gray-300 rounded overflow-hidden hover:ring-2 ring-blue-500">
+            <img src="https://api.mapbox.com/styles/v1/communityscale/cmcuwuwcv00xz01s1gn7xccqi/static/-91.58,41.67,9.5/300x200@2x?access_token=pk.eyJ1IjoiZW10em90MDEiLCJhIjoiY20zZ2kyd3RpMDRnajJscHoyMG5neGJldyJ9.poXi4pgd2CoXKV2B4kg1Cw" alt="Light monochrome" class="w-full h-auto">
+            <div class="text-xs text-center py-1 group-hover:font-medium">Monochrome light</div>
+          </button>
+          <button data-style="communityscale/cmcntrq2h00hp01qv4paqhpwx" class="group border border-gray-300 rounded overflow-hidden hover:ring-2 ring-blue-500">
+            <img src="https://api.mapbox.com/styles/v1/communityscale/cmcntrq2h00hp01qv4paqhpwx/static/-91.58,41.67,9.5/300x200@2x?access_token=pk.eyJ1IjoiZW10em90MDEiLCJhIjoiY20zZ2kyd3RpMDRnajJscHoyMG5neGJldyJ9.poXi4pgd2CoXKV2B4kg1Cw" alt="Light satellite" class="w-full h-auto">
+            <div class="text-xs text-center py-1 group-hover:font-medium">Satellite light</div>
+          </button>
+          <button data-style="communityscale/cmc96uych026401s6577egc2r" class="group border border-gray-300 rounded overflow-hidden hover:ring-2 ring-blue-500">
+            <img src="https://api.mapbox.com/styles/v1/communityscale/cmc96uych026401s6577egc2r/static/-91.58,41.67,9.5/300x200@2x?access_token=pk.eyJ1IjoiZW10em90MDEiLCJhIjoiY20zZ2kyd3RpMDRnajJscHoyMG5neGJldyJ9.poXi4pgd2CoXKV2B4kg1Cw" alt="Grayscale satellite" class="w-full h-auto">
+            <div class="text-xs text-center py-1 group-hover:font-medium">Grayscale satellite</div>
+          </button>
+      </div>
+    </div>
+    
+    </select>
+  </div>
+
+  <div>
+      <label for="opacity" class="block text-sm font-medium text-gray-700 mb-1">Layer opacity</label>
+      <input
+        id="opacity"
+        type="range"
+        min="0"
+        max="1"
+        step="0.01"
+        value="1"
+        class="w-full"
+        onchange="setLayerOpacity(this.value)"
+      />
+    </div>
+</div>
+
+<footer class="border-t border-gray-300 bg-gray-50 px-4 py-3 text-sm text-gray-700 flex items-center gap-3">
+  <a href="https://communityscale.io" target="_blank" rel="noopener noreferrer">
+      <img
+        src="https://communityscale.io/wp-content/uploads/2024/01/white-on-black-with-edges-150x150.png"
+        alt="CommunityScale logo"
+        class="h-10 w-10 object-contain rounded"
+      />
+    </a>      
+  <div>
+    <p class="font-medium">CommunityScale</p>
+    <p class="text-xs text-gray-500">Scaling community innovation.</p>
+  </div>
+</footer>
+
+</div>
+  </div>
+
+  <!-- Map -->
+  <div id="map" class="flex-grow"></div>
+</div>
+
+<script>
+    const INITIAL_LOC = [-91.58, 41.67] 
+    const INITIAL_ZOOM = 9.5 //set initial zoom (zoom levels 9-12 best for cities depending on size)(this is set to 13 to accomodate the tileset that will need to be uploaded via CLI)
+    const communityScaleGray = "#425A70" //could replace with different accent color, I personally like this branding 
+    const placeOfInterest = "Johnson County"
+    const citiesOfInterest = [
+                "Hills",
+                "Lone Tree",
+                "Oxford",
+                "Shueyville",
+                "Solon",
+                "Swisher"
+            ]
+    const excludedCities = [
+                "Iowa City",
+                "Coralville",
+                "North Liberty",
+                "Tiffin",
+                "University Heights"
+            ]
+    const medIncomePalette = [ //Sequential colorBrewer Purple/Red ramp
+                '#f1eef6',
+                '#d7b5d8',
+                '#df65b0',
+                '#dd1c77',
+                '#980043'
+            ]
+    const cbRentersPalette = [ //Sequential colorBrewer GrnBlu ramp
+                '#f6eff7',
+                '#bdc9e1',
+                '#67a9cf',
+                '#1c9099',
+                '#016c59'
+            ]
+    const cbOwnersPalette = [ //Sequential colorBrewer BluPur ramp
+                '#edf8fb',
+                '#b3cde3',
+                '#8c96c6',
+                '#8856a7',
+                '#810f7c'
+            ]
+    const hhChangePalette = [ //Diverging colorBrewer PurGre ramp
+                '#762a83',
+                '#af8dc3',
+                '#e7d4e8',
+                '#f7f7f7',
+                '#d9f0d3',
+                '#7fbf7b',
+                '#1b7837'
+            ]
+
+    const landValuePalette = [ //Sequential colorBrewer Blu ramp
+                '#f1eef6',
+                '#bdc9e1',
+                '#74a9cf',
+                '#2b8cbe',
+                '#045a8d'
+            ]
+    const parcelValuePalette = [ //colorBrewer purples 
+                '#f2f0f7',
+                '#cbc9e2',
+                '#9e9ac8',
+                '#756bb1',
+                '#54278f'
+            ]
+
+    const ownershipPalette = [ //categorical palette for tax credits -- update!!
+                '#f2e22c',
+                '#fa2a73',
+                '#559428',
+                '#79a8f2',
+                '#e4ac28',
+                '#a7d96d',
+                '#8b63ba',
+                '#bdc9e1'
+            ]
+    const landUsePalette = [
+                "#24910a", //Agriculture
+                "#d4f088", //Agricultural/residential
+                "#fff8bf", //Residential
+                "#ffa734", //Multifamily
+                "#da6262", //Commercial
+                "#b560bb", //Mixed use
+                "#323052", //Industrial
+                "#425A70", //Exempt
+                "#bdc9e1" //Unknown
+            ]
+
+    //import * as turf from '@turf/turf';
+
+    //mapboxgl.accessToken = 'pk.eyJ1IjoiZW10em90MDEiLCJhIjoiY20zZ2kyd3RpMDRnajJscHoyMG5neGJldyJ9.poXi4pgd2CoXKV2B4kg1Cw ';
+    
+    mapboxgl.accessToken = 'pk.eyJ1IjoiY29tbXVuaXR5c2NhbGUiLCJhIjoiY21hZ3Y4azlmMDU5YTJqb2NqbzRsa3psbSJ9.eJlBVHcMSB88Czl3ti2i5g';
+    let map;
+    const BASEMAP_STYLES = {
+        gray: 'mapbox://styles/emtzot01/cm6a8mjb5004g01qrd7cv07mq',
+        satellite: 'mapbox://styles/communityscale/cmc96uych026401s6577egc2r',
+        lightSatellite: 'mapbox://styles/communityscale/cmcntrq2h00hp01qv4paqhpwx'
+    };
+
+    function initializeMap(styleKey = 'gray') {
+      map = new mapboxgl.Map({
+        container: 'map',
+        style: BASEMAP_STYLES[styleKey],
+        center: INITIAL_LOC,
+        zoom: INITIAL_ZOOM
+      });
+
+
+    function adjustMapSize() { //idk if needed!!
+        const sidebarWidth = document.getElementById('sidebar').width;
+        const mapContainer = document.getElementById('map');
+  
+        mapContainer.style.marginLeft = `${sidebarWidth}px`;
+        map.resize(); 
+        }
+
+    function addData (opacity = 0.6, visibleLayer = document.getElementById('layer-dropdown')) {
+        map.addSource("tracts", {    
+            type: "geojson",
+            data: "https://raw.githubusercontent.com/CommunityScale/JohnsonCounty/main/iaBgs_selectCounties.geojson",
+            promoteId: "GEOID"
+        })
+   
+        map.addSource("cities", {    
+            type: "geojson",
+            data: "https://raw.githubusercontent.com/CommunityScale/JohnsonCounty/main/jc_politicalBoundaries.geojson",
+            promoteId: "OBJECTID"
+        })
+
+        map.addSource("admin", {
+            type: "geojson",
+            data: "https://raw.githubusercontent.com/CommunityScale/JohnsonCounty/main/adminBoundaries_jcia.geojson",
+            promoteId: "OBJECTID"
+        })
+
+        map.addSource("counties", {    
+            type: "geojson",
+            data: "https://raw.githubusercontent.com/CommunityScale/JohnsonCounty/main/iaCounties.geojson",
+            promoteId: "GEOID"
+        })
+
+        map.addSource("villages",{
+            type: "geojson",
+            data: "https://raw.githubusercontent.com/CommunityScale/JohnsonCounty/main/villages_jco.geojson",
+            promoteId: "VILLAGE"
+        })
+
+        map.addSource("parcels", {
+            type: "geojson",
+            data: 'https://raw.githubusercontent.com/CommunityScale/JohnsonCounty/main/uninc_parcels_jcia.geojson',
+            //url: "mapbox://emtzot01.06wm5jay",
+            promoteId: "PPN"
+        })
+
+        map.addSource("growthAreas", {
+            type: "geojson",
+            data: "https://raw.githubusercontent.com/CommunityScale/JohnsonCounty/main/targetedGrowthAreas_jcia.geojson",
+            promoteId: "OBJECTID"
+        })
+
+        map.addSource("newPermits", {
+            type: "geojson",
+            data: "https://raw.githubusercontent.com/CommunityScale/JohnsonCounty/main/recentPermits_jcia.geojson",
+            promoteId: "PPN"
+        })
+
+        map.addSource("manufacturedHomeParks", {
+            type: "geojson",
+            data: "https://raw.githubusercontent.com/CommunityScale/JohnsonCounty/main/mobileHomes_jcia.geojson",
+            promoteId: "NAME"
+        })
+
+        map.addLayer({
+                id: "admin-layer",  
+                type: "fill",
+                source: "admin",
+                paint: {
+                    'fill-color': communityScaleGray,
+                    "fill-opacity": 0.6,
+                    "fill-outline-color": "white",
+                    "fill-outline-width": 1,
+                    "fill-opacity": [
+                        "case",
+                        ["boolean", ["feature-state", "hover"], false],
+                        0.95,
+                        0.6
+                ]},
+                layout: {
+                    visibility: "none"
+                }
+            },"road-label", 
+            "settlement-major-label", 
+            "settlement-subdivision-label", 
+            "settlement-minor-label"
+        )
+
+        map.addLayer({
+            id: "tracts-medIncome",  
+            type: "fill",
+            source: "tracts",
+            paint: {
+                "fill-color": [
+                    "case", ["==", ["get", "medIncome"], null], communityScaleGray,
+                    ["interpolate", 
+                    ["linear"],
+                    ["get", "medIncome"],
+                    15000,
+                    medIncomePalette[0], 
+                    56000,
+                    medIncomePalette[1],
+                    73000,
+                    medIncomePalette[2],
+                    95000,
+                    medIncomePalette[3],
+                    130000,
+                    medIncomePalette[4]]],
+                "fill-outline-color": "white",
+                "fill-opacity": [
+                    "case", ["==", ["get", "medIncome"], null], 0.3,
+                    ["case",
+                    ["boolean", ["feature-state", "hover"], false],
+                    0.95,
+                    0.6
+            ]]
+             },
+             layout: {
+                visibility: "visible"
+             }
+        },
+        "settlement-major-label", 
+        "settlement-subdivision-label", 
+        "settlement-minor-label"
+    ) 
+
+
+    map.addLayer({      
+            id: "tracts-pctCostBurdenedRenters",  
+            type: "fill",
+            source: "tracts",
+            paint: {
+                "fill-color": [
+                    "case", ["==", ["get", "pctRent30"], null], communityScaleGray,
+                    ["interpolate", 
+                    ["linear"],
+                    ["get", "pctRent30"],
+                    0,
+                    cbRentersPalette[0], 
+                    0.25,
+                    cbRentersPalette[1],
+                    0.50,
+                    cbRentersPalette[2],
+                    0.60,
+                    cbRentersPalette[3],
+                    0.75,
+                    cbRentersPalette[4]]],
+                "fill-outline-color": "white",
+                "fill-opacity": [
+                    "case", ["==", ["get", "pctRent30"], null], 0.3,
+                    ["case",
+                    ["boolean", ["feature-state", "hover"], false],
+                    0.95,
+                    0.6
+            ]]
+             },
+             layout: {
+                visibility: "none"
+             }
+        },
+        "settlement-major-label", 
+        "settlement-subdivision-label", 
+        "settlement-minor-label"
+    )
+    
+
+    map.addLayer({      
+            id: "tracts-pctCostBurdenedOwners",  
+            type: "fill",
+            source: "tracts",
+            paint: {
+                "fill-color": [
+                    "case", ["==", ["get", "pctOwned30"], null], communityScaleGray,
+                    ["interpolate",
+                    ["linear"],
+                    ["get", "pctOwned30"],
+                    0,
+                    cbOwnersPalette[0],
+                    0.11,
+                    cbOwnersPalette[1], 
+                    0.15,
+                    cbOwnersPalette[2],
+                    0.22,
+                    cbOwnersPalette[3],
+                    0.35,
+                    cbOwnersPalette[4],
+                ]],
+                "fill-outline-color": "white",
+                "fill-opacity": [
+                    "case", ["==", ["get", "pctOwned30"], null], 0.3,
+                    ["case",
+                    ["boolean", ["feature-state", "hover"], false],
+                    0.95,
+                    0.6
+            ]]
+             },
+             layout: {
+                visibility: "none"
+             }
+        },
+        "settlement-major-label", 
+        "settlement-subdivision-label", 
+        "settlement-minor-label"
+    )
+
+    map.addLayer({
+                id: "parcels-landuse", //update with parcel types!!
+                type: "fill",
+                source: "parcels",
+                //"source-layer": "parcels_jcia-7q1vz4", 
+                paint: {
+                    "fill-color": [
+                        "match",
+                        ["get", "PropClass"],
+                        "A", landUsePalette[0],
+                        "A,AD", landUsePalette[1],
+                        "C", landUsePalette[4],
+                        "C,M", landUsePalette[5],
+                        "C,R", landUsePalette[5],
+                        "E", landUsePalette[7],
+                        "I", landUsePalette[6],
+                        "R", landUsePalette[2],
+                        "M", landUsePalette[3],
+                        landUsePalette[8]
+                    ],
+                    "fill-outline-color": communityScaleGray,
+                    "fill-opacity": [
+                        "case",
+                        ["boolean", ["feature-state", "hover"], false],
+                        0.7,
+                        0.5
+                    ]
+                },
+                layout: {
+                    visibility: "none"
+                }
+            }, 
+            "settlement-major-label", 
+            "settlement-subdivision-label", 
+            "settlement-minor-label")
+
+    map.addLayer({ 
+            id: "parcels-pctLV",  
+            type: "fill",
+            source: "parcels",
+            //"source-layer": "parcels_jcia-7q1vz4", 
+            paint: {
+                "fill-color": [
+                    "case", ["==", ["get", "pctLandVal"], null], communityScaleGray,
+                    ["interpolate", 
+                    ["linear"],
+                    ["get", "pctLandVal"],
+                    0.03,
+                    landValuePalette[4], 
+                    0.15,
+                    landValuePalette[3],
+                    0.35,
+                    landValuePalette[2],
+                    0.65,
+                    landValuePalette[1],
+                    0.90,
+                    landValuePalette[0]]],
+                "fill-outline-color": "#545453",
+                "fill-opacity": [
+                    "case", ["==", ["get", "pctLandVal"], null], 0.3,
+                    ["case",
+                    ["boolean", ["feature-state", "hover"], false],
+                    0.95,
+                    0.6
+            ]]
+             },
+             layout: {
+                visibility: "none"
+             }
+        },"road-label", 
+        "settlement-major-label", 
+        "settlement-subdivision-label", 
+        "settlement-minor-label"
+    )
+
+    map.addLayer(
+            {
+                id: 'manufacturedHomes',
+                type: 'circle',
+                source: 'manufacturedHomeParks',
+                paint: {
+                    // Make circles larger as the user zooms from z12 to z22.
+                    'circle-radius': {
+                        'base': 2,
+                        'stops': [
+                            [12, 4],
+                            [22, 180]
+                    ]},
+                    'circle-color': "#249bd6"},
+                layout: {
+                    visibility: "none"
+                } 
+           })
+
+    map.addLayer( 
+            {
+                id: 'parcels-newPermits2020',
+                type: 'circle',
+                source: "newPermits",
+                paint: {
+                    'circle-radius': { 
+                        'base': 2,
+                        'stops': [
+                            [12, 3],
+                            [22, 18]
+                    ]},
+                    'circle-color': "#82ac22", //"#D1CBC1" agreeable gray a la Sherwin Williams, add color to legend      
+                }, 
+                layout: {
+                    visibility: "none"
+                },
+            filter: [">", ["get", "permitYr"], 2019]
+        })
+
+    map.addLayer( 
+            {
+                id: 'parcels-newPermits2010',
+                type: 'circle',
+                source: "newPermits",
+                paint: {
+                    'circle-radius': { 
+                        'base': 2,
+                        'stops': [
+                            [12, 3],
+                            [22, 18]
+                    ]},
+                    'circle-color': "#cddea8",   
+                }, 
+                layout: {
+                    visibility: "none"
+                },
+            filter: ["<", ["get", "permitYr"], 2019]
+        })
+
+    map.addLayer({ 
+            id: "parcels-ownership",  
+            type: "fill",
+            source: "parcels",
+            //"source-layer": "parcels_jcia-7q1vz4", //filter by residential??
+            paint: {
+                "fill-color": [
+                    "match",
+                    ["get", "credits"], //update palette
+                        "HMST", ownershipPalette[0], 
+                        "AG", ownershipPalette[2],
+                        "MIL", ownershipPalette[1], 
+                        "S42", ownershipPalette[3],
+                        "HMST,AG", ownershipPalette[5],
+                        "HMST,MIL", ownershipPalette[4],
+                        "HMST,AG,MI", ownershipPalette[6],
+                        "NONE", ownershipPalette[7],
+                        ownershipPalette[7]
+                        ],
+                "fill-outline-color": "#545453",
+                "fill-opacity": ["case",
+                    ["boolean", ["feature-state", "hover"], false],
+                    0.95,
+                    0.6]
+             },
+             layout: {
+                visibility: "none"
+            }},
+            "settlement-major-label", 
+            "settlement-subdivision-label", 
+            "settlement-minor-label"
+    ) 
+
+    map.addLayer({     
+            id: "tracts-pctHH",  
+            type: "fill",
+            source: "tracts",
+            paint: {
+                "fill-color": [
+                    "case", ["==", ["get", "pctChangeHH"], null], communityScaleGray,
+                    ["interpolate",
+                    ["linear"],
+                    ["get", "pctChangeHH"],
+                    -0.15,
+                    hhChangePalette[0],
+                    -0.07, 
+                    hhChangePalette[1],
+                    -0.01,
+                    hhChangePalette[2],
+                    0,
+                    hhChangePalette[3], 
+                    0.1,
+                    hhChangePalette[4],
+                    0.2,
+                    hhChangePalette[5],
+                    0.5,
+                    hhChangePalette[6]
+                ]],
+                "fill-outline-color": "white",
+                "fill-opacity": [
+                    "case", ["==", ["get", "pctChangeHH"], null], 0.3,
+                    ["case",
+                    ["boolean", ["feature-state", "hover"], false],
+                    0.95,
+                    0.6
+            ]]
+             },
+             layout: {
+                visibility: "none"
+        }},
+            "settlement-major-label", 
+            "settlement-subdivision-label", 
+            "settlement-minor-label"
+    )
+
+    map.addLayer({ 
+            id: "parcels-value", 
+            type: "fill",
+            source: "parcels",
+            //"source-layer": "parcels_jcia-7q1vz4", 
+            paint: {
+                "fill-color": [
+                    "case", ["==", ["get", "acreVal"], null], communityScaleGray,
+                    ["interpolate", 
+                    ["linear"],
+                    ["get", "acreVal"],
+                    24000,
+                    parcelValuePalette[0], 
+                    175000,
+                    parcelValuePalette[1],
+                    327000,
+                    parcelValuePalette[2],
+                    575000,
+                    parcelValuePalette[3],
+                    850000,
+                    parcelValuePalette[4]]],
+                "fill-outline-color": "#545453",
+                "fill-opacity": [
+                    "case", ["==", ["get", "acreVal"], null], 0.3,
+                    ["case",
+                    ["boolean", ["feature-state", "hover"], false],
+                    0.95,
+                    0.6
+            ]]
+             },
+             layout: {
+                visibility: "none"
+             }},
+            "settlement-major-label", 
+            "settlement-subdivision-label", 
+            "settlement-minor-label"
+    ) 
+
+    map.addLayer({
+            id: "smallCities-layer",
+            type: "fill",
+            source: "cities",
+            paint: {
+                "fill-color": "#ffce0a",
+                "fill-opacity": 0.8,
+                //"line-width": 3
+                },
+            layout: {
+                visibility: "visible"
+                },
+            filter: ["in", "NAME", ...citiesOfInterest]}
+        )
+
+     map.addLayer({
+            id: "villages-layer",
+            type: "fill",
+            source: "villages",
+            paint: {
+                "fill-color": "#ffcebf",
+                "fill-opacity": 0.8,
+                //"line-width": 3
+                },
+                layout: {
+                    visibility: "visible"
+                }
+    })
+
+    map.addLayer({
+            id: "excludedCities-layer",
+            type: "fill",
+            source: "cities",
+            paint: {
+                "fill-color": "#a9a9a9", //'dark gray'
+                "fill-opacity": 0.9,
+                },
+            layout: {
+                    visibility: "visible"
+                },
+            filter: ["in", "NAME", ...excludedCities]},
+            "settlement-major-label", 
+            "settlement-subdivision-label", 
+            "settlement-minor-label"
+        )
+
+    map.addLayer({
+            id: "targetedGrowth-layer",
+            type: "fill",
+            source: "growthAreas",
+            paint: {
+                "fill-color": "#d67315",
+                "fill-opacity": 0.8,
+                //"line-width": 2,
+                }, 
+            layout: {
+                    visibility: "visible"
+                }
+    })
+    
+    map.addLayer({
+            id: "county-layer",
+            type: "line",
+            source: "counties",
+            paint: {
+                "line-color": "black",
+                "line-opacity": 1,
+                "line-width": 3
+                },
+            layout: {
+                visibility: "visible"
+                },
+            filter: ["==", "NAME", placeOfInterest]}
+        );
+
+        adjustMapSize();
+        window.addEventListener('resize', adjustMapSize)
+    }
+
+    map.on("load", () => {
+        addData();
+    }); //change!!
+
+const layerSelect = document.getElementById('layer-select');
+const legendContent = document.getElementById('legend-content');
+
+const allLayers = [
+    'tracts-medIncome',
+    'tracts-pctCostBurdenedRenters', 
+    'tracts-pctCostBurdenedOwners',
+    'parcels-landuse',
+    'parcels-pctLV',
+    'parcels-value',
+    'parcels-ownership'
+];
+
+// ✅ Extract fill-color stops from layer expression
+function getStopsFromLayer(layerId) {
+  let expression = map.getPaintProperty(layerId, 'fill-color');
+
+  // If it's a case statement, find the color scale inside
+  if (Array.isArray(expression) && expression[0] === 'case') {
+    // Search for 'interpolate' or 'step' inside the case --> update if statement to account for matching 
+    expression = expression.find(sub => Array.isArray(sub) && (sub[0] === 'interpolate' || sub[0] === 'step'));
+  }
+
+  if (!Array.isArray(expression)) return [];
+
+  const type = expression[0];
+  if (type !== 'interpolate' && type !== 'step') return [];
+
+  const stops = expression.slice(3); // [value1, color1, value2, color2, ...]
+  const result = [];
+
+  for (let i = 0; i < stops.length; i += 2) {
+    result.push({
+      value: stops[i],
+      color: stops[i + 1]
+    });
+  }
+
+  return result;
+}
+
+
+//Optional label formatter --> need to fix for 0 values, what should happen to other values
+function formatLegendLabel(value) {
+  if (typeof value === 'number') {
+    if (value < 1 && value > 0) return `${Math.round(value * 100)}%`;
+    return `$${Math.round(value).toLocaleString()}`;
+  }
+  return value;
+}
+
+// ✅ Render legend from stops
+function renderLegendFromStops(layerId) {
+  const stops = getStopsFromLayer(layerId);
+
+  if (!stops.length) {
+    legendContent.innerHTML = `<p class="italic text-gray-500">No legend available</p>`;
+    return;
+  }
+
+  legendContent.innerHTML = stops.map(stop => `
+    <div class="flex items-center gap-2">
+      <span class="w-4 h-4 inline-block rounded-sm" style="background-color: ${stop.color};"></span>
+      <span>${formatLegendLabel(stop.value)}</span>
+    </div>
+  `).join('');
+}
+
+// ✅ On dropdown change
+layerSelect.addEventListener('change', (e) => {
+  const selected = e.target.value;
+
+  allLayers.forEach(id => {
+    if (map.getLayer(id)) {
+      map.setLayoutProperty(id, 'visibility', id === selected ? 'visible' : 'none');
+    }
+  });
+
+  renderLegendFromStops(selected);
+});
+
+// ✅ On map load
+map.on('load', () => {
+  const initialLayer = layerSelect.value;
+
+  allLayers.forEach(id => {
+    if (map.getLayer(id)) {
+      map.setLayoutProperty(id, 'visibility', id === initialLayer ? 'visible' : 'none');
+    }
+  });
+
+  renderLegendFromStops(initialLayer);
+});
+       
+    function layerLegendVisibility() {
+        const dropdown = document.getElementById('layer-dropdown');
+        const selectedLayerId = dropdown.value;
+
+        dataLayers.forEach(layerId => {
+            const visibility = (layerId === selectedLayerId) ? 'visible' : 'none';
+            if (map.getLayer(layerId)) {
+                map.setLayoutProperty(layerId, 'visibility', visibility);
+            }
+    });
+
+    //     const persistentLayers = [ //double check these, use this to establish which labels are above the fill layers!!
+    //         "placeOfInterest-layer",
+    //         "road-label",
+    //         "settlement-major-label",
+    //         "settlement-subdivision-label",
+    //         "settlement-minor-label"
+    //     ];
+    //     persistentLayers.forEach(id => {
+    //         if (map.getLayer(id)) {
+    //         map.setLayoutProperty(id, 'visibility', 'visible');
+    //         }
+    //     });
+
+    //     const legends = document.querySelectorAll('.legend');
+    //         legends.forEach(legend => {
+    //             legend.style.display = 'none';
+    //         });
+
+    //     const legendDictionary = {
+    //         //'tracts-class-layer': 'ncLegend',
+    //         'tracts-medIncome': 'medIncomeLegend',
+    //         'tracts-pctCostBurdenedRenters': 'cbRentersLegend', 
+    //         'tracts-pctCostBurdenedOwners': 'cbOwnersLegend',
+    //         //'tracts-pctHH': pctHHLegend,
+    //         'parcels-landuse': 'landuseLegend',
+    //         'parcels-pctLV': 'pctLVLegend',
+    //         'parcels-value': 'parcelValueLegend',
+    //         'parcels-ownership': 'ownershipLegend'
+            
+    //     };
+
+    //     const legendId = legendDictionary[selectedLayerId];
+    //         if (legendId) {
+    //             document.getElementById(legendId).style.display = 'block';
+    //     }
+     }
+
+    //document.getElementById('layer-dropdown').addEventListener('change', layerLegendVisibility);
+
+    function getOpacityExp(property, baseOpacity) {
+        return [
+            "case",
+            ["==", ["get", property], null], 0.2,
+            ["boolean", ["feature-state", "hover"], false], 0.95,
+            baseOpacity
+        ];
+    }
+
+    document.getElementById("opacity").addEventListener("input", function (e) {
+        const newOpacity = parseFloat(e.target.value);
+
+        const props = {
+            //"tracts-class-layer": "class",
+            "parcels-landuse": "ParcelType",
+            "parcels-pctLV": "pctLV",
+            "parcels-value": "acreVal",
+            'tracts-medIncome': "medIncome",
+            'tracts-pctCostBurdenedRenters': 'pctRent30',
+            'tracts-pctCostBurdenedOwners': 'pctOwned30'
+        };
+
+        dataLayers.forEach(layerId => {
+            const prop = props[layerId];
+            if (map.getLayer(layerId)) {
+                map.setPaintProperty(
+                    layerId,
+                    "fill-opacity",
+                    getOpacityExp(prop, newOpacity)
+                );
+            }
+        });
+    });
+
+    function updateLayerOpacity() {
+        const currentOpacity = parseFloat(document.getElementById("opacity").value);
+        const props = {
+            "parcels-landuse": "ParcelType",
+            "parcels-pctLV": "pctLV",
+            "parcels-value": "acreVal",
+            'tracts-medIncome': "medIncome",
+            'tracts-pctCostBurdenedRenters': 'pctRent30',
+            'tracts-pctCostBurdenedOwners': 'pctOwned30'
+        };
+
+        dataLayers.forEach(layerId => {
+            const prop = props[layerId];
+            if (map.getLayer(layerId)) {
+                map.setPaintProperty(
+                    layerId,
+                    "fill-opacity",
+                    getOpacityExp(prop, currentOpacity)
+                );
+            }
+        });
+    }
+  
+
+    const checkboxes = document.querySelectorAll('.overlay-toggle');
+
+    checkboxes.forEach((checkbox) => {
+    checkbox.addEventListener('change', () => {
+        const layerId = checkbox.data-layer;
+        const visibility = checkbox.checked ? 'visible' : 'none';
+        if (map.getLayer(layerId)) {
+            map.setLayoutProperty(layerId, 'visibility', visibility);
+            map.setLayoutProperty("county-layer", 'visibility', 'visible');
+            map.setLayoutProperty("road-label", 'visibility', 'visible');
+            map.setLayoutProperty("settlement-major-label", 'visibility', 'visible');
+            map.setLayoutProperty("settlement-subdivision-label", 'visibility', 'visible');
+            map.setLayoutProperty("settlement-minor-label", 'visibility', 'visible');;
+        }})})
+  
+
+    const countyFIPS = "103"; // Johnson County fips code
+    const tractLayerIds = [
+       //"admin-layer",
+        "tracts-medIncome",
+        "tracts-pctCostBurdenedRenters",
+        "tracts-pctCostBurdenedOwners",
+        //"tracts-pctHH"
+    ];
+
+    document.getElementById("toggleCounty").addEventListener("change", (e) => {
+        const showOnlyCounty = e.target.checked;
+        const filter = showOnlyCounty
+            ? ["==", ["get", "COUNTY"], countyFIPS]
+            : null;
+
+        tractLayerIds.forEach(id => {
+            map.setFilter(id, filter);
+        });
+    });
+
+    map.on('click', (e) => {
+        const [selectedGeo] = map.queryRenderedFeatures(e.point, {               
+            layers: ["tracts-medIncome"]
+        });
+
+        if (selectedGeo) {
+            const medianIncome = selectedGeo.properties.medIncome;
+            const displayIncome = medianIncome === null || medianIncome === undefined ? 'No available data' : `Annual median household income: $${medianIncome.toLocaleString()} (2023 USD)`;
+
+            new mapboxgl.Popup({ closeButton: true }, { clickToClose: true })
+            .setLngLat(selectedGeo.geometry.coordinates[0][0])
+            .setHTML(`
+                <div class="mapboxgl-popup">
+                <div class="mapboxgl-popup-close-button">x</div>
+                <div class="mapboxgl-popup-header">${selectedGeo.properties.NAME}</div>
+                <div class="mapboxgl-popup-content">${displayIncome}
+                </div>
+            </div>`)
+            .addTo(map);
+    }});
+
+    map.on("click", (e)=> {
+        const [ selectedGeo ]= map.queryRenderedFeatures(e.point, {
+            layers: ["admin-layer"]
+        });
+
+        if (selectedGeo) {
+            new mapboxgl.Popup({closeButton: true}, {clickToClose: true})
+            .setLngLat(selectedGeo.geometry.coordinates[0][0]) 
+            .setHTML(`<div class="mapboxgl-popup">
+                <div class="mapboxgl-popup-close-button">x</div>
+                <div class="mapboxgl-popup-header">${selectedGeo.properties.NAME}</div>
+            </div>`)
+            .addTo(map)
+    }});
+
+    map.on('click', (e) => {
+        const [selectedGeo] = map.queryRenderedFeatures(e.point, {               
+            layers: ["tracts-pctCostBurdenedRenters"]
+        });
+
+        if (selectedGeo) {
+            const pctRent30 = selectedGeo.properties.pctRent30;
+            const roundedPctRent30 = Math.round(pctRent30 * 1000) / 10
+            const displayPctRent30 = pctRent30 === null || pctRent30 === undefined ? 'No available data' : `${roundedPctRent30}% of renters in ${selectedGeo.properties.NAME} spend more than 30% of income on housing costs.`;
+
+            new mapboxgl.Popup({ closeButton: true }, { clickToClose: true })
+            .setLngLat(selectedGeo.geometry.coordinates[0][0])
+            .setHTML(`
+                <div class="mapboxgl-popup">
+                <div class="mapboxgl-popup-close-button">x</div>
+                <div class="mapboxgl-popup-header">${selectedGeo.properties.NAME}</div>
+                <div class="mapboxgl-popup-content">${displayPctRent30}
+                </div>
+            </div>`)
+            .addTo(map);
+    }});
+
+    map.on('click', (e) => {
+        const [selectedGeo] = map.queryRenderedFeatures(e.point, {               
+            layers: ["tracts-pctCostBurdenedOwners"]
+        });
+
+        if (selectedGeo) {
+            const pctOwned30 = selectedGeo.properties.pctOwned30;
+            const roundedPctOwned30 = Math.round(pctOwned30 * 1000) / 10
+            const displayPctOwned30 = pctOwned30 === null || pctOwned30 === undefined ? 'No available data' : `${roundedPctOwned30}% of homeowners in ${selectedGeo.properties.NAME} spend more than 30% of income on housing costs.`;
+
+            new mapboxgl.Popup({ closeButton: true }, { clickToClose: true })
+            .setLngLat(selectedGeo.geometry.coordinates[0][0])
+            .setHTML(`
+                <div class="mapboxgl-popup">
+                <div class="mapboxgl-popup-close-button">x</div>
+                <div class="mapboxgl-popup-header">${selectedGeo.properties.NAME}</div>
+                <div class="mapboxgl-popup-content">${displayPctOwned30}
+                </div>
+            </div>`)
+            .addTo(map);
+    }});
+
+    map.on('click', (e) => {
+        const [selectedGeo] = map.queryRenderedFeatures(e.point, {               
+            layers: ["parcels-pctLV"]
+        });
+
+        if (selectedGeo) {
+            const name = selectedGeo.properties.SiteAddress;
+            const displayName = name == null || name == undefined ? `Address unavailable` : `${name}`;
+            const pctLandValue = selectedGeo.properties.pctLandVal;
+            const roundedPctLV = Math.round(pctLandValue * 1000) / 10
+            const displayPctLV = pctLandValue === null || pctLandValue === undefined ? 'No available data.' : ` Land value accounts for ${roundedPctLV}% of Parcel #${selectedGeo.properties.PPN}'s total assessed value.`;
+
+            new mapboxgl.Popup({ closeButton: true }, { clickToClose: true })
+            .setLngLat(selectedGeo.geometry.coordinates[0][0])
+            .setHTML(`
+                <div class="mapboxgl-popup">
+                <div class="mapboxgl-popup-close-button">x</div>
+                <div class="mapboxgl-popup-header">${displayName}</div>
+                <div class="mapboxgl-popup-content">${displayPctLV}
+                </div>
+            </div>`)
+            .addTo(map);
+    }});
+
+    map.on('click', (e) => {
+        const [selectedGeo] = map.queryRenderedFeatures(e.point, {               
+            layers: ["tracts-pctHH"]
+        });
+
+        if (selectedGeo) {
+            const pctChangeHH = selectedGeo.properties.pctChangeHH;
+            const roundedPctChangeHH = Math.round(pctChangeHH * 1000) / 10
+            const displayPctChangeHH = pctChangeHH === null || pctChangeHH === undefined ? 'No available data' : `${selectedGeo.properties.NAME} saw a ${roundedPctChangeHH}% change in the number of households (2013-2023).`;
+
+            new mapboxgl.Popup({ closeButton: true }, { clickToClose: true })
+            .setLngLat(selectedGeo.geometry.coordinates[0][0])
+            .setHTML(`
+                <div class="mapboxgl-popup">
+                <div class="mapboxgl-popup-close-button">x</div>
+                <div class="mapboxgl-popup-header">${selectedGeo.properties.NAME}</div>
+                <div class="mapboxgl-popup-content">${displayPctChangeHH}
+                </div>
+            </div>`)
+            .addTo(map);
+    }});
+
+    map.on('click', (e) => {
+        const [selectedGeo] = map.queryRenderedFeatures(e.point, {              
+            layers: ["parcels-value"]
+        });
+
+        if (selectedGeo) {
+            const name = selectedGeo.properties.SiteAddress;
+            const displayName = name == null || name == undefined ? `Address unavailable` : `${name}`;
+            const normVal = Math.round(selectedGeo.properties.acreVal * 100/100);
+            const av = selectedGeo.properties.TotalValue;
+            const displayVal = normVal === null || normVal === undefined ? 'No available data.' : `Assessed value per acre: $${normVal.toLocaleString('en-US')}.`;
+            const displayAV = av === null || av === undefined ? `No available data.` : `Total assessed value: $${av.toLocaleString('en-US')}.`
+            new mapboxgl.Popup({ closeButton: true }, { clickToClose: true })
+            .setLngLat(selectedGeo.geometry.coordinates[0][0])
+            .setHTML(`
+                <div class="mapboxgl-popup">
+                <div class="mapboxgl-popup-close-button">x</div>
+                <div class="mapboxgl-popup-header">${displayName}</div>
+                <div class="mapboxgl-popup-content">${displayVal}<br>${displayAV}
+                </div>
+            </div>`)
+            .addTo(map);
+    }});
+
+    map.on('click', (e) => { //excluded cities
+        const [selectedGeo] = map.queryRenderedFeatures(e.point, {               
+            layers: ["excludedCities-layer"]
+        });
+
+        if (selectedGeo) {
+            new mapboxgl.Popup({ closeButton: true }, { clickToClose: true })
+            .setLngLat(selectedGeo.geometry.coordinates[0][0])
+            .setHTML(`
+                <div class="mapboxgl-popup">
+                <div class="mapboxgl-popup-close-button">x</div>
+                <div class="mapboxgl-popup-header">${selectedGeo.properties.NAME}</div>
+                </div>
+            </div>`)
+            .addTo(map);
+    }});
+
+    map.on('click', (e) => { //small cities
+        const [selectedGeo] = map.queryRenderedFeatures(e.point, {               
+            layers: ["smallCities-layer"]
+        });
+
+        if (selectedGeo) {
+            new mapboxgl.Popup({ closeButton: true }, { clickToClose: true })
+            .setLngLat(selectedGeo.geometry.coordinates[0][0])
+            .setHTML(`
+                <div class="mapboxgl-popup">
+                <div class="mapboxgl-popup-close-button">x</div>
+                <div class="mapboxgl-popup-header">${selectedGeo.properties.NAME}</div>
+                </div>
+            </div>`)
+            .addTo(map);
+    }});
+
+    map.on('click', (e) => { //villages
+        const [selectedGeo] = map.queryRenderedFeatures(e.point, {               
+            layers: ["villages-layer"]
+        });
+
+        if (selectedGeo) {
+            new mapboxgl.Popup({ closeButton: true }, { clickToClose: true })
+            .setLngLat(selectedGeo.geometry.coordinates[0][0])
+            .setHTML(`
+                <div class="mapboxgl-popup">
+                <div class="mapboxgl-popup-close-button">x</div>
+                <div class="mapboxgl-popup-header">${selectedGeo.properties.VILLAGE}</div>
+                </div>
+            </div>`)
+            .addTo(map);
+    }});
+
+
+    map.on('click', (e) => { //targeted growth areas 
+        const [selectedGeo] = map.queryRenderedFeatures(e.point, {               
+            layers: ["targetedGrowth-layer"]
+        });
+
+        if (selectedGeo) {
+            const tifHeader = 'TIF';
+            const displayUse = selectedGeo.properties.LAND_USE;
+
+            new mapboxgl.Popup({ closeButton: true }, { clickToClose: true })
+            .setLngLat(selectedGeo.geometry.coordinates[0][0])
+            .setHTML(`
+                <div class="mapboxgl-popup">
+                <div class="mapboxgl-popup-close-button">x</div>
+                <div class="mapboxgl-popup-header">${tifHeader}</div>
+                <div class="mapboxgl-popup-content">${displayUse}
+                </div>
+            </div>`)
+            .addTo(map);
+    }});
+
+    const dataLayers = [
+        'tracts-medIncome', 
+        'tracts-pctCostBurdenedRenters', 
+        'tracts-pctCostBurdenedOwners',
+        'tracts-pctHH',
+        'admin-layer',
+        'parcels-landuse',
+        'parcels-pctLV',
+        'parcels-value',
+        'parcels-ownership'
+        ];
+
+    function toggleBasemapSettings() { //correct for the basemap toggle situation
+        const panel = document.getElementById('basemap-settings');
+        const arrow = document.getElementById('basemap-arrow');
+        panel.classList.toggle('hidden');
+        arrow.classList.toggle('rotate-180'); // Flip the arrow
+        }
+
+        document.querySelectorAll('#basemap-style-thumbnails button').forEach(button => {
+  button.addEventListener('click', () => {
+    const style = button.getAttribute('data-style');
+
+    // ✅ Capture visible layers before switching
+    const visibleLayers = dataLayers.filter(id => {
+      const layer = map.getLayer(id);
+      return layer && map.getLayoutProperty(id, 'visibility') === 'visible';
+    });
+
+    // ✅ Switch basemap
+    map.setStyle(`mapbox://styles/${style}`);
+
+    // ✅ Restore layers and visibility once style loads
+    map.once('style.load', () => {
+      addData();
+
+      visibleLayers.forEach(id => {
+        if (map.getLayer(id)) {
+          map.setLayoutProperty(id, 'visibility', 'visible');
+        }
+      });
+
+      updateLayerOpacity();
+
+      const selected = document.getElementById('layer-dropdown')?.value;
+      if (selected) renderLegendFromStops(selected);
+    });
+  });
+});
+
+
+    document.getElementById('basemap-toggle').addEventListener('click', toggleBasemapSettings);
+
+    
+    const dropdown = document.getElementById('layer-dropdown');
+
+    document.getElementById("opacity").addEventListener("input", function (e) {
+        const newOpacity = parseFloat(e.target.value);
+        dataLayers.forEach(layerId => {
+        map.setPaintProperty(layerId, "fill-opacity", newOpacity);
+        });
+    });
+
+    dropdown.addEventListener('change', function() { //keep but change 
+        const selectedLayer = dropdown.value;
+        dataLayers.forEach(layerId => {
+            if (layerId !== selectedLayer && map.getLayer(layerId)) {
+            map.setLayoutProperty(layerId, 'visibility', 'none');
+        }
+    });
+        
+        map.setLayoutProperty(selectedLayer, 'visibility', 'visible');
+        map.setLayoutProperty("county-layer", 'visibility', 'visible');
+        map.setLayoutProperty("road-label", 'visibility', 'visible');
+        map.setLayoutProperty("settlement-major-label", 'visibility', 'visible');
+        map.setLayoutProperty("settlement-subdivision-label", 'visibility', 'visible');
+        map.setLayoutProperty("settlement-minor-label", 'visibility', 'visible');
+    });
+
+    // document.getElementById('layer-dropdown').addEventListener('change', function() { //can cut
+    //     var legends = document.querySelectorAll('.legend');
+    //     legends.forEach(function(legend) {
+    //     legend.style.display = 'none';
+    //         });
+
+    //     var selectedLayer = dropdown.value; //cut 
+    //     if (selectedLayer === 'tracts-medIncome') {
+    //     document.getElementById('medIncomeLegend').style.display = 'block';
+    //     }      else if (selectedLayer === 'tracts-pctCostBurdenedRenters') {
+    //     document.getElementById('cbRentersLegend').style.display = 'block';
+    //     }   else if (selectedLayer === 'tracts-pctCostBurdenedOwners') {
+    //     document.getElementById('cbOwnersLegend').style.display = 'block';
+    //     }   else if (selectedLayer === 'tracts-pctCostBurdenedOwners') {
+    //     document.getElementById('cbOwnersLegend').style.display = 'block'; //replace
+    //     }   else if (selectedLayer === 'parcels-pctLV') { 
+    //     document.getElementById('pctLVLegend').style.display = 'block';
+    //     }   else if (selectedLayer === 'parcels-landuse') { 
+    //     document.getElementById('landUseLegend').style.display = 'block';
+    //     }   else if (selectedLayer === 'parcels-ownership') { 
+    //     document.getElementById('ownershipLegend').style.display = 'block';
+    //     }   else if (selectedLayer === 'parcels-value') { 
+    //     document.getElementById('parcelValueLegend').style.display = 'block';
+    //     }   else if (selectedLayer === 'tracts-pctHH') {
+    //     document.getElementById('pctHHLegend').style.display = 'block';
+    //     }});
+
+
+    // document.getElementById("basemapStyle").addEventListener("change", function (e) { //change to meet needs 
+    // const newStyle = e.target.value;
+    // const center = map.getCenter();
+    // const zoom = map.getZoom();
+    //     map.remove();
+    //     initializeMap(newStyle);
+    //     setTimeout(() => {
+    //         map.setCenter(center);
+    //         map.setZoom(zoom);
+    //     }, 500);
+    // });
+
+        let hoveredGeoId = null;
+
+        const hoverLayers = [
+            { id: 'tracts-medIncome', source: 'tracts'},
+            { id: 'tracts-pctCostBurdenedRenters', source: 'tracts'},
+            { id: 'tracts-pctCostBurdenedOwners', source: 'tracts' },
+            { id: 'tracts-pctHH', source: 'tracts' },
+            { id: 'admin-layer', source: 'admin' },
+            { id: 'parcels-landuse', source: 'parcels'},
+            { id: 'parcels-value', source: 'parcels'},
+            { id: 'parcels-pctLV', source: 'parcels'},
+            { id: 'parcels-ownership', source: 'parcels'}
+        ];
+
+        hoverLayers.forEach(({ id, source }) => {
+            map.on('mousemove', id, (e) => {
+                if (e.features.length > 0) {
+                    if (hoveredGeoId !== null) {
+                        map.setFeatureState(
+                            { source, id: hoveredGeoId },
+                            { hover: false }
+                        );
+                    }
+                    hoveredGeoId = e.features[0].id;
+                    map.setFeatureState(
+                        { source, id: hoveredGeoId },
+                        { hover: true }
+                    );
+                }
+            });
+
+            map.on('mouseleave', id, () => {
+                if (hoveredGeoId !== null) {
+                    map.setFeatureState(
+                        { source, id: hoveredGeoId },
+                        { hover: false }
+                    );
+                }
+                hoveredGeoId = null;
+            });
+        })};
+
+const overlayToggle = document.getElementById('overlay-toggle');
+const overlayContent = document.getElementById('overlay-content');
+const overlayArrow = document.getElementById('overlay-arrow');
+
+overlayToggle.addEventListener('click', () => {
+  const isOpen = !overlayContent.classList.contains('hidden');
+  overlayContent.classList.toggle('hidden');
+  overlayArrow.classList.toggle('rotate-180')});
+
+        initializeMap();
+
+        </script>
+    </body>
+</html>
