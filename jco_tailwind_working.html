@@ -264,11 +264,11 @@
                 "University Heights"
             ]
     const medIncomePalette = [ //Sequential colorBrewer Purple/Red ramp
-                '#f1eef6',
-                '#d7b5d8',
-                '#df65b0',
-                '#dd1c77',
-                '#980043'
+                '#BFD7FF',
+                '#9BB1FF',
+                '#8795F3',
+                '#4956C5',
+                '#071A43'
             ]
     const cbRentersPalette = [ //Sequential colorBrewer GrnBlu ramp
                 '#f6eff7',
@@ -806,12 +806,11 @@
 
     map.addLayer({
             id: "smallCities-layer",
-            type: "fill",
+            type: "line",
             source: "cities",
             paint: {
-                "fill-color": "#ffce0a",
-                "fill-opacity": 0.8,
-                //"line-width": 3
+                "line-color": "black",
+                "line-width": 1.5
                 },
             layout: {
                 visibility: "visible"
@@ -821,12 +820,11 @@
 
      map.addLayer({
             id: "villages-layer",
-            type: "fill",
+            type: "line",
             source: "villages",
             paint: {
-                "fill-color": "#ffcebf",
-                "fill-opacity": 0.8,
-                //"line-width": 3
+                "line-color": "black",
+                "line-width": 1
                 },
                 layout: {
                     visibility: "visible"
@@ -850,19 +848,31 @@
             "settlement-minor-label"
         )
 
-    map.addLayer({
-            id: "targetedGrowth-layer",
-            type: "fill",
-            source: "growthAreas",
-            paint: {
-                "fill-color": "#d67315",
-                "fill-opacity": 0.8,
-                //"line-width": 2,
-                }, 
-            layout: {
-                    visibility: "visible"
-                }
-    })
+
+    map.loadImage(
+            'https://mits003.github.io/studio_null/img/mapbox_texture/dot_xs.png',
+            (err, image) => {
+                // Throw an error if something goes wrong.
+                if (err) throw err;
+
+                // Add the image to the map style.
+                map.addImage('pattern', image);
+
+                // Create a new layer and style it using `fill-pattern`.
+                map.addLayer({
+                    id: "targetedGrowth-layer",
+                    type: "fill",
+                    source: "growthAreas",
+                    paint: {
+                        "fill-pattern": "pattern"
+                    },
+                                layout: {
+                visibility: "visible"
+                },
+                });
+                
+            }
+        );
     
     map.addLayer({
             id: "county-layer",
