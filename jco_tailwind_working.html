@@ -30,12 +30,43 @@
 
   body {
     font-display: swap;
+    margin: 0;
   }
-</style>
 
-<style>
-  body { margin: 0; }
-  #map { width: 100%; height: 100%; }
+  #map { 
+    width: 100%; 
+    height: 100%; 
+  }
+
+  .mapboxgl-popup {
+      max-width: 150px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.875rem; /* Tailwind's text-sm */
+    }
+  
+  .mapboxgl-popup-content {
+      background: white;
+      border-radius: 0.3rem; /* rounded-lg */
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      padding: 1rem;
+      color: #1f2937; /* text-gray-800 */
+    }
+  
+  .mapboxgl-popup-close-button {
+      font-size: 1.2rem;
+      top: 0.5rem;
+      right: 0.5rem;
+    }
+  
+  .popup-header {
+      font-weight: 600; /* font-semibold */
+      margin-bottom: 0.5rem;
+    }
+  
+  .popup-content p {
+      margin: 0;
+      line-height: 1.4;
+    }
 </style>
 </head>
 <body class="overflow-hidden">
@@ -103,7 +134,7 @@
       checked:bg-gray-700 checked:border-gray-700 transition-colors duration-200 mt-1" value="excludedCities-layer" checked />
       <span class="leading-snug">Excluded cities</span>
     </label>
-    <label class="flex items-start gap-x-2 text-sm text-gray-700">
+    <label class="flex items-start gap-2 text-sm text-gray-700">
       <input type="checkbox" class="overlay-toggle appearance-none w-3 h-3 border-2 border-gray-400 rounded-sm
       checked:bg-gray-700 checked:border-gray-700 transition-colors duration-200 mt-1" value="smallCities-layer" checked />
       <span class="leading-snug">Small cities</span>
@@ -112,25 +143,53 @@
         <input type="checkbox" class="overlay-toggle grayscale scale-90 accent-gray-600 mt-1" value="villages-layer" checked />
         <span class="leading-snug">Villages</span>
     </label>
-    <label class="flex items-start gap-x-2 text-sm text-gray-700">
-        <input type="checkbox" class="overlay-toggle grayscale scale-90 accent-gray-600 mt-1" value="targetedGrowth-layer" checked />
-        <span class="leading-snug">Targeted economic growth areas</span>
+    <label class="flex items-start text-sm text-gray-700"> <!--edit this one!! behaving weirdly thanks to not needing a second line -->
+        <div class="relative">
+            <input type="checkbox" class="sr-only overlay-toggle peer" value="county-layer" checked/>
+            <div class="w-6 h-3.5 bg-gray-300 rounded-full peer-checked:bg-gray-600 transition-colors"></div>
+            <div class="absolute top-[2px] left-[2px] w-2.5 h-2.5 bg-white border border-gray-400 rounded-full transition-transform peer-checked:translate-x-[10px]"></div>
+          </div>
+        <span class="leading-snug ms-2">County boundary</span>
     </label>
-    <label class="flex items-start gap-x-2 text-sm text-gray-700">
-        <input type="checkbox" class="overlay-toggle grayscale scale-90 accent-gray-600 mt-1" value="parcels-newPermits2010" />
-        <span class="leading-snug">New build permits, 2010-2019</span>
+    <label class="flex items-center justify-between w-full text-sm text-gray-700">
+        <div class="relative">
+            <input type="checkbox" class="sr-only overlay-toggle peer" value="targetedGrowth-layer" checked/>
+            <div class="w-6 h-3.5 bg-gray-300 rounded-full peer-checked:bg-gray-600 transition-colors"></div>
+            <div class="absolute top-[2px] left-[2px] w-2.5 h-2.5 bg-white border border-gray-400 rounded-full transition-transform peer-checked:translate-x-[10px]"></div>
+          </div>
+        <span class="leading-snug ms-2">Targeted economic growth areas</span>
     </label>
-    <label class="flex items-start gap-x-2 text-sm text-gray-700">
-        <input type="checkbox" class="overlay-toggle grayscale scale-90 accent-gray-600 mt-1" value="parcels-newPermits2020" />
-        <span class="leading-snug">New build permits, 2020-present</span>
+    <label class="flex items-center justify-between w-full text-sm text-gray-700">
+        <div class="relative">
+            <input type="checkbox" class="sr-only overlay-toggle peer" value="parcels-newPermits2010" />
+            <div class="w-6 h-3.5 bg-gray-300 rounded-full peer-checked:bg-gray-600 transition-colors"></div>
+            <div class="absolute top-[2px] left-[2px] w-2.5 h-2.5 bg-white border border-gray-400 rounded-full transition-transform peer-checked:translate-x-[10px]"></div>
+          </div>
+        <span class="leading-snug ms-2">New build permits, 2010-2019</span>
     </label>
-    <label class="flex items-start gap-x-2 text-sm text-gray-700">
-        <input type="checkbox" class="overlay-toggle grayscale scale-90 accent-gray-600 mt-1" value="manufacturedHomes" checked />
-        <span class="leading-snug">Manufactured home parks</span>
+    <label class="flex items-center justify-between w-full text-sm text-gray-700">
+        <div class="relative">
+            <input type="checkbox" class="sr-only overlay-toggle peer" value="parcels-newPermits2020" />
+            <div class="w-6 h-3.5 bg-gray-300 rounded-full peer-checked:bg-gray-600 transition-colors"></div>
+            <div class="absolute top-[2px] left-[2px] w-2.5 h-2.5 bg-white border border-gray-400 rounded-full transition-transform peer-checked:translate-x-[10px]"></div>
+          </div>
+        <span class="leading-snug ms-2">New build permits, 2020-present</span>
     </label>
-    <label class="flex items-start gap-x-2 text-sm text-gray-700">
-        <input type="checkbox" id="toggleCounty" class="overlay-toggle grayscale scale-90 accent-gray-600 mt-1" value="parcels-newPermits2010"/>
-        <span class="leading-snug">Hide surrounding counties</span>
+    <label class="flex items-center justify-between w-full text-sm text-gray-700">
+        <div class="relative">
+            <input type="checkbox" class="sr-only overlay-toggle peer" value="manufacturedHomes" checked />
+            <div class="w-6 h-3.5 bg-gray-300 rounded-full peer-checked:bg-gray-600 transition-colors"></div>
+            <div class="absolute top-[2px] left-[2px] w-2.5 h-2.5 bg-white border border-gray-400 rounded-full transition-transform peer-checked:translate-x-[10px]"></div>
+          </div>
+        <span class="ms-2 leading-snug">Manufactured home parks</span>
+    </label>
+    <label class="flex items-center justify-between w-full text-sm text-gray-700">
+        <div class="relative">
+            <input type="checkbox" id="toggleCounty" class="sr-only overlay-toggle peer" />
+            <div class="w-6 h-3.5 bg-gray-300 rounded-full peer-checked:bg-gray-600 transition-colors"></div>
+            <div class="absolute top-[2px] left-[2px] w-2.5 h-2.5 bg-white border border-gray-400 rounded-full transition-transform peer-checked:translate-x-[10px]"></div>
+          </div>
+        <span class="ms-2 leading-snug">Hide surrounding counties</span>
     </label>
     <!-- edit javascript to make it all work!!, add in colors/to legend via js?? -->
   </div>
@@ -319,21 +378,25 @@
                 '#8b63ba',
                 '#bdc9e1'
             ]
-    const landUsePalette = [
-                "#24910a", //Agriculture
-                "#d4f088", //Agricultural/residential
-                "#fff8bf", //Residential
-                "#ffa734", //Multifamily
-                "#da6262", //Commercial
-                "#b560bb", //Mixed use
-                "#323052", //Industrial
-                "#425A70", //Exempt
-                "#bdc9e1" //Unknown
+    const landUsePalette = [ //only set this up ofr custom legends unless there is a way to set inner html of breaks/stops dynamically??
+                { color: "#24910a", label: "Agriculture" },
+                { color: "#d4f088", label: "Agricultural/residential" },
+                { color: "#fff8bf", label: "Residential" },
+                { color: "#ffa734", label: "Multifamily" },
+                { color: "#da6262", label: "Commercial" }, 
+                { color: "#b560bb", label: "Mixed use" },
+                { color: "#323052", label: "Industrial" },
+                { color: "#425A70", label: "Exempt" },
+                { color: "#bdc9e1", label: "Unknown" }
             ]
 
-    //import * as turf from '@turf/turf';
+    const palettesByLayer = {
+            'parcels-landuse': landUsePalette,
+  //best way to match palettes to their respective layers ??
+};
 
-    //mapboxgl.accessToken = 'pk.eyJ1IjoiZW10em90MDEiLCJhIjoiY20zZ2kyd3RpMDRnajJscHoyMG5neGJldyJ9.poXi4pgd2CoXKV2B4kg1Cw ';
+
+    //import * as turf from '@turf/turf';
     
     mapboxgl.accessToken = 'pk.eyJ1IjoiY29tbXVuaXR5c2NhbGUiLCJhIjoiY21hZ3Y4azlmMDU5YTJqb2NqbzRsa3psbSJ9.eJlBVHcMSB88Czl3ti2i5g';
     let map;
@@ -393,8 +456,7 @@
 
         map.addSource("parcels", {
             type: "geojson",
-            data: 'https://raw.githubusercontent.com/CommunityScale/JohnsonCounty/main/uninc_parcels_jcia.geojson',
-            //url: "mapbox://emtzot01.06wm5jay",
+            data: 'https://raw.githubusercontent.com/CommunityScale/JohnsonCounty/main/uninc_parcels_jcia.geojson', //replace with a tileset if feeling nice 
             promoteId: "PPN"
         })
 
@@ -441,7 +503,7 @@
         )
 
         map.addLayer({
-            id: "tracts-medIncome",  
+            id: "tracts-medIncome",  //use this to play with dynamically generating the breaks !!
             type: "fill",
             source: "tracts",
             paint: {
@@ -566,16 +628,16 @@
                     "fill-color": [
                         "match",
                         ["get", "PropClass"],
-                        "A", landUsePalette[0],
-                        "A,AD", landUsePalette[1],
-                        "C", landUsePalette[4],
-                        "C,M", landUsePalette[5],
-                        "C,R", landUsePalette[5],
-                        "E", landUsePalette[7],
-                        "I", landUsePalette[6],
-                        "R", landUsePalette[2],
-                        "M", landUsePalette[3],
-                        landUsePalette[8]
+                        "A", landUsePalette[0].color,
+                        "A,AD", landUsePalette[1].color,
+                        "C", landUsePalette[4].color,
+                        "C,M", landUsePalette[5].color,
+                        "C,R", landUsePalette[5].color,
+                        "E", landUsePalette[7].color,
+                        "I", landUsePalette[6].color,
+                        "R", landUsePalette[2].color,
+                        "M", landUsePalette[3].color,
+                        landUsePalette[8].color
                     ],
                     "fill-outline-color": communityScaleGray,
                     "fill-opacity": [
@@ -597,7 +659,6 @@
             id: "parcels-pctLV",  
             type: "fill",
             source: "parcels",
-            //"source-layer": "parcels_jcia-7q1vz4", 
             paint: {
                 "fill-color": [
                     "case", ["==", ["get", "pctLandVal"], null], communityScaleGray,
@@ -638,7 +699,7 @@
                 type: 'circle',
                 source: 'manufacturedHomeParks',
                 paint: {
-                    // Make circles larger as the user zooms from z12 to z22.
+                    // Make circles larger as the user zooms from z12 to z22. ??
                     'circle-radius': {
                         'base': 2,
                         'stops': [
@@ -695,7 +756,7 @@
             id: "parcels-ownership",  
             type: "fill",
             source: "parcels",
-            //"source-layer": "parcels_jcia-7q1vz4", //filter by residential??
+                //filter by residential??
             paint: {
                 "fill-color": [
                     "match",
@@ -725,7 +786,7 @@
     ) 
 
     map.addLayer({     
-            id: "tracts-pctHH",  
+            id: "tracts-pctHH",  //replace with crosswalked ctysds 
             type: "fill",
             source: "tracts",
             paint: {
@@ -770,7 +831,6 @@
             id: "parcels-value", 
             type: "fill",
             source: "parcels",
-            //"source-layer": "parcels_jcia-7q1vz4", 
             paint: {
                 "fill-color": [
                     "case", ["==", ["get", "acreVal"], null], communityScaleGray,
@@ -895,7 +955,7 @@
 
     map.on("load", () => {
         addData();
-    }); //change!!
+    }); //change!!/include others
 
 const layerSelect = document.getElementById('layer-select');
 const legendContent = document.getElementById('legend-content');
@@ -910,57 +970,104 @@ const allLayers = [
     'parcels-ownership'
 ];
 
-// ✅ Extract fill-color stops from layer expression
+// // ✅ Extract fill-color stops from layer expression
+// function getStopsFromLayer(layerId) {
+//   let expression = map.getPaintProperty(layerId, 'fill-color');
+
+//   // If it's a case statement, find the color scale inside
+//   if (Array.isArray(expression) && expression[0] === 'case') {
+//     // Search for 'interpolate' or 'step' inside the case --> update if statement to account for matching 
+//     expression = expression.find(sub => Array.isArray(sub) && (sub[0] === 'interpolate' || sub[0] === 'step'));
+//   }
+
 function getStopsFromLayer(layerId) {
   let expression = map.getPaintProperty(layerId, 'fill-color');
 
-  // If it's a case statement, find the color scale inside
+  // If it's a 'case' expression, check inside it for 'interpolate', 'step', or 'match'
   if (Array.isArray(expression) && expression[0] === 'case') {
-    // Search for 'interpolate' or 'step' inside the case --> update if statement to account for matching 
-    expression = expression.find(sub => Array.isArray(sub) && (sub[0] === 'interpolate' || sub[0] === 'step'));
+    expression = expression.find(
+      sub => Array.isArray(sub) && ['interpolate', 'step', 'match'].includes(sub[0])
+    );
   }
 
   if (!Array.isArray(expression)) return [];
 
   const type = expression[0];
-  if (type !== 'interpolate' && type !== 'step') return [];
+  // ✅ Handle 'match'
+  if (type === 'match') {
+    const stops = expression.slice(2, -1); // skip 'match', ['get', ...], and default color
+    const result = [];
 
-  const stops = expression.slice(3); // [value1, color1, value2, color2, ...]
-  const result = [];
+    for (let i = 0; i < stops.length; i += 2) {
+      result.push({
+        value: stops[i],
+        color: stops[i + 1]
+      });
+    }
 
-  for (let i = 0; i < stops.length; i += 2) {
-    result.push({
-      value: stops[i],
-      color: stops[i + 1]
-    });
+    return result;
   }
 
-  return result;
+  // ✅ Handle 'interpolate' or 'step'
+  if (type === 'interpolate' || type === 'step') {
+    const stops = expression.slice(3); // skip type, interpolation method, and input expression
+    const result = [];
+
+    for (let i = 0; i < stops.length; i += 2) {
+      result.push({
+        value: stops[i],
+        color: stops[i + 1]
+      });
+    }
+
+    return result;
+  }
+
+  return [];
 }
 
 
 //Optional label formatter --> need to fix for 0 values, what should happen to other values
 function formatLegendLabel(value) {
   if (typeof value === 'number') {
-    if (value < 1 && value > 0) return `${Math.round(value * 100)}%`;
+    if (value < 1 //&& value > 0
+    ) return `${Math.round(value * 100)}%`;
     return `$${Math.round(value).toLocaleString()}`;
   }
   return value;
 }
 
-// ✅ Render legend from stops
+// Render legend from stops
 function renderLegendFromStops(layerId) {
   const stops = getStopsFromLayer(layerId);
+  const palette = palettesByLayer[layerId] || [];
+
+  function getLabel(stop) {
+    const match = palette.find(p => 
+      (p.value === stop.value) || (p.color.toLowerCase() === stop.color.toLowerCase())
+    );
+    return match?.label || formatLegendLabel(stop.value); // fallback to data value if no label
+  }
 
   if (!stops.length) {
     legendContent.innerHTML = `<p class="italic text-gray-500">No legend available</p>`;
     return;
   }
 
+  //prevent duplicates -- doesn't seem to work yet 
+  const seen = new Set();
+  const uniqueStops = stops.filter(stop => {
+    const label = getLabel(stop);
+    const key = `${stop.color.toLowerCase()}|${label}`;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+
   legendContent.innerHTML = stops.map(stop => `
     <div class="flex items-center gap-2">
-      <span class="w-4 h-4 inline-block rounded-sm" style="background-color: ${stop.color};"></span>
-      <span>${formatLegendLabel(stop.value)}</span>
+      <span class="w-3.5 h-3.5 inline-block rounded-sm" style="background-color: ${stop.color};"></span>
+      <span>${getLabel(stop)}</span>
     </div>
   `).join('');
 }
@@ -979,7 +1086,7 @@ layerSelect.addEventListener('change', (e) => {
 });
 
 // ✅ On map load
-map.on('load', () => {
+map.on('load', () => { //redundant?? can place somewhere else??
   const initialLayer = layerSelect.value;
 
   allLayers.forEach(id => {
@@ -988,7 +1095,7 @@ map.on('load', () => {
     }
   });
 
-  renderLegendFromStops(initialLayer);
+  renderLegendFromStops(initialLayer); 
 });
        
     function layerLegendVisibility() {
@@ -1107,7 +1214,7 @@ map.on('load', () => {
         const visibility = checkbox.checked ? 'visible' : 'none';
         if (map.getLayer(layerId)) {
             map.setLayoutProperty(layerId, 'visibility', visibility);
-            map.setLayoutProperty("county-layer", 'visibility', 'visible'); //potentially take
+            //map.setLayoutProperty("county-layer", 'visibility', 'visible'); //potentially take
             map.setLayoutProperty("road-label", 'visibility', 'visible');
             map.setLayoutProperty("settlement-major-label", 'visibility', 'visible');
             map.setLayoutProperty("settlement-subdivision-label", 'visibility', 'visible');
@@ -1115,8 +1222,9 @@ map.on('load', () => {
         }})})
   
 
+    let showOnlyCounty = false;
     const countyFIPS = "103"; // Johnson County fips code
-    const tractLayerIds = [
+    const tractLayerIds = [ //any layer to be sorted by a numeric filter
        //"admin-layer",
         "tracts-medIncome",
         "tracts-pctCostBurdenedRenters",
@@ -1124,10 +1232,12 @@ map.on('load', () => {
         //"tracts-pctHH"
     ];
 
+    const studyAreaFilter = ["==", ["get", "COUNTY"], countyFIPS]; //redefined/edit as needed
+
     document.getElementById("toggleCounty").addEventListener("change", (e) => {
-        const showOnlyCounty = e.target.checked;
+        showOnlyCounty = e.target.checked;
         const filter = showOnlyCounty
-            ? ["==", ["get", "COUNTY"], countyFIPS]
+            ? studyAreaFilter
             : null;
 
         tractLayerIds.forEach(id => {
@@ -1147,12 +1257,9 @@ map.on('load', () => {
             new mapboxgl.Popup({ closeButton: true }, { clickToClose: true })
             .setLngLat(selectedGeo.geometry.coordinates[0][0])
             .setHTML(`
-                <div class="mapboxgl-popup">
-                <div class="mapboxgl-popup-close-button">x</div>
-                <div class="mapboxgl-popup-header">${selectedGeo.properties.NAME}</div>
-                <div class="mapboxgl-popup-content">${displayIncome}
-                </div>
-            </div>`)
+                <div class="popup-header">${selectedGeo.properties.NAME}</div>
+                <div class="popup-content">${displayIncome}
+                `)
             .addTo(map);
     }});
 
@@ -1166,7 +1273,7 @@ map.on('load', () => {
             .setLngLat(selectedGeo.geometry.coordinates[0][0]) 
             .setHTML(`<div class="mapboxgl-popup">
                 <div class="mapboxgl-popup-close-button">x</div>
-                <div class="mapboxgl-popup-header">${selectedGeo.properties.NAME}</div>
+                <div class="popup-header">${selectedGeo.properties.NAME}</div>
             </div>`)
             .addTo(map)
     }});
@@ -1184,12 +1291,9 @@ map.on('load', () => {
             new mapboxgl.Popup({ closeButton: true }, { clickToClose: true })
             .setLngLat(selectedGeo.geometry.coordinates[0][0])
             .setHTML(`
-                <div class="mapboxgl-popup">
-                <div class="mapboxgl-popup-close-button">x</div>
-                <div class="mapboxgl-popup-header">${selectedGeo.properties.NAME}</div>
-                <div class="mapboxgl-popup-content">${displayPctRent30}
-                </div>
-            </div>`)
+                <div class="popup-header">${selectedGeo.properties.NAME}</div>
+                <div class="popup-content">${displayPctRent30}
+                `)
             .addTo(map);
     }});
 
@@ -1206,12 +1310,9 @@ map.on('load', () => {
             new mapboxgl.Popup({ closeButton: true }, { clickToClose: true })
             .setLngLat(selectedGeo.geometry.coordinates[0][0])
             .setHTML(`
-                <div class="mapboxgl-popup">
-                <div class="mapboxgl-popup-close-button">x</div>
-                <div class="mapboxgl-popup-header">${selectedGeo.properties.NAME}</div>
-                <div class="mapboxgl-popup-content">${displayPctOwned30}
-                </div>
-            </div>`)
+                <div class="popup-header">${selectedGeo.properties.NAME}</div>
+                <div class="popup-content">${displayPctOwned30}
+                `)
             .addTo(map);
     }});
 
@@ -1230,12 +1331,9 @@ map.on('load', () => {
             new mapboxgl.Popup({ closeButton: true }, { clickToClose: true })
             .setLngLat(selectedGeo.geometry.coordinates[0][0])
             .setHTML(`
-                <div class="mapboxgl-popup">
-                <div class="mapboxgl-popup-close-button">x</div>
-                <div class="mapboxgl-popup-header">${displayName}</div>
-                <div class="mapboxgl-popup-content">${displayPctLV}
-                </div>
-            </div>`)
+                <div class="popup-header">${displayName}</div>
+                <div class="popup-content">${displayPctLV}
+               `)
             .addTo(map);
     }});
 
@@ -1252,12 +1350,9 @@ map.on('load', () => {
             new mapboxgl.Popup({ closeButton: true }, { clickToClose: true })
             .setLngLat(selectedGeo.geometry.coordinates[0][0])
             .setHTML(`
-                <div class="mapboxgl-popup">
-                <div class="mapboxgl-popup-close-button">x</div>
-                <div class="mapboxgl-popup-header">${selectedGeo.properties.NAME}</div>
-                <div class="mapboxgl-popup-content">${displayPctChangeHH}
-                </div>
-            </div>`)
+                <div class="popup-header">${selectedGeo.properties.NAME}</div>
+                <div class="popup-content">${displayPctChangeHH}
+               `)
             .addTo(map);
     }});
 
@@ -1276,12 +1371,9 @@ map.on('load', () => {
             new mapboxgl.Popup({ closeButton: true }, { clickToClose: true })
             .setLngLat(selectedGeo.geometry.coordinates[0][0])
             .setHTML(`
-                <div class="mapboxgl-popup">
-                <div class="mapboxgl-popup-close-button">x</div>
-                <div class="mapboxgl-popup-header">${displayName}</div>
-                <div class="mapboxgl-popup-content">${displayVal}<br>${displayAV}
-                </div>
-            </div>`)
+                <div class="popup-header">${displayName}</div>
+                <div class="popup-content">${displayVal}<br>${displayAV}
+              `)
             .addTo(map);
     }});
 
@@ -1294,11 +1386,8 @@ map.on('load', () => {
             new mapboxgl.Popup({ closeButton: true }, { clickToClose: true })
             .setLngLat(selectedGeo.geometry.coordinates[0][0])
             .setHTML(`
-                <div class="mapboxgl-popup">
-                <div class="mapboxgl-popup-close-button">x</div>
-                <div class="mapboxgl-popup-header">${selectedGeo.properties.NAME}</div>
-                </div>
-            </div>`)
+                <div class="popup-header">${selectedGeo.properties.NAME}</div>
+               `)
             .addTo(map);
     }});
 
@@ -1311,11 +1400,8 @@ map.on('load', () => {
             new mapboxgl.Popup({ closeButton: true }, { clickToClose: true })
             .setLngLat(selectedGeo.geometry.coordinates[0][0])
             .setHTML(`
-                <div class="mapboxgl-popup">
-                <div class="mapboxgl-popup-close-button">x</div>
-                <div class="mapboxgl-popup-header">${selectedGeo.properties.NAME}</div>
-                </div>
-            </div>`)
+                <div class="popup-header">${selectedGeo.properties.NAME}</div>
+                `)
             .addTo(map);
     }});
 
@@ -1328,11 +1414,8 @@ map.on('load', () => {
             new mapboxgl.Popup({ closeButton: true }, { clickToClose: true })
             .setLngLat(selectedGeo.geometry.coordinates[0][0])
             .setHTML(`
-                <div class="mapboxgl-popup">
-                <div class="mapboxgl-popup-close-button">x</div>
-                <div class="mapboxgl-popup-header">${selectedGeo.properties.VILLAGE}</div>
-                </div>
-            </div>`)
+                <div class="popup-header">${selectedGeo.properties.VILLAGE}</div>
+                `)
             .addTo(map);
     }});
 
@@ -1349,16 +1432,14 @@ map.on('load', () => {
             new mapboxgl.Popup({ closeButton: true }, { clickToClose: true })
             .setLngLat(selectedGeo.geometry.coordinates[0][0])
             .setHTML(`
-                <div class="mapboxgl-popup">
-                <div class="mapboxgl-popup-close-button">x</div>
-                <div class="mapboxgl-popup-header">${tifHeader}</div>
-                <div class="mapboxgl-popup-content">${displayUse}
+                <div class="popup-header">${tifHeader}</div>
+                <div class="popup-content">${displayUse}
                 </div>
-            </div>`)
+            `)
             .addTo(map);
     }});
 
-    const dataLayers = [
+    const dataLayers = [ // all fill data layers need to be listed here
         'tracts-medIncome', 
         'tracts-pctCostBurdenedRenters', 
         'tracts-pctCostBurdenedOwners',
@@ -1370,6 +1451,17 @@ map.on('load', () => {
         'parcels-ownership'
         ];
 
+    const overlayLayers = [ // all overlay layers need to be listed here
+        "county-layer",
+        "villages-layer",
+        "smallCities-layer",
+        "excludedCities-layer",
+        "parcels-newPermits2010",
+        "parcels-newPermits2020",
+        "manufacturedHomes",
+        "targetedGrowth-layer"
+        ];
+
     function toggleBasemapSettings() { //correct for the basemap toggle situation
         const panel = document.getElementById('basemap-settings');
         const arrow = document.getElementById('basemap-arrow');
@@ -1377,12 +1469,18 @@ map.on('load', () => {
         arrow.classList.toggle('rotate-180'); // Flip the arrow
         }
 
-        document.querySelectorAll('#basemap-style-thumbnails button').forEach(button => {
-  button.addEventListener('click', () => {
+document.querySelectorAll('#basemap-style-thumbnails button').forEach(button => {
+    button.addEventListener('click', () => {
     const style = button.getAttribute('data-style');
 
-    // ✅ Capture visible layers before switching
+    // Capture visible data layers before switching
     const visibleLayers = dataLayers.filter(id => {
+      const layer = map.getLayer(id);
+      return layer && map.getLayoutProperty(id, 'visibility') === 'visible';
+    });
+
+    // Capture visible overlays prior to switch 
+    const visibleOverlays = overlayLayers.filter(id => {
       const layer = map.getLayer(id);
       return layer && map.getLayoutProperty(id, 'visibility') === 'visible';
     });
@@ -1394,11 +1492,37 @@ map.on('load', () => {
     map.once('style.load', () => {
       addData();
 
+    dataLayers.forEach(id => {
+        if (map.getLayer(id)) {
+          map.setLayoutProperty(id, 'visibility', 'none');
+        }
+      });
+
       visibleLayers.forEach(id => {
         if (map.getLayer(id)) {
           map.setLayoutProperty(id, 'visibility', 'visible');
         }
       });
+
+      overlayLayers.forEach(id => {
+        if (map.getLayer(id)) {
+          map.setLayoutProperty(id, 'visibility', 'none');
+        }
+      });
+
+      visibleOverlays.forEach(id => {
+        if (map.getLayer(id)) {
+          map.setLayoutProperty(id, 'visibility', 'visible');
+        }
+      });
+
+      if (showOnlyCounty) {
+        tractLayerIds.forEach(id => {
+            if (map.getLayer(id)) {
+                map.setFilter(id, studyAreaFilter);
+        }
+        });
+    }
 
       updateLayerOpacity();
 
@@ -1430,52 +1554,12 @@ map.on('load', () => {
     });
         
         map.setLayoutProperty(selectedLayer, 'visibility', 'visible');
-        map.setLayoutProperty("county-layer", 'visibility', 'visible');
         map.setLayoutProperty("road-label", 'visibility', 'visible');
         map.setLayoutProperty("settlement-major-label", 'visibility', 'visible');
         map.setLayoutProperty("settlement-subdivision-label", 'visibility', 'visible');
         map.setLayoutProperty("settlement-minor-label", 'visibility', 'visible');
     });
 
-    // document.getElementById('layer-dropdown').addEventListener('change', function() { //can cut
-    //     var legends = document.querySelectorAll('.legend');
-    //     legends.forEach(function(legend) {
-    //     legend.style.display = 'none';
-    //         });
-
-    //     var selectedLayer = dropdown.value; //cut 
-    //     if (selectedLayer === 'tracts-medIncome') {
-    //     document.getElementById('medIncomeLegend').style.display = 'block';
-    //     }      else if (selectedLayer === 'tracts-pctCostBurdenedRenters') {
-    //     document.getElementById('cbRentersLegend').style.display = 'block';
-    //     }   else if (selectedLayer === 'tracts-pctCostBurdenedOwners') {
-    //     document.getElementById('cbOwnersLegend').style.display = 'block';
-    //     }   else if (selectedLayer === 'tracts-pctCostBurdenedOwners') {
-    //     document.getElementById('cbOwnersLegend').style.display = 'block'; //replace
-    //     }   else if (selectedLayer === 'parcels-pctLV') { 
-    //     document.getElementById('pctLVLegend').style.display = 'block';
-    //     }   else if (selectedLayer === 'parcels-landuse') { 
-    //     document.getElementById('landUseLegend').style.display = 'block';
-    //     }   else if (selectedLayer === 'parcels-ownership') { 
-    //     document.getElementById('ownershipLegend').style.display = 'block';
-    //     }   else if (selectedLayer === 'parcels-value') { 
-    //     document.getElementById('parcelValueLegend').style.display = 'block';
-    //     }   else if (selectedLayer === 'tracts-pctHH') {
-    //     document.getElementById('pctHHLegend').style.display = 'block';
-    //     }});
-
-
-    // document.getElementById("basemapStyle").addEventListener("change", function (e) { //change to meet needs 
-    // const newStyle = e.target.value;
-    // const center = map.getCenter();
-    // const zoom = map.getZoom();
-    //     map.remove();
-    //     initializeMap(newStyle);
-    //     setTimeout(() => {
-    //         map.setCenter(center);
-    //         map.setZoom(zoom);
-    //     }, 500);
-    // });
 
         let hoveredGeoId = null;
 
@@ -1525,6 +1609,50 @@ document.getElementById('zoom-in').addEventListener('click', () => {
 
 document.getElementById('zoom-out').addEventListener('click', () => {
   map.zoomOut();
+});
+
+//clear map
+document.getElementById('clear-map').addEventListener('click', () => {
+  const overlayInputs = document.querySelectorAll('.overlay-toggle');
+
+  overlayInputs.forEach(input => {
+    const layerId = input.value;
+    const layer = map.getLayer(layerId);
+
+    if (layer && map.getLayoutProperty(layerId, 'visibility') !== 'none') {
+      map.setLayoutProperty(layerId, 'visibility', 'none');
+    }
+
+    input.checked = false; // uncheck toggle in UI
+  });
+
+//86 the fills 
+  map.getStyle().layers.forEach(layer => {
+    if (layer.type === 'fill') {
+      try {
+        map.setLayoutProperty(layer.id, 'visibility', 'none');
+      } catch (e) {
+        console.warn(`Could not hide layer ${layer.id}:`, e);
+      }
+    }
+  });
+
+  // clear the legend panel
+  const legendContent = document.getElementById('legend-content');
+  if (legendContent) {
+    legendContent.innerHTML = `<p class="italic text-gray-500">Legend cleared</p>`; //replace with text "select a layer to view a legend??"
+  }
+
+  //Fly to default map center/zoom - potentially take out??
+  map.flyTo({
+    center: [-91.58, 41.67], // default center
+    zoom: 9.5 //  default zoom
+  });
+
+  // remove any popups
+  if (typeof popup !== 'undefined') {
+    popup.remove();
+  }
 });
 
 
