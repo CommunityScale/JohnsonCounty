@@ -305,7 +305,7 @@
 <script>
     const INITIAL_LOC = [-91.58, 41.67] 
     const INITIAL_ZOOM = 9.5 //set initial zoom (zoom levels 9-12 best for cities depending on size)(this is set to 13 to accomodate the tileset that will need to be uploaded via CLI)
-    const communityScaleGray = "#425A70" //could replace with different accent color, I personally like this branding 
+    const communityScaleGray = "#F7F2F0" //could replace with different accent color, I personally like this branding 
     const placeOfInterest = "Johnson County"
     const citiesOfInterest = [
                 "Hills",
@@ -323,49 +323,49 @@
                 "University Heights"
             ]
     const medIncomePalette = [ //Sequential colorBrewer Purple/Red ramp
-                '#BFD7FF',
-                '#9BB1FF',
+                '#C2D8FF',
+                '#ADBFFF',
                 '#8795F3',
                 '#4956C5',
                 '#071A43'
             ]
     const cbRentersPalette = [ //Sequential colorBrewer GrnBlu ramp
-                '#f6eff7',
-                '#bdc9e1',
-                '#67a9cf',
-                '#1c9099',
-                '#016c59'
+                '#C2D8FF',
+                '#ADBFFF',
+                '#8795F3',
+                '#4956C5',
+                '#071A43'
             ]
     const cbOwnersPalette = [ //Sequential colorBrewer BluPur ramp
-                '#edf8fb',
-                '#b3cde3',
-                '#8c96c6',
-                '#8856a7',
-                '#810f7c'
+                '#C2D8FF',
+                '#ADBFFF',
+                '#8795F3',
+                '#4956C5',
+                '#071A43'
             ]
     const hhChangePalette = [ //Diverging colorBrewer PurGre ramp
-                '#762a83',
-                '#af8dc3',
-                '#e7d4e8',
-                '#f7f7f7',
-                '#d9f0d3',
-                '#7fbf7b',
-                '#1b7837'
+                '#B7A329',
+                '#ECD731',
+                '#FFF290',
+                '#8795F3',
+                '#8795F3',
+                '#3643B8',
+                '#071A43'
             ]
 
     const landValuePalette = [ //Sequential colorBrewer Blu ramp
-                '#f1eef6',
-                '#bdc9e1',
-                '#74a9cf',
-                '#2b8cbe',
-                '#045a8d'
+                '#C2D8FF',
+                '#ADBFFF',
+                '#8795F3',
+                '#3643B8',
+                '#071A43'
             ]
     const parcelValuePalette = [ //colorBrewer purples 
-                '#f2f0f7',
-                '#cbc9e2',
-                '#9e9ac8',
-                '#756bb1',
-                '#54278f'
+                '#C2D8FF',
+                '#ADBFFF',
+                '#8795F3',
+                '#3643B8',
+                '#071A43'
             ]
 
     const ownershipPalette = [ //categorical palette for tax credits -- update!!
@@ -401,7 +401,7 @@
     mapboxgl.accessToken = 'pk.eyJ1IjoiY29tbXVuaXR5c2NhbGUiLCJhIjoiY21hZ3Y4azlmMDU5YTJqb2NqbzRsa3psbSJ9.eJlBVHcMSB88Czl3ti2i5g';
     let map;
     const BASEMAP_STYLES = {
-        gray: 'mapbox://styles/emtzot01/cm6a8mjb5004g01qrd7cv07mq',
+        gray: 'mapbox://styles/communityscale/cmcuwuwcv00xz01s1gn7xccqi',
         satellite: 'mapbox://styles/communityscale/cmc96uych026401s6577egc2r',
         lightSatellite: 'mapbox://styles/communityscale/cmcntrq2h00hp01qv4paqhpwx'
     };
@@ -478,6 +478,21 @@
             promoteId: "NAME"
         })
 
+let labelLayerId;
+
+// Find the first symbol layer with a text-field, assumed to be a label
+map.on('style.load', () => {
+  const layers = map.getStyle().layers;
+  for (const layer of layers) {
+    if (layer.type === 'symbol' && layer.layout && layer.layout['text-field']) {
+      labelLayerId = layer.id;
+      break;
+    }
+  }
+
+  addData(); // Call your function to load sources/layers AFTER labelLayerId is found
+});
+
         map.addLayer({
                 id: "admin-layer",  
                 type: "fill",
@@ -496,10 +511,8 @@
                 layout: {
                     visibility: "none"
                 }
-            },"road-label", 
-            "settlement-major-label", 
-            "settlement-subdivision-label", 
-            "settlement-minor-label"
+            },
+            labelLayerId
         )
 
         map.addLayer({
@@ -535,9 +548,7 @@
                 visibility: "visible"
              }
         },
-        "settlement-major-label", 
-        "settlement-subdivision-label", 
-        "settlement-minor-label"
+            labelLayerId
     ) 
 
 
@@ -574,9 +585,9 @@
                 visibility: "none"
              }
         },
-        "settlement-major-label", 
-        "settlement-subdivision-label", 
-        "settlement-minor-label"
+            labelLayerId
+
+
     )
     
 
@@ -614,9 +625,8 @@
                 visibility: "none"
              }
         },
-        "settlement-major-label", 
-        "settlement-subdivision-label", 
-        "settlement-minor-label"
+            labelLayerId
+
     )
 
     map.addLayer({
@@ -650,10 +660,9 @@
                 layout: {
                     visibility: "none"
                 }
-            }, 
-            "settlement-major-label", 
-            "settlement-subdivision-label", 
-            "settlement-minor-label")
+            },
+            labelLayerId 
+)
 
     map.addLayer({ 
             id: "parcels-pctLV",  
@@ -687,10 +696,8 @@
              layout: {
                 visibility: "none"
              }
-        },"road-label", 
-        "settlement-major-label", 
-        "settlement-subdivision-label", 
-        "settlement-minor-label"
+        },
+            labelLayerId
     )
 
     map.addLayer(
@@ -706,7 +713,7 @@
                             [12, 4],
                             [22, 180]
                     ]},
-                    'circle-color': "#249bd6"},
+                    'circle-color': "#F95738"},
                 layout: {
                     visibility: "visible"
                 } 
@@ -780,9 +787,7 @@
              layout: {
                 visibility: "none"
             }},
-            "settlement-major-label", 
-            "settlement-subdivision-label", 
-            "settlement-minor-label"
+
     ) 
 
     map.addLayer({     
@@ -822,9 +827,8 @@
              layout: {
                 visibility: "none"
         }},
-            "settlement-major-label", 
-            "settlement-subdivision-label", 
-            "settlement-minor-label"
+            labelLayerId
+
     )
 
     map.addLayer({ 
@@ -859,9 +863,8 @@
              layout: {
                 visibility: "none"
              }},
-            "settlement-major-label", 
-            "settlement-subdivision-label", 
-            "settlement-minor-label"
+            labelLayerId
+
     ) 
 
     map.addLayer({
@@ -903,9 +906,6 @@
                     visibility: "visible"
                 },
             filter: ["in", "NAME", ...excludedCities]},
-            "settlement-major-label", 
-            "settlement-subdivision-label", 
-            "settlement-minor-label"
         )
 
 
@@ -952,6 +952,7 @@
         adjustMapSize();
         window.addEventListener('resize', adjustMapSize)
     }
+
 
     map.on("load", () => {
         addData();
@@ -1096,6 +1097,22 @@ map.on('load', () => { //redundant?? can place somewhere else??
   });
 
   renderLegendFromStops(initialLayer); 
+
+  const labelLayerPrefixList = [
+    'road-label',
+    'place-label',
+    'settlement-subdivision-label',
+    'settlement-minor-label',
+    'settlement-major-label',
+    'state-label',
+    'country-label'
+];
+
+map.getStyle().layers.forEach((layer) => {
+    if (labelLayerPrefixList.some(prefix => layer.id.startsWith(prefix))) {
+        map.moveLayer(layer.id);
+    }
+});
 });
        
     function layerLegendVisibility() {
@@ -1216,6 +1233,7 @@ map.on('load', () => { //redundant?? can place somewhere else??
             map.setLayoutProperty(layerId, 'visibility', visibility);
             //map.setLayoutProperty("county-layer", 'visibility', 'visible'); //potentially take
             map.setLayoutProperty("road-label", 'visibility', 'visible');
+            map.setLayoutProperty("place-layer", 'visibility', 'visible');
             map.setLayoutProperty("settlement-major-label", 'visibility', 'visible');
             map.setLayoutProperty("settlement-subdivision-label", 'visibility', 'visible');
             map.setLayoutProperty("settlement-minor-label", 'visibility', 'visible');;
@@ -1528,6 +1546,7 @@ document.querySelectorAll('#basemap-style-thumbnails button').forEach(button => 
 
       const selected = document.getElementById('layer-dropdown')?.value;
       if (selected) renderLegendFromStops(selected);
+      
     });
   });
 });
