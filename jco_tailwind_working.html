@@ -75,10 +75,10 @@
   <!-- Sidebar -->
   <div id="sidebar" class="w-80 bg-white border-r border-gray-300 shadow-xl p-4 overflow-y-auto z-10">
       <div class="flex flex-col h-full">
-          <h2 class="text-xl font-semibold mb-5">Johnson County Housing Study </h2> <!--set dynamically-->
+          <h2 class="text-xl font-semibold mb-5">Johnson County Housing Study</h2> <!--set dynamically?-->
           <div class="overflow-y-auto flex-grow">
     
-    <!-- Layer Toggle -->
+    <!-- Layer toggle - add all layers that will be in the dropdown menu  -->
     <div class="mb-4">
       <select id="layer-select" class="w-full border border-gray-300 rounded px-2 py-1">
         <option value="tracts-medIncome">Median Annual Household Income</option> 
@@ -314,7 +314,7 @@
 </div>
 
 <script>
-    const INITIAL_LOC = [-91.58, 41.67] 
+    const INITIAL_LOC = [-91.58, 41.67] //set before using template 
     const INITIAL_ZOOM = 9.5 //set initial zoom (zoom levels 9-12 best for cities depending on size)(this is set to 13 to accomodate the tileset that will need to be uploaded via CLI)
     const communityScaleGray = "#425A70" //could replace with different accent color, I personally like this branding 
     const placeOfInterest = "Johnson County"
@@ -443,7 +443,7 @@
         map.on('sourcedata', checkSourceLoaded);
         }
 
-        function adjustMapSize() { //idk if needed!!
+        function adjustMapSize() { //idk if needed!! 
         const sidebarWidth = document.getElementById('sidebar').width;
         const mapContainer = document.getElementById('map');
   
@@ -648,7 +648,7 @@ const interpolateLayers = [ //come back to this as it is driving me crazy!!
 
 
 
-    function addAllOtherLayers() {
+    function addAllOtherLayers() { //all categorical, overlay, base geo layers 
        
         map.addLayer({
                 id: "admin-layer",  
@@ -1366,8 +1366,7 @@ layerSelect.addEventListener('change', (e) => {
         const visibility = checkbox.checked ? 'visible' : 'none';
         if (map.getLayer(layerId)) {
             map.setLayoutProperty(layerId, 'visibility', visibility);
-            //map.setLayoutProperty("county-layer", 'visibility', 'visible'); //potentially take out
-            //map.setLayoutProperty("road-label", 'visibility', 'visible'); //replace not needed/DNE
+            //map.setLayoutProperty() //
             map.setLayoutProperty("settlement-major-label", 'visibility', 'visible');
             map.setLayoutProperty("settlement-subdivision-label", 'visibility', 'visible');
             map.setLayoutProperty("settlement-minor-label", 'visibility', 'visible');;
@@ -1591,6 +1590,7 @@ layerSelect.addEventListener('change', (e) => {
             .addTo(map);
     });
 
+    //KEEP LAYERS WHEN BASEMAP CHANGES --> move constant/this list towards the top
     const dataLayers = [ // all fill data layers need to be listed here
         'tracts-medIncome', 
         'tracts-pctCostBurdenedRenters', 
@@ -1753,10 +1753,12 @@ document.querySelectorAll('#basemap-style-thumbnails button').forEach(button => 
                         { hover: false }
                     );
                 }
-                hoveredGeoId = null;
+                hoveredGeoId = null; //cut hovers 
             });
         })};
 
+
+//zoom in zoom out buttons 
 document.getElementById('zoom-in').addEventListener('click', () => {
   map.zoomIn();
 });
@@ -1780,7 +1782,7 @@ document.getElementById('clear-map').addEventListener('click', () => {
     input.checked = false; // uncheck toggle in UI
   });
 
-//86 the fills 
+// wipe the fills 
   map.getStyle().layers.forEach(layer => {
     if (layer.type === 'fill') {
       try {
@@ -1879,7 +1881,7 @@ overlayToggle.addEventListener('click', () => {
   overlayContent.classList.toggle('hidden');
   overlayArrow.classList.toggle('rotate-180')});
 
-        initializeMap();
+    initializeMap();
 
         </script>
     </body>
