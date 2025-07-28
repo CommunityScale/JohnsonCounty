@@ -317,6 +317,8 @@
     const INITIAL_LOC = [-91.58, 41.67] //set before using template 
     const INITIAL_ZOOM = 9.5 //set initial zoom (zoom levels 9-12 best for cities depending on size)(this is set to 13 to accomodate the tileset that will need to be uploaded via CLI)
     const communityScaleGray = "#425A70" //could replace with different accent color, I personally like this branding 
+    
+    //place specific constants!!
     const placeOfInterest = "Johnson County"
     const citiesOfInterest = [
                 "Hills",
@@ -333,6 +335,32 @@
                 "Tiffin",
                 "University Heights"
             ]
+
+    //layer constants/arrays to use later 
+    const dataLayers = [ // all fill data layers need to be listed here
+        'tracts-medIncome', 
+        'tracts-pctCostBurdenedRenters', 
+        'tracts-pctCostBurdenedOwners',
+        'tracts-pctHH',
+        'admin-layer',
+        'parcels-landuse',
+        'parcels-pctLV',
+        'parcels-value',
+        'parcels-ownership'
+        ];
+
+    const overlayLayers = [ // all overlay layers need to be listed here
+        "county-layer",
+        "villages-layer",
+        "smallCities-layer",
+        "excludedCities-layer",
+        "parcels-newPermits2010",
+        "parcels-newPermits2020",
+        "manufacturedHomes",
+        "targetedGrowth-layer"
+        ];
+
+    //all palettes here!!
     const medIncomePalette = [ //Sequential colorBrewer Purple/Red ramp
                 '#BFD7FF',
                 '#9BB1FF',
@@ -405,7 +433,7 @@
     const palettesByLayer = {
             'parcels-landuse': landUsePalette,
             'parcels-ownership': taxCreditPalette
-  //best way to match palettes to their respective layers ??
+  //best way to match palettes to their respective layers ?? particularly for categorical layers
 };
 
     
@@ -430,7 +458,7 @@
     function waitForSourcesToLoad(sourceIds, callback) {
         let loadedSources = new Set();
 
-        function checkSourceLoaded(e) {
+        function checkSourceLoaded(e) { 
             if (sourceIds.includes(e.sourceId)) {
             loadedSources.add(e.sourceId);
             if (loadedSources.size === sourceIds.length) {
@@ -505,7 +533,9 @@
             data: "https://raw.githubusercontent.com/CommunityScale/JohnsonCounty/main/mobileHomes_jcia.geojson",
             promoteId: "NAME"
         });
+
     }
+
 
 async function computeStatsFromGeoJSON(source_url, property) {
   const response = await fetch(source_url);
@@ -542,7 +572,9 @@ async function computeStatsFromGeoJSON(source_url, property) {
 function generateColorStopsFromStats(breaks, colors, property) {
   if (!breaks || breaks.length !== colors.length) return null;
 
-  const interpolateExpr = ["interpolate", ["linear"], ["get", property]];
+  const interpolateExpr = ["step", //["linear"], 
+        ["get", property], 
+        communityScaleGray]; //try step vs interpolate
   for (let i = 0; i < breaks.length; i++) {
     interpolateExpr.push(breaks[i], colors[i]);
   }
@@ -554,13 +586,13 @@ function generateColorStopsFromStats(breaks, colors, property) {
 }
 
 
-const interpolateLayers = [ //come back to this as it is driving me crazy!!
+const interpolateLayers = [
         {
             id: "tracts-medIncome",
             property: "medIncome",
             data_source: "tracts",
             source_url: "https://raw.githubusercontent.com/CommunityScale/JohnsonCounty/main/iaBgs_selectCounties.geojson",
-            colors: medIncomePalette,
+            colors: medIncomePalette, 
             defaultViz: "visible" 
         },
         {
@@ -568,7 +600,7 @@ const interpolateLayers = [ //come back to this as it is driving me crazy!!
             property: "pctRent30",
             data_source: "tracts",
             source_url: "https://raw.githubusercontent.com/CommunityScale/JohnsonCounty/main/iaBgs_selectCounties.geojson",
-            colors: cbRentersPalette,
+            colors: medIncomePalette, //replaced with medIncomePalette for color consistency 
             defaultViz: "none"
         },
         {
@@ -576,7 +608,7 @@ const interpolateLayers = [ //come back to this as it is driving me crazy!!
             property:"pctOwned30",
             data_source: "tracts",
             source_url: "https://raw.githubusercontent.com/CommunityScale/JohnsonCounty/main/iaBgs_selectCounties.geojson",
-            colors: cbOwnersPalette,
+            colors: medIncomePalette, //replaced with medIncomePalette for color consistency 
             defaultViz: "none"
         },
         // {
@@ -603,32 +635,34 @@ const interpolateLayers = [ //come back to this as it is driving me crazy!!
         console.log(`Processing layer: ${id}`); //debugging/check 
         const stats = await computeStatsFromGeoJSON(source_url, property);
         console.log(`Stats for ${id}:`, stats);
-        if (!stats) {
-        console.warn(`Skipping ${id} – insufficient data.`);
-        continue;
-        }
+        // if (!stats) {
+        // console.warn(`Skipping ${id} – insufficient data.`);
+        // continue;
+        // }
 
         const colorStops = generateColorStopsFromStats(stats, colors, property);
-        if (!colorStops) { //debugging, can cut??
-        console.warn(`Invalid color stops for ${id}`);
-        continue;
-        }
+        // if (!colorStops) { //debugging, can cut??
+        // console.warn(`Invalid color stops for ${id}`);
+        // continue;
+        // }
 
-        if (!map.getSource(data_source)) { //debugginh, can cut?
-        console.error(`Source ${data_source} not found for layer ${id}`);
-        continue;
-        }
+        // if (!map.getSource(data_source)) { //debugging, can cut?
+        // console.error(`Source ${data_source} not found for layer ${id}`);
+        // continue;
+        // }
 
-        if (map.getLayer(id)) { //debugging/can cut!!
-        console.warn(`Layer ${id} already exists, skipping addLayer.`);
-        continue;
-        }
+        // if (map.getLayer(id)) { //debugging/can cut!!
+        // console.warn(`Layer ${id} already exists, skipping addLayer.`);
+        // continue;
+        // }
 
         map.addLayer({
         id,
         type: "fill",
         source: data_source,
-        layout: { visibility: defaultViz },
+        layout: {
+            visibility: id === visibleLayerId ? "visible" : "none" //or use default viz parameter??
+            },
         paint: {
             "fill-color": colorStops,
             "fill-outline-color": "white",
@@ -638,9 +672,7 @@ const interpolateLayers = [ //come back to this as it is driving me crazy!!
             ["case", ["boolean", ["feature-state", "hover"], false], 0.95, opacity]
             ]
         }
-        }, "settlement-major-label", 
-            "settlement-subdivision-label", 
-            "settlement-minor-label");
+        }, labelLayerId);
         console.log(`Layer ${id} added.`); //debugging/check
     }
     }
@@ -658,136 +690,16 @@ const interpolateLayers = [ //come back to this as it is driving me crazy!!
                     'fill-color': communityScaleGray,
                     "fill-outline-color": "white",
                     "fill-opacity": [
-                        "case",
-                        ["boolean", ["feature-state", "hover"], false],
-                        0.95,
-                        0.66
-                ]},
+                    "case", ["==", ["get", "OBJECTID"], null], 0.3,
+                    0.66
+                    ]},
                 layout: {
                     visibility: "none"
                 }
             },
-            "settlement-major-label", 
-            "settlement-subdivision-label", 
-            "settlement-minor-label"
+            labelLayerId
         )
 
-    //     map.addLayer({
-    //         id: "tracts-medIncome",  //use this to play with dynamically generating the breaks !!
-    //         type: "fill",
-    //         source: "tracts",
-    //         paint: {
-    //             "fill-color": [
-    //                 "case", ["==", ["get", "medIncome"], null], communityScaleGray,
-    //                 ["interpolate", 
-    //                 ["linear"],
-    //                 ["get", "medIncome"],
-    //                 15000,
-    //                 medIncomePalette[0], 
-    //                 56000,
-    //                 medIncomePalette[1],
-    //                 73000,
-    //                 medIncomePalette[2],
-    //                 95000,
-    //                 medIncomePalette[3],
-    //                 130000,
-    //                 medIncomePalette[4]]],
-    //             "fill-outline-color": "white",
-    //             "fill-opacity": [
-    //                 "case", ["==", ["get", "medIncome"], null], 0.3,
-    //                 ["case",
-    //                 ["boolean", ["feature-state", "hover"], false],
-    //                 0.95,
-    //                 0.66
-    //         ]]
-    //          },
-    //          layout: {
-    //             visibility: "visible"
-    //          }
-    //     },
-    //     "settlement-major-label", 
-    //     "settlement-subdivision-label", 
-    //     "settlement-minor-label"
-    // ) 
-
-
-    // map.addLayer({      
-    //         id: "tracts-pctCostBurdenedRenters",  
-    //         type: "fill",
-    //         source: "tracts",
-    //         paint: {
-    //             "fill-color": [
-    //                 "case", ["==", ["get", "pctRent30"], null], communityScaleGray,
-    //                 ["interpolate", 
-    //                 ["linear"],
-    //                 ["get", "pctRent30"],
-    //                 0,
-    //                 cbRentersPalette[0], 
-    //                 0.25,
-    //                 cbRentersPalette[1],
-    //                 0.50,
-    //                 cbRentersPalette[2],
-    //                 0.60,
-    //                 cbRentersPalette[3],
-    //                 0.75,
-    //                 cbRentersPalette[4]]],
-    //             "fill-outline-color": "white",
-    //             "fill-opacity": [
-    //                 "case", ["==", ["get", "pctRent30"], null], 0.3,
-    //                 ["case",
-    //                 ["boolean", ["feature-state", "hover"], false],
-    //                 0.95,
-    //                 0.66
-    //         ]]
-    //          },
-    //          layout: {
-    //             visibility: "none"
-    //          }
-    //     },
-    //     "settlement-major-label", 
-    //     "settlement-subdivision-label", 
-    //     "settlement-minor-label"
-    // )
-    
-
-    // map.addLayer({      
-    //         id: "tracts-pctCostBurdenedOwners",  
-    //         type: "fill",
-    //         source: "tracts",
-    //         paint: {
-    //             "fill-color": [
-    //                 "case", ["==", ["get", "pctOwned30"], null], communityScaleGray,
-    //                 ["interpolate",
-    //                 ["linear"],
-    //                 ["get", "pctOwned30"],
-    //                 0,
-    //                 cbOwnersPalette[0],
-    //                 0.11,
-    //                 cbOwnersPalette[1], 
-    //                 0.15,
-    //                 cbOwnersPalette[2],
-    //                 0.22,
-    //                 cbOwnersPalette[3],
-    //                 0.35,
-    //                 cbOwnersPalette[4],
-    //             ]],
-    //             "fill-outline-color": "white",
-    //             "fill-opacity": [
-    //                 "case", ["==", ["get", "pctOwned30"], null], 0.3,
-    //                 ["case",
-    //                 ["boolean", ["feature-state", "hover"], false],
-    //                 0.95,
-    //                 0.66
-    //         ]]
-    //          },
-    //          layout: {
-    //             visibility: "none"
-    //          }
-    //     },
-    //     "settlement-major-label", 
-    //     "settlement-subdivision-label", 
-    //     "settlement-minor-label"
-    // )
 
     map.addLayer({
                 id: "parcels-landuse", //update with parcel types!!
@@ -810,19 +722,17 @@ const interpolateLayers = [ //come back to this as it is driving me crazy!!
                     ],
                     "fill-outline-color": communityScaleGray,
                     "fill-opacity": [
-                        "case",
-                        ["boolean", ["feature-state", "hover"], false],
-                        0.95,
-                        0.66
-                    ]
-                },
+                    "case", ["==", ["get", "PropClass"], null], 0.3,
+                    ["case",
+                    ["boolean", ["feature-state", "hover"], false],
+                    0.95,
+                    0.66
+            ]]},
                 layout: {
                     visibility: "none"
                 }
             }, 
-            "settlement-major-label", 
-            "settlement-subdivision-label", 
-            "settlement-minor-label")
+            labelLayerId)
 
     map.addLayer({ 
             id: "parcels-pctLV",  
@@ -857,9 +767,7 @@ const interpolateLayers = [ //come back to this as it is driving me crazy!!
                 visibility: "none"
              }
         },
-        "settlement-major-label", 
-        "settlement-subdivision-label", 
-        "settlement-minor-label"
+        labelLayerId
     )
 
     map.addLayer({ 
@@ -882,18 +790,17 @@ const interpolateLayers = [ //come back to this as it is driving me crazy!!
                         taxCreditPalette[7].color
                         ],
                 "fill-outline-color": "#545453",
-                "fill-opacity": ["case",
+                "fill-opacity": [
+                    "case", ["==", ["get", "credits"], null], 0.3,
+                    ["case",
                     ["boolean", ["feature-state", "hover"], false],
                     0.95,
                     0.66
-                ]
-             },
+            ]]},
              layout: {
                 visibility: "none"
             }},
-            "settlement-major-label", 
-            "settlement-subdivision-label", 
-            "settlement-minor-label"
+            labelLayerId
     ) 
 
     map.addLayer({     
@@ -933,9 +840,7 @@ const interpolateLayers = [ //come back to this as it is driving me crazy!!
              layout: {
                 visibility: "none"
         }},
-            "settlement-major-label", 
-            "settlement-subdivision-label", 
-            "settlement-minor-label"
+            labelLayerId
     )
 
     // map.addLayer({ 
@@ -1044,24 +949,25 @@ const interpolateLayers = [ //come back to this as it is driving me crazy!!
 
 //point overlays!! 
 
-        map.addLayer( 
-            {
-                id: 'manufacturedHomes',
-                type: 'circle',
-                source: 'manufacturedHomeParks',
-                paint: {
-                    // Make circles larger as the user zooms from z12 to z22. ??
-                    'circle-radius': {
-                        'base': 2,
-                        'stops': [
-                            [12, 4],
-                            [22, 180]
-                    ]},
-                    'circle-color': "#249bd6"},
-                layout: {
-                    visibility: "visible"
-                } 
-           })
+    map.addLayer(
+        {
+            id: 'manufacturedHomes',
+            type: 'circle',
+            source: 'manufacturedHomeParks',
+            paint: {
+                'circle-radius': [
+                'interpolate',
+                ['linear'],
+                ['zoom'],
+                12, 4,
+                22, 180
+                ],
+                'circle-color': '#249bd6'
+            },
+        layout: {
+            visibility: 'visible'
+        }
+    })
 
     map.addLayer( 
             {
@@ -1122,17 +1028,28 @@ const interpolateLayers = [ //come back to this as it is driving me crazy!!
         window.addEventListener('resize', adjustMapSize)
     }
 
+let labelLayerId; //pull text fields on top!!
+
+map.on('style.load', () => {
+  const layers = map.getStyle().layers;
+  for (const layer of layers) {
+    if (layer.type === 'symbol' && layer.layout && layer.layout['text-field']) {
+      labelLayerId = layer.id;
+      break;
+    }
+  }})  
+
 
 map.on('load', () => {
     addSources();
 
     map.once('idle', async () => {
         const opacity = 0.66; 
-        const visibleLayerId = "tracts-medIncome"; // needed now but logic could be changed 
+        const visibleLayerId = "tracts-medIncome"; // set visible layer id to layer wanted for initial load!!
 
-        await addInterpolatedLayers(opacity, visibleLayerId); // <<< Add interpolated layers FIRST
+        await addInterpolatedLayers(opacity, visibleLayerId); //add interpolated layers FIRST
 
-        addAllOtherLayers(); // <<< Then add static/dummy layers second
+        addAllOtherLayers(); // & add static layers second
 
         const initialLayer = layerSelect.value;
 
@@ -1214,12 +1131,14 @@ function getStopsFromLayer(layerId) {
 //Label formatter --> need to fix for 0 values, what should happen to other values (need to edit for pctLV)
 function formatLegendLabel(value) {
   if (typeof value === 'number') {
-    if (value < 1 //&& value > 0
-    ) return `${Math.round(value * 100)}%`;
+    if (value < 1) return `${Math.round(value * 100)}%`; // decimal -> percent, figure out how to include values greater than -1
+    if (value >= 1500) return `$${(Math.round(value / 1000) * 1000).toLocaleString()}`; // round to nearest 1000
     return `$${Math.round(value).toLocaleString()}`;
   }
   return value;
 }
+
+
 
 // Render legend from stops
 function renderLegendFromStops(layerId) {
@@ -1314,7 +1233,7 @@ layerSelect.addEventListener('change', (e) => {
 
         const props = { //opacity properties/data fill properties 
             //"tracts-class-layer": "class",
-            "parcels-landuse": "ParcelType",
+            "parcels-landuse": "PropClass", //ParcelType??
             "parcels-pctLV": "pctLandVal",
             "parcels-value": "acreVal",
             'tracts-medIncome': "medIncome",
@@ -1337,7 +1256,7 @@ layerSelect.addEventListener('change', (e) => {
     function updateLayerOpacity() {
         const currentOpacity = parseFloat(document.getElementById("opacity").value);
         const props = {
-            "parcels-landuse": "ParcelType",
+            "parcels-landuse": "PropClass", //make sure property names exist...
             "parcels-pctLV": "pctLandVal",
             "parcels-value": "acreVal",
             'tracts-medIncome': "medIncome",
@@ -1574,10 +1493,10 @@ layerSelect.addEventListener('change', (e) => {
                 <div class="popup-content">${stats}
                 </div>`;
 
-                new mapboxgl.Popup()
-                    .setLngLat([coords[0], coords[1]]) // forcefully ensuring it's a valid [lng, lat] array ?? still acting strange, perhaps because it is a small, small geo
-                    .setHTML(html)
-                    .addTo(map);
+                // new mapboxgl.Popup()
+                //     .setLngLat([coords[0], coords[1]]) // forcefully ensuring it's a valid [lng, lat] array ?? still acting strange, perhaps because it is a small, small geo
+                //     .setHTML(html)
+                //     .addTo(map);
             break;
             }
 
@@ -1590,30 +1509,7 @@ layerSelect.addEventListener('change', (e) => {
             .addTo(map);
     });
 
-    //KEEP LAYERS WHEN BASEMAP CHANGES --> move constant/this list towards the top
-    const dataLayers = [ // all fill data layers need to be listed here
-        'tracts-medIncome', 
-        'tracts-pctCostBurdenedRenters', 
-        'tracts-pctCostBurdenedOwners',
-        'tracts-pctHH',
-        'admin-layer',
-        'parcels-landuse',
-        'parcels-pctLV',
-        'parcels-value',
-        'parcels-ownership'
-        ];
-
-    const overlayLayers = [ // all overlay layers need to be listed here
-        "county-layer",
-        "villages-layer",
-        "smallCities-layer",
-        "excludedCities-layer",
-        "parcels-newPermits2010",
-        "parcels-newPermits2020",
-        "manufacturedHomes",
-        "targetedGrowth-layer"
-        ];
-
+    //KEEP LAYERS WHEN BASEMAP CHANGES 
     function toggleBasemapSettings() { //correct for the basemap toggle situation
         const panel = document.getElementById('basemap-settings');
         const arrow = document.getElementById('basemap-arrow');
@@ -1626,7 +1522,7 @@ document.querySelectorAll('#basemap-style-thumbnails button').forEach(button => 
     const style = button.getAttribute('data-style');
 
     // Capture visible data layers before switching
-    const visibleLayers = dataLayers.filter(id => {
+    const visibleLayers = allFillLayers.filter(id => { //or dataLayers?? troubleshooting bc it doesn't seem to want to work rn 
       const layer = map.getLayer(id);
       return layer && map.getLayoutProperty(id, 'visibility') === 'visible';
     });
@@ -1640,48 +1536,53 @@ document.querySelectorAll('#basemap-style-thumbnails button').forEach(button => 
     // Switch basemap
     map.setStyle(`mapbox://styles/${style}`);
 
-    // Restore layers and visibility once style loads --> take out med income as always visible layer??
     map.once('style.load', () => {
-      addSources();
-      addInterpolatedLayers();
-      addAllOtherLayers();
+  addSources();
+  addInterpolatedLayers(0.66);
+  addAllOtherLayers();
 
+  map.once('idle', () => {
+    // run afer everything has been added back as changing the style wipes the sources as well??
+
+    // Hide all layers by default 
     dataLayers.forEach(id => {
+      if (map.getLayer(id)) {
+        map.setLayoutProperty(id, 'visibility', 'none');
+      }
+    });
+
+    overlayLayers.forEach(id => {
+      if (map.getLayer(id)) {
+        map.setLayoutProperty(id, 'visibility', 'none');
+      }
+    });
+
+    // Restore peviously visible layers once the style loads
+    visibleLayers.forEach(id => {
+      if (map.getLayer(id)) {
+        map.setLayoutProperty(id, 'visibility', 'visible');
+      }
+    });
+
+    visibleOverlays.forEach(id => {
+      if (map.getLayer(id)) {
+        map.setLayoutProperty(id, 'visibility', 'visible');
+      }
+    });
+
+    if (showOnlyCounty) {
+      tractLayerIds.forEach(id => {
         if (map.getLayer(id)) {
-          map.setLayoutProperty(id, 'visibility', 'none');
+          map.setFilter(id, studyAreaFilter);
         }
       });
-
-      visibleLayers.forEach(id => {
-        if (map.getLayer(id)) {
-          map.setLayoutProperty(id, 'visibility', 'visible');
-        }
-      });
-
-      overlayLayers.forEach(id => {
-        if (map.getLayer(id)) {
-          map.setLayoutProperty(id, 'visibility', 'none');
-        }
-      });
-
-      visibleOverlays.forEach(id => {
-        if (map.getLayer(id)) {
-          map.setLayoutProperty(id, 'visibility', 'visible');
-        }
-      });
-
-      if (showOnlyCounty) {
-        tractLayerIds.forEach(id => {
-            if (map.getLayer(id)) {
-                map.setFilter(id, studyAreaFilter);
-        }
-        });
     }
 
-      updateLayerOpacity();
+    updateLayerOpacity();
 
-      const selected = document.getElementById('layer-dropdown')?.value;
-      if (selected) renderLegendFromStops(selected);
+    const selected = document.getElementById('layer-dropdown')?.value;
+    if (selected) renderLegendFromStops(selected);
+  });
     });
   });
 });
@@ -1706,6 +1607,8 @@ document.querySelectorAll('#basemap-style-thumbnails button').forEach(button => 
             map.setLayoutProperty(layerId, 'visibility', 'none');
         }
     });
+
+    
         
         map.setLayoutProperty(selectedLayer, 'visibility', 'visible');
         //map.setLayoutProperty("road-label", 'visibility', 'visible'); //replace, this layer DNE
@@ -1713,49 +1616,7 @@ document.querySelectorAll('#basemap-style-thumbnails button').forEach(button => 
         map.setLayoutProperty("settlement-subdivision-label", 'visibility', 'visible');
         map.setLayoutProperty("settlement-minor-label", 'visibility', 'visible');
     });
-
-
-        let hoveredGeoId = null; //fix!!
-
-        const hoverLayers = [
-            { id: 'tracts-medIncome', source: 'tracts'},
-            { id: 'tracts-pctCostBurdenedRenters', source: 'tracts'},
-            { id: 'tracts-pctCostBurdenedOwners', source: 'tracts' },
-            { id: 'tracts-pctHH', source: 'tracts' },
-            { id: 'admin-layer', source: 'admin' },
-            { id: 'parcels-landuse', source: 'parcels'},
-            { id: 'parcels-value', source: 'parcels'},
-            { id: 'parcels-pctLV', source: 'parcels'},
-            { id: 'parcels-ownership', source: 'parcels'}
-        ];
-
-        hoverLayers.forEach(({ id, source }) => {
-            map.on('mousemove', id, (e) => {
-                if (e.features.length > 0) {
-                    if (hoveredGeoId !== null) {
-                        map.setFeatureState(
-                            { source, id: hoveredGeoId },
-                            { hover: false }
-                        );
-                    }
-                    hoveredGeoId = e.features[0].id;
-                    map.setFeatureState(
-                        { source, id: hoveredGeoId },
-                        { hover: true }
-                    );
-                }
-            });
-
-            map.on('mouseleave', id, () => {
-                if (hoveredGeoId !== null) {
-                    map.setFeatureState(
-                        { source, id: hoveredGeoId },
-                        { hover: false }
-                    );
-                }
-                hoveredGeoId = null; //cut hovers 
-            });
-        })};
+};
 
 
 //zoom in zoom out buttons 
