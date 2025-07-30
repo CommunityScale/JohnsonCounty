@@ -572,9 +572,10 @@ async function computeStatsFromGeoJSON(source_url, property) {
 function generateColorStopsFromStats(breaks, colors, property) {
   if (!breaks || breaks.length !== colors.length) return null;
 
-  const interpolateExpr = ["step", //["linear"], 
+  const interpolateExpr = ["interpolate", 
+        ["linear"], 
         ["get", property], 
-        communityScaleGray]; //try step vs interpolate
+        ]; //try step vs interpolate --> need to replace with step and leave a default value for lower vals, somewhat interchangeable otherwise  
   for (let i = 0; i < breaks.length; i++) {
     interpolateExpr.push(breaks[i], colors[i]);
   }
@@ -975,12 +976,13 @@ const interpolateLayers = [
                 type: 'circle',
                 source: "newPermits",
                 paint: {
-                    'circle-radius': { 
-                        'base': 2,
-                        'stops': [
-                            [12, 3],
-                            [22, 18]
-                    ]},
+                    'circle-radius': [
+                      'interpolate',
+                      ['linear'],
+                      ['zoom'],
+                      12, 3,
+                      22, 20
+                      ],
                     'circle-color': "#82ac22", //"#D1CBC1" agreeable gray a la Sherwin Williams, add color to legend      
                 }, 
                 layout: {
@@ -995,12 +997,13 @@ const interpolateLayers = [
                 type: 'circle',
                 source: "newPermits",
                 paint: {
-                    'circle-radius': { 
-                        'base': 2,
-                        'stops': [
-                            [12, 3],
-                            [22, 18]
-                    ]},
+                    'circle-radius': [
+                      'interpolate',
+                      ['linear'],
+                      ['zoom'],
+                      12, 3,
+                      22, 20
+                      ],
                     'circle-color': "#cddea8",   
                 }, 
                 layout: {
@@ -1607,15 +1610,7 @@ document.querySelectorAll('#basemap-style-thumbnails button').forEach(button => 
             map.setLayoutProperty(layerId, 'visibility', 'none');
         }
     });
-
-    
-        
-        map.setLayoutProperty(selectedLayer, 'visibility', 'visible');
-        //map.setLayoutProperty("road-label", 'visibility', 'visible'); //replace, this layer DNE
-        map.setLayoutProperty("settlement-major-label", 'visibility', 'visible');
-        map.setLayoutProperty("settlement-subdivision-label", 'visibility', 'visible');
-        map.setLayoutProperty("settlement-minor-label", 'visibility', 'visible');
-    });
+  });
 };
 
 
@@ -1679,15 +1674,15 @@ const descriptionEl = document.getElementById('layer-description');
 const layerDescriptions = { //edit as needed; some base text should be re-useable!!
   'tracts-medIncome': `
     <p><strong>Median household income</strong> (2023 USD) by Census block group.
-    Area median income, as defined by HUD, is <strong>$xxx,xxx</strong>.</p><br>
+    Area median income, as defined by HUD, is <strong>$118,200</strong>.</p><br>
     <p><em>Source(s):</em> Table B19013, 2023 ACS 5-year estimates; HUD; CommunityScale.</p>
   `,
   'tracts-pctCostBurdenedRenters': `
-    <p><strong>Cost-burdened renters</strong>: % of renters spending more than 30% of income on housing costs.</p><br>
+    <p><strong>Cost-burdened renters</strong>: Percent of renters spending more than 30% of income on housing costs.</p><br>
     <p><em>Source(s):</em> Table B25140, 2023 ACS 5-year estimates; CommunityScale.</p>
   `,
   'tracts-pctCostBurdenedOwners': `
-    <p><strong>Cost-burdened owners</strong>: % of homeowners, with and without mortgages, spending more than 30% of income on housing.</p><br>
+    <p><strong>Cost-burdened owners</strong>: Percent of homeowners, with and without mortgages, spending more than 30% of income on housing.</p><br>
     <p><em>Source(s):</em> Table B25140, 2023 ACS 5-year estimates; CommunityScale.</p>
   `,
   'parcels-pctLV': `
@@ -1699,7 +1694,7 @@ const layerDescriptions = { //edit as needed; some base text should be re-useabl
     <p><em>Source:</em> 2024 Johnson County, IA Assessor's Office parcel database; CommunityScale.</p>
   `,
   'parcels-ownership': `
-    <p><strong>Property tax credit</strong> data reveals where ......</p><br>
+    <p><strong>Property tax credit</strong> data reveals which parcels are owner-occupied and/or certain types of development of incentivized.</p><br>
     <p><em>Source:</em> 2024 Johnson County, IA Assessor's Office parcel database; CommunityScale.</p>
   `,
   'parcels-value': `
