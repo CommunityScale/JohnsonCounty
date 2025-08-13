@@ -75,7 +75,7 @@
   <!-- Sidebar -->
   <div id="sidebar" class="w-80 bg-white border-r border-gray-300 shadow-xl p-4 overflow-y-auto z-10">
       <div class="flex flex-col h-full">
-          <h2 class="text-xl font-semibold mb-5">Johnson County Housing Study</h2> <!--set dynamically?-->
+          <h2 class="text-xl font-semibold mb-5">Johnson County Non-metro Housing Study</h2> <!--set dynamically?-->
           <div class="overflow-y-auto flex-grow">
     
     <!-- Layer toggle - add all layers that will be in the dropdown menu  -->
@@ -185,21 +185,21 @@
           </div>
         <span class="leading-snug ms-2">New build permits, 2020-present</span>
     </label>
-    <label class="flex items-center justify-between w-full text-sm text-gray-700">
+    <label class="flex items-start text-sm text-gray-700">
         <div class="relative">
             <input type="checkbox" class="sr-only overlay-toggle peer" value="manufacturedHomes" checked />
             <div class="w-6 h-3.5 bg-gray-300 rounded-full peer-checked:bg-gray-600 transition-colors"></div>
             <div class="absolute top-[2px] left-[2px] w-2.5 h-2.5 bg-white border border-gray-400 rounded-full transition-transform peer-checked:translate-x-[10px]"></div>
           </div>
-        <span class="ms-2 leading-snug">Manufactured home parks</span>
+        <span class="leading-snug ms-2">Manufactured home parks</span>
     </label>
-    <label class="flex items-center justify-between w-full text-sm text-gray-700">
+    <label class="flex items-start text-sm text-gray-700">
         <div class="relative">
             <input type="checkbox" id="toggleCounty" class="sr-only overlay-toggle peer" />
             <div class="w-6 h-3.5 bg-gray-300 rounded-full peer-checked:bg-gray-600 transition-colors"></div>
             <div class="absolute top-[2px] left-[2px] w-2.5 h-2.5 bg-white border border-gray-400 rounded-full transition-transform peer-checked:translate-x-[10px]"></div>
           </div>
-        <span class="ms-2 leading-snug">Hide surrounding counties</span>
+        <span class="leading-snug ms-2">Hide surrounding counties</span>
     </label>
     <!-- add in colors/to legend via js?? -->
   </div>
@@ -683,23 +683,40 @@ const interpolateLayers = [
 
     function addAllOtherLayers() { //all categorical, overlay, base geo layers 
        
+        // map.addLayer({
+        //         id: "admin-layer",  
+        //         type: "fill",
+        //         source: "admin",
+        //         paint: {
+        //             'fill-color': communityScaleGray,
+        //             "fill-outline-color": "white",
+        //             "fill-opacity": [
+        //             "case", ["==", ["get", "OBJECTID"], null], 0.3,
+        //             0.66
+        //             ]},
+        //         layout: {
+        //             visibility: "none"
+        //         }
+        //     },
+        //     labelLayerId
+        // )
+
         map.addLayer({
-                id: "admin-layer",  
-                type: "fill",
-                source: "admin",
-                paint: {
-                    'fill-color': communityScaleGray,
-                    "fill-outline-color": "white",
-                    "fill-opacity": [
-                    "case", ["==", ["get", "OBJECTID"], null], 0.3,
-                    0.66
-                    ]},
-                layout: {
-                    visibility: "none"
-                }
-            },
-            labelLayerId
-        )
+            id: "admin-layer",
+            type: "fill",
+            source: "counties",
+            paint: {
+                "fill-outline-color": "black",
+                "fill-opacity": 0.4,
+                "fill-color": "#a9a9a9"
+                //"line-width": 3
+                },
+            layout: {
+                visibility: "visible"
+                },
+            filter: ["==", "NAME", placeOfInterest]},
+            labelLayerId 
+        );
 
 
     map.addLayer({
@@ -919,7 +936,8 @@ const interpolateLayers = [
             layout: {
                     visibility: "visible"
                 },
-            filter: ["in", "NAME", ...excludedCities]}
+            filter: ["in", "NAME", ...excludedCities]},
+            labelLayerId
         )
 
 
@@ -1623,24 +1641,33 @@ document.getElementById('zoom-out').addEventListener('click', () => {
   map.zoomOut();
 });
 
-//clear map
+// clear map 
 document.getElementById('clear-map').addEventListener('click', () => {
+  // layers that clear map will default to 
+  const keepLayers = ['admin-layer', 'county-layer']; 
+
   const overlayInputs = document.querySelectorAll('.overlay-toggle');
 
   overlayInputs.forEach(input => {
     const layerId = input.value;
-    const layer = map.getLayer(layerId);
 
+    // Keep layers from keepLayers list
+    if (keepLayers.includes(layerId)) return;
+
+    const layer = map.getLayer(layerId);
     if (layer && map.getLayoutProperty(layerId, 'visibility') !== 'none') {
       map.setLayoutProperty(layerId, 'visibility', 'none');
     }
 
-    input.checked = false; // uncheck toggle in UI
+    // Uncheck toggle if it's not in the keep list
+    if (!keepLayers.includes(layerId)) {
+      input.checked = false;
+    }
   });
 
-// wipe the fills 
+  // Hide all fill layers except those in keep list
   map.getStyle().layers.forEach(layer => {
-    if (layer.type === 'fill') {
+    if (layer.type === 'fill' && !keepLayers.includes(layer.id)) {
       try {
         map.setLayoutProperty(layer.id, 'visibility', 'none');
       } catch (e) {
@@ -1649,16 +1676,16 @@ document.getElementById('clear-map').addEventListener('click', () => {
     }
   });
 
-  // clear the legend panel
+  // Clear the legend panel
   const legendContent = document.getElementById('legend-content');
   if (legendContent) {
-    legendContent.innerHTML = `<p class="italic text-gray-500">Legend cleared</p>`; //replace with text "select a layer to view a legend??"
+    legendContent.innerHTML = `<p class="italic text-gray-500">Legend cleared</p>`;
   }
 
-  //Fly to default map center/zoom - potentially take out??
+  // Fly to default map center/zoom
   map.flyTo({
     center: [-91.58, 41.67], // default center
-    zoom: 9.5 //  default zoom
+    zoom: 9.5
   });
 
   // remove any popups
@@ -1666,6 +1693,7 @@ document.getElementById('clear-map').addEventListener('click', () => {
     popup.remove();
   }
 });
+
 
 
 const layerInfoBtn = document.getElementById('layer-info');
