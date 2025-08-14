@@ -75,7 +75,7 @@
   <!-- Sidebar -->
   <div id="sidebar" class="w-80 bg-white border-r border-gray-300 shadow-xl p-4 overflow-y-auto z-10">
       <div class="flex flex-col h-full">
-          <h2 class="text-xl font-semibold mb-5">Johnson County Non-metro Housing Study</h2> <!--set dynamically?-->
+          <h2 class="text-xl font-semibold mb-5">Johnson County Non-Metro Housing Study</h2> <!--set dynamically?-->
           <div class="overflow-y-auto flex-grow">
     
     <!-- Layer toggle - add all layers that will be in the dropdown menu  -->
@@ -102,7 +102,7 @@
     <div id="legend" class="mt-4 pb-4">
       <h3 class="font-medium mb-2">Legend</h3>
       <div id="legend-content" class="space-y-1 text-sm text-gray-700 mb-2">
-        <p class="italic text-gray-500">Select a layer to view legend</p>
+       <!-- <p class="italic text-gray-500">Select a layer to view legend</p> -->
       </div>
       <button id="layer-info" class="flex items-center text-sm"><span class="material-icons text-base mr-1">info</span>About this layer</button>
       <p id="layer-description" class="mt-1 text-xs text-gray-600 hidden"></p>
@@ -1099,6 +1099,7 @@ const allFillLayers = [
     'parcels-value',
     'parcels-ownership',
     'admin-layer'
+
 ];
 
 
@@ -1173,10 +1174,13 @@ function renderLegendFromStops(layerId) {
     return match?.label || formatLegendLabel(stop.value); // fallback to data value if no label
   }
 
-  if (!stops.length) {
-    legendContent.innerHTML = `<p class="italic text-gray-500">No legend available</p>`;
-    return;
-  }
+  // if (!stops.length) {
+  //   legendContent.innerHTML = `<p class="italic text-gray-500">No legend available</p>`;
+  //   return;
+  // }
+
+  // add data layers header - has not done anything so I am taking it out atm 
+  //legendContent.innerHTML = `<p class="text-sm font-semibold mt-2 mb-1">Data Layers</p>`;
 
   //prevent duplicates
   const seen = new Set();
@@ -1188,10 +1192,36 @@ function renderLegendFromStops(layerId) {
     return true;
   });
 
-  legendContent.innerHTML = uniqueStops.map((stop, index) => {
-    const next = uniqueStops[index + 1];
-    const prev = uniqueStops[index - 1];
-    const label = getLabel(stop); 
+
+//   legendContent.innerHTML = uniqueStops.map((stop, index) => {
+//     const next = uniqueStops[index + 1];
+//     const prev = uniqueStops[index - 1];
+//     const label = getLabel(stop); 
+
+//   // Show ranges if numeric
+//   let displayLabel = label;
+//   const isNumeric = typeof stop.value === 'number';
+
+//   if (isNumeric && next) {
+//     displayLabel = index === 0
+//       ? `< ${getLabel(next)}`
+//       : `${label} – ${getLabel(next)}`;
+//   } else if (isNumeric && index === uniqueStops.length - 1) {
+//     displayLabel = `≥ ${label}`;
+//   }
+
+//   return `
+//     <div class="flex items-center gap-2">
+//       <span class="w-3.5 h-3.5 inline-block rounded-sm" style="background-color: ${stop.color};"></span>
+//       <span>${displayLabel}</span>
+//     </div>
+//   `;
+// }).join('');
+
+// Generate HTML for the data-layer legend
+const dataLayerHtml = uniqueStops.map((stop, index) => {
+  const next = uniqueStops[index + 1];
+  const label = getLabel(stop); 
 
   // Show ranges if numeric
   let displayLabel = label;
@@ -1213,7 +1243,176 @@ function renderLegendFromStops(layerId) {
   `;
 }).join('');
 
+// Ensure a container for data-layer entries exists
+let dataLayerContainer = document.getElementById('legend-data-layers');
+if (!dataLayerContainer) {
+  dataLayerContainer = document.createElement('div');
+  dataLayerContainer.id = 'legend-data-layers';
+  legendContent.prepend(dataLayerContainer); // insert at top of legend
 }
+
+// Update only the data-layer container, leaving overlays untouched
+dataLayerContainer.innerHTML = dataLayerHtml;
+
+
+}
+
+//test overlay legend parts
+document.querySelectorAll('.overlay-toggle').forEach(input => {
+  input.addEventListener('change', () => {
+    const layerId = input.value;
+
+    if (input.checked) {
+      map.setLayoutProperty(layerId, 'visibility', 'visible');
+      renderOverlayLegend(layerId); // append overlay to legend
+    } else {
+      map.setLayoutProperty(layerId, 'visibility', 'none');
+      // optionally remove overlay entry from legend
+    }
+  });
+});
+
+
+// ---------------- Helper Functions ---------------- //
+
+// Get display name from the sidebar label text
+function getOverlayDisplayName(layerId) {
+  const input = document.querySelector(`.overlay-toggle[value="${layerId}"]`);
+  if (!input) return layerId;
+
+  // Find the <span> containing the text inside the parent <label>
+  const labelSpan = input.closest('label')?.querySelector('span');
+  return labelSpan?.textContent?.trim() || layerId;
+}
+
+// Get a usable color from the layer
+// function getOverlayColor(layerId) {
+//   try {
+//     let color = map.getPaintProperty(layerId, 'circle-color') ||
+//                 map.getPaintProperty(layerId, 'line-color') ||
+//                 map.getPaintProperty(layerId, 'fill-color');
+
+//     // If it's an expression (array), try to pick the first color string
+//     if (Array.isArray(color)) {
+//       // Example: ["match", ["get", "type"], "A", "#f00", "B", "#0f0", "#000"]
+//       const firstColor = color.find(c => typeof c === 'string' && /^#|rgb|hsl/.test(c));
+//       if (firstColor) color = firstColor;
+//       else color = '#999';
+//     }
+
+//     return color || '#999';
+//   } catch (err) {
+//     console.warn(`Could not get color for ${layerId}:`, err);
+//     return '#999';
+//   }
+// }
+
+function getOverlayColor(layerId) {
+  const layer = map.getLayer(layerId);
+  if (!layer) return '#999';
+
+  const type = layer.type;
+  let paintProp;
+
+  if (type === 'circle') paintProp = 'circle-color';
+  else if (type === 'line') paintProp = 'line-color';
+  else if (type === 'fill') paintProp = 'fill-color';
+  else return '#999';
+
+  let paint = map.getPaintProperty(layerId, paintProp);
+  if (!paint) return '#999';
+
+  // if paint is a string, return it
+  if (typeof paint === 'string') return paint;
+
+  // if paint is an expression/array (Mapbox style), try to extract first color
+  if (Array.isArray(paint)) {
+    const colorStop = paint.find(item => typeof item === 'string' && /^#|rgb|hsl/.test(item));
+    if (colorStop) return colorStop;
+  }
+
+  return '#999'; // fallback
+}
+
+
+
+// Add overlay entry to legend
+function addOverlayLegendEntry(layerId) {
+  const legendContent = document.getElementById('legend-content');
+  if (!legendContent) return;
+
+  // add overlay header (once)
+  if (!document.querySelector('#legend-overlays-header')) {
+    legendContent.insertAdjacentHTML(
+      'beforeend',
+      `<div class="h-2"></div>
+      <p id="legend-overlays-header" class="text-sm font-medium mb-1">Overlays</p>`
+    );
+  }
+
+
+  // Avoid duplicates
+  if (document.querySelector(`#legend-overlay-${layerId}`)) return;
+
+  // Wait until layer exists
+  if (!map.getLayer(layerId)) {
+    map.once('idle', () => addOverlayLegendEntry(layerId));
+    return;
+  }
+
+  const displayName = getOverlayDisplayName(layerId);
+  const color = getOverlayColor(layerId);
+
+  const overlayHtml = `
+    <div id="legend-overlay-${layerId}" class="flex items-center gap-2 mt-1">
+      <span class="w-3 h-3 inline-block rounded-full border border-gray-300"
+            style="background-color: ${color};"></span>
+      <span class="font-normal">${displayName}</span>
+    </div>
+  `;
+
+  legendContent.insertAdjacentHTML('beforeend', overlayHtml);
+}
+
+// Remove overlay entry from legend
+function removeOverlayLegendEntry(layerId) {
+  const entry = document.getElementById(`legend-overlay-${layerId}`);
+  if (entry) entry.remove();
+}
+
+// ---------------- Initialization ---------------- //
+
+function initOverlayLegend() {
+  document.querySelectorAll('.overlay-toggle').forEach(input => {
+    const layerId = input.value;
+
+    // Set visibility according to checkbox
+    if (input.checked) {
+      map.setLayoutProperty(layerId, 'visibility', 'visible');
+      addOverlayLegendEntry(layerId); // render legend for visible overlays
+    } else {
+      map.setLayoutProperty(layerId, 'visibility', 'none');
+    }
+
+    // Listen for toggle changes
+    input.addEventListener('change', () => {
+      if (input.checked) {
+        map.setLayoutProperty(layerId, 'visibility', 'visible');
+        addOverlayLegendEntry(layerId);
+      } else {
+        map.setLayoutProperty(layerId, 'visibility', 'none');
+        removeOverlayLegendEntry(layerId);
+      }
+    });
+  });
+}
+
+// ---------------- Map Load ---------------- //
+
+map.on('load', () => {
+  initOverlayLegend();
+});
+
 
 // Change legend on dropdown change/selection
 layerSelect.addEventListener('change', (e) => {
@@ -1641,10 +1840,17 @@ document.getElementById('zoom-out').addEventListener('click', () => {
   map.zoomOut();
 });
 
-// clear map 
+// // clear map 
 document.getElementById('clear-map').addEventListener('click', () => {
   // layers that clear map will default to 
   const keepLayers = ['admin-layer', 'county-layer']; 
+
+  keepLayers.forEach(layerId => {
+  if (map.getLayer(layerId)) {
+    map.setLayoutProperty(layerId, 'visibility', 'visible');
+  }
+});
+
 
   const overlayInputs = document.querySelectorAll('.overlay-toggle');
 
@@ -1693,6 +1899,67 @@ document.getElementById('clear-map').addEventListener('click', () => {
     popup.remove();
   }
 });
+
+// Clear map
+// document.getElementById('clear-map').addEventListener('click', () => {
+//   const keepLayers = ['admin-layer', 'county-layer']; // exact Mapbox layer IDs to keep
+
+//   keepLayers.forEach(layerId => {
+//     if (map.getLayer(layerId)) {
+//       map.setLayoutProperty(layerId, 'visibility', 'visible');
+//     }
+//   });
+
+//   // Hide everything except keepLayers
+//   map.getStyle().layers.forEach(layer => {
+//     const id = layer.id;
+
+//     // Skip layers in keep list
+//     if (keepLayers.includes(id)) return;
+
+//     // Only hide vector layers that have visibility
+//     if (['fill', 'line', 'circle'].includes(layer.type)) {
+//       try {
+//         if (map.getLayoutProperty(id, 'visibility') !== 'none') {
+//           map.setLayoutProperty(id, 'visibility', 'none');
+//         }
+//       } catch (e) {
+//         console.warn(`Could not hide layer ${id}:`, e);
+//       }
+//     }
+//   });
+
+//   // Uncheck overlays that are not in keep list
+//   document.querySelectorAll('.overlay-toggle').forEach(input => {
+//     if (!keepLayers.includes(input.value)) {
+//       input.checked = false;
+//     }
+//   });
+
+//   // Clear only the data layers part of the legend, not overlays
+//   const legendContent = document.getElementById('legend-content');
+//   if (legendContent) {
+//     // Remove all children up until overlays header
+//     const overlaysHeader = document.getElementById('legend-overlays-header');
+//     if (overlaysHeader) {
+//       overlaysHeader.previousElementSibling?.remove(); // remove last data layer chunk
+//     } else {
+//       legendContent.innerHTML = `<p class="italic text-gray-500">Legend cleared</p>`;
+//     }
+//   }
+
+//   // Fly to default map center/zoom
+//   map.flyTo({
+//     center: [-91.58, 41.67],
+//     zoom: 9.5
+//   });
+
+//   // Remove any popups
+//   if (typeof popup !== 'undefined') {
+//     popup.remove();
+//   }
+// });
+
 
 
 
