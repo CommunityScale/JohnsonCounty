@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            'sans': ['Roboto', 'ui-sans-serif', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Arial', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+</head>
+
+
+<body class="bg-gray-100 p-4">
+  <div class="max-w-7xl mx-auto">
+    
+    <!-- Section 1 -->
+    <div class="bg-white shadow rounded-lg p-6 mb-6 max-w-[800px] mx-auto">
+      <h2 class="text-3xl font-light mb-4">How affordable is Upper Arlington?</h2>
+      <div class="flex flex-col md:flex-row gap-6">
+        <div class="md:w-2/5">
+          <p class="text-gray-700">This is some text describing the chart on the right. It provides context and insights about the data being visualized.</p>
+        </div>
+        <div class="md:w-3/5">
+          <iframe title="How affordable is Upper Arlington?" aria-label="Interactive line chart" id="datawrapper-chart-f4d3i" src="https://datawrapper.dwcdn.net/f4d3i/4/" scrolling="no" frameborder="0" style="width: 0; min-width: 100% !important; border: none;" height="491" data-external="1"></iframe>
+          <script type="text/javascript">!function () { "use strict"; window.addEventListener("message", (function (a) { if (void 0 !== a.data["datawrapper-height"]) { var e = document.querySelectorAll("iframe"); for (var t in a.data["datawrapper-height"]) for (var r = 0; r < e.length; r++)if (e[r].contentWindow === a.source) { var i = a.data["datawrapper-height"][t] + "px"; e[r].style.height = i } } })) }();
+          </script>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 2 -->
+    <div class="bg-white shadow rounded-lg p-6 mb-6 max-w-[800px] mx-auto">
+      <h2 class="text-3xl font-light mb-4">Section 2</h2>
+      <div class="flex flex-col md:flex-row gap-6">
+        <div class="md:w-2/5">
+          <p class="text-gray-700">This is another section with text describing the chart on the right. Tailwind CSS makes it easy to style this layout.</p>
+        </div>
+        <div class="md:w-3/5">
+          <iframe title="Household growth by household income" aria-label="Interactive area chart" id="datawrapper-chart-cH1VA" src="https://datawrapper.dwcdn.net/cH1VA/1/" scrolling="no" frameborder="0" style="width: 0; min-width: 100% !important; border: none;" height="337" data-external="1"></iframe>
+          <script type="text/javascript">!function () { "use strict"; window.addEventListener("message", (function (a) { if (void 0 !== a.data["datawrapper-height"]) { var e = document.querySelectorAll("iframe"); for (var t in a.data["datawrapper-height"]) for (var r, i = 0; r = e[i]; i++)if (r.contentWindow === a.source) { var d = a.data["datawrapper-height"][t] + "px"; r.style.height = d } } })) }();
+          </script>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 3: Full-width chart -->
+    <div class="bg-white shadow rounded-lg p-6 mb-6 max-w-[800px] mx-auto">
+      <h2 class="text-3xl font-light mb-4">Full Width Chart</h2>
+      <iframe title="Additional housing supply needed 2025-2035" aria-label="Table" id="datawrapper-chart-SUOGQ" src="https://datawrapper.dwcdn.net/SUOGQ/2/" scrolling="no" frameborder="0" style="width: 0; min-width: 100% !important; border: none;" height="375" data-external="1"></iframe>
+      <script type="text/javascript">!function () { "use strict"; window.addEventListener("message", (function (a) { if (void 0 !== a.data["datawrapper-height"]) { var e = document.querySelectorAll("iframe"); for (var t in a.data["datawrapper-height"]) for (var r, i = 0; r = e[i]; i++)if (r.contentWindow === a.source) { var d = a.data["datawrapper-height"][t] + "px"; r.style.height = d } } })) }();
+      </script>
+    </div>
+  </div>
+
+
+
+</body>
+
+</html>

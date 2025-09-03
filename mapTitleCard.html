@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Upper Arlington Title Card – Light</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <link href="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
+  <script src="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js"></script>
+  <script src="https://unpkg.com/@turf/turf@^7/turf.min.js"></script>
+
+  <style>
+    html,body,#container,#map{margin:0;padding:0;height:100%;width:100%;}
+
+    /* ――― Popup light shell ――― */
+    .mapboxgl-popup{
+      font:12px/20px 'Roboto',sans-serif;
+      background:#ffffff;        /* 📌 CHANGED to white */
+      color:#333;                /* 📌 CHANGED to dark text */
+      box-shadow:0 0 10px rgba(0,0,0,.2); /* lighter shadow for light mode */
+      width:175px;
+      z-index:9999;
+      padding:0;margin:0;
+    }
+    .mapboxgl-popup .mapboxgl-popup-tip{display:none;}
+    .mapboxgl-popup-close-button{
+      top:2px;right:4px;width:10px;height:10px;
+      color:#333;                /* 📌 CHANGED to dark */
+    }
+    .mapboxgl-popup-header{margin:0;font-size:16px;font-weight:700;padding:5px;}
+    .mapboxgl-popup-content{
+      font-size:12px;line-height:1.25;
+      background:#f8f9fa;        /* 📌 CHANGED to light gray */
+      color:#495057;             /* 📌 CHANGED to dark-grey body text */
+      padding:8px;margin-left:0;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="container"><div id="map"></div></div>
+
+  <script>
+    /* ―― constants ―― */
+    const INITIAL_LOC  = [-83.0629, 40.0264]; /* 📌 CHANGED to Upper Arlington center */
+    const INITIAL_ZOOM = 10.2; /* 📌 CHANGED to zoom out further to show entire Upper Arlington */
+    const communityScaleGray = "#6c757d"; /* darker stroke for light bg 📌 CHANGED */
+    const placeOfInterest = "Upper Arlington";
+
+    mapboxgl.accessToken =
+      'pk.eyJ1IjoiZW10em90MDEiLCJhIjoiY20zZ2kyd3RpMDRnajJscHoyMG5neGJldyJ9.poXi4pgd2CoXKV2B4kg1Cw';
+
+    const map = new mapboxgl.Map({
+      container:'map',
+      style:'mapbox://styles/mapbox/light-v11',    /* 📌 CHANGED to Mapbox Light */
+      center: INITIAL_LOC,
+      zoom: INITIAL_ZOOM
+    });
+
+    map.on('load', () => {
+
+      /* —— GeoJSON source —— */
+      map.addSource('ohioPlaces',{
+        type:'geojson',
+        data:'https://raw.githubusercontent.com/emtzot/mapSources/main/ohioPlacesCensus2020.geojson',
+        promoteId:'GEOID'
+      });
+
+      /* —— base fill layer —— */
+      map.addLayer({
+        id:'places-layer',
+        type:'fill',
+        source:'ohioPlaces',
+        paint:{
+          'fill-color':'#f1f3f4',          /* 📌 CHANGED to light grayscale */
+          'fill-opacity':[
+            'case',['boolean',['feature-state','hover'],false],0.7,0.25]
+        }
+      },'settlement-major-label');
+
+      /* —— outlines —— */
+      map.addLayer({
+        id:'places-boundaries',
+        type:'line',
+        source:'ohioPlaces',
+        paint:{
+          'line-color':communityScaleGray,
+          'line-width':1.2,
+          'line-opacity':0.8             /* 📌 CHANGED for light mode visibility */
+        }
+      },'settlement-major-label');
+
+      /* —— highlight UA —— */
+      map.addLayer({
+        id:'placeOfInterest-layer',
+        type:'fill',
+        source:'ohioPlaces',
+        filter:['==','NAME',placeOfInterest],
+        paint:{
+          'fill-color':'#9e9e9e',        /* 📌 CHANGED to medium gray */
+          'fill-opacity':0.4
+        }
+      },'settlement-major-label');
+    });
+
+    /* —— hover state —— */
+    let hoveredPlaceId=null;
+    map.on('mousemove','places-layer',e=>{
+      if(e.features.length){
+        if(hoveredPlaceId!==null){
+          map.setFeatureState({source:'ohioPlaces',id:hoveredPlaceId},{hover:false});
+        }
+        hoveredPlaceId=e.features[0].id;
+        map.setFeatureState({source:'ohioPlaces',id:hoveredPlaceId},{hover:true});
+      }
+    });
+    map.on('mouseleave','places-layer',()=>{
+      if(hoveredPlaceId!==null){
+        map.setFeatureState({source:'ohioPlaces',id:hoveredPlaceId},{hover:false});
+      }
+      hoveredPlaceId=null;
+    });
+
+    /* —— click popup —— */
+    map.on('click',e=>{
+      const [selected]=map.queryRenderedFeatures(e.point,{layers:['places-layer']});
+      if(selected){
+        new mapboxgl.Popup({closeButton:true})
+          .setLngLat(selected.geometry.coordinates[0][0])
+          .setHTML(`
+            <div class="mapboxgl-popup-header">${selected.properties.NAME}</div>
+          `)
+          .addTo(map);
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Net Growth Chart</title>
+      <script src="https://cdn.tailwindcss.com"></script>
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+      <script>
+         tailwind.config = {
+           theme: {
+             extend: {
+               fontFamily: {
+                 'sans': ['Roboto', 'ui-sans-serif', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Arial', 'sans-serif'],
+               }
+             }
+           }
+         }
+      </script>
+      <link rel="stylesheet" href="./index.css">
+   </head>
+   <body class="antialiased min-h-screen flex flex-col" cz-shortcut-listen="true">
+    <main class="w-full bg-gray-300 min-h-screen">
+        <div class="grid mx-auto grid-cols-12 my-12 max-w-[1000px]" id="net-growth-chart">
+           <div class="col-span-full w-full text-center flex mx-auto justify-center">
+              <div class="grid grid-cols-12 bg-white border shadow-[0px_1px_3px_#c7c7c7] p-8 rounded-[5px] border-solid border-[#c7c7c7]">
+                 <div class="flex flex-col col-span-full gap-y-4 items-start mb-10 text-start">
+                    <h1>Additional housing supply needed 2025-2035</h1>
+                    <p>The following calculation translates household growth to a target for housing supply and related housing production. This calculation takes into account several adjustments intended to relieve underlying market pressures such as pent up demand.</p>
+                 </div>
+                 <div class="grid grid-cols-12 gap-x-4 col-span-full w-full my-2">
+                    <div class="col-span-1 justify-self-end">
+                       <h3>1,133</h3>
+                    </div>
+                    <div class="col-span-3 justify-self-start flex text-left">
+                       <h3>Net growth in households</h3>
+                    </div>
+                    <div class="col-span-4 justify-self-start flex text-left">
+                       <p>Housing supply needed to keep up with projected household growth over the next 25 years (MTP forecast)</p>
+                    </div>
+                    <div class="col-span-4 flex flex-col gap-y-1">
+                       <div class="grid grid-cols-12 gap-x-[2px] items-center w-full">
+                          <div class="col-span-8 col-start-3 relative">
+                             <div>
+                                <p class="absolute -top-[30px] -translate-x-[50%]" style="left: 161.488px;">2025</p>
+                                <p class="absolute -top-[12px] -translate-x-[50%] scale-75" style="left: 161.488px;">▼</p>
+                             </div>
+                             <div>
+                                <p class="absolute top-[20px] -translate-x-[50%]" style="left: 199.938px;">2050</p>
+                                <p class="absolute top-[7px] -translate-x-[50%] scale-75" style="left: 199.938px;">▲</p>
+                             </div>
+                             <div class="flex flex-row bullet-chart cursor-pointer">
+                                <div class="h-[15px] bg-blue-400" style="width: 161.488px;"></div>
+                                <div class="h-[15px] bg-blue-100 flex-1"></div>
+                             </div>
+                          </div>
+                       </div>
+                       <p class="text-gray-600">Projected growth</p>
+                    </div>
+                    <div class="flex flex-row col-span-12 items-center gap-x-2">
+                       <p class="uppercase text-gray-600"><b>Adjustments</b></p>
+                       <div class="border-b-3 border-gray-200 border-dashed flex-1"></div>
+                    </div>
+                 </div>
+                 <div class="grid grid-cols-12 gap-x-4 col-span-full w-full py-4 border-gray-200 border-dashed items-center border-b-1">
+                    <div class="col-span-1 justify-self-end">
+                       <h3 class="text-gray-600">62</h3>
+                    </div>
+                    <div class="col-span-3 justify-self-start flex text-left">
+                       <h3 class="text-gray-600">Replacement</h3>
+                    </div>
+                    <div class="col-span-4 justify-self-start flex text-left">
+                       <p>Housing production for 0.1% annual replacement of overall stock throughout the planning period.</p>
+                    </div>
+                    <div class="col-span-4 flex flex-col gap-y-1">
+                       <div class="grid grid-cols-12 gap-x-2 items-center">
+                          <div class="col-span-2 justify-self-end">
+                             <p class="text-gray-600">0%</p>
+                          </div>
+                          <div class="col-span-8 relative">
+                             <p class="absolute -top-[30px] -translate-x-[50%]" style="left: 0.197938px;"><b>0.1%</b></p>
+                             <p class="absolute -top-[12px] -translate-x-[50%] scale-75" style="left: 0.197938px;">▼</p>
+                             <div class="flex flex-row bullet-chart cursor-pointer">
+                                <div class="h-[15px] bg-red-200" style="width:0"></div>
+                                <div class="h-[15px] flex-1 bg-green-200"></div>
+                             </div>
+                          </div>
+                          <div class="col-span-2 justify-self-start">
+                             <p class="text-gray-600"></p>
+                          </div>
+                       </div>
+                       <p class="text-gray-600">24,944 dwellings</p>
+                    </div>
+                 </div>
+                 <div class="grid grid-cols-12 gap-x-4 col-span-full w-full py-4 border-gray-200 border-dashed items-center border-b-1">
+                    <div class="col-span-1 justify-self-end">
+                       <h3 class="text-gray-600">166</h3>
+                    </div>
+                    <div class="col-span-3 justify-self-start flex text-left">
+                       <h3 class="text-gray-600">Ownership vacancy</h3>
+                    </div>
+                    <div class="col-span-4 justify-self-start flex text-left">
+                       <p>There aren't enough ownership units available to meet pent-up demand, creating unsustainably low vacancy that can drive up prices.</p>
+                    </div>
+                    <div class="col-span-4 flex flex-col gap-y-1">
+                       <div class="grid grid-cols-12 gap-x-2 items-center">
+                          <div class="col-span-2 justify-self-end">
+                             <p class="text-gray-600">0%</p>
+                          </div>
+                          <div class="col-span-8 relative">
+                             <p class="absolute -top-[30px] -translate-x-[50%]" style="left: 26.3917px;"><b>0.4%</b></p>
+                             <p class="absolute -top-[12px] -translate-x-[50%] scale-75" style="left: 26.3917px;">▼</p>
+                             <p class="absolute top-[7px] -translate-x-[50%] scale-75" style="left: 98.9688px;">▲</p>
+                             <div class="flex flex-row bullet-chart cursor-pointer">
+                                <div class="h-[15px] bg-red-200" style="width: 98.9688px;"></div>
+                                <div class="h-[15px] flex-1 bg-green-200"></div>
+                             </div>
+                          </div>
+                          <div class="col-span-2 justify-self-start">
+                             <p class="text-gray-600">&gt;3.0%</p>
+                          </div>
+                       </div>
+                       <p class="text-gray-600">Stable target 1.5%</p>
+                    </div>
+                 </div>
+                 <div class="grid grid-cols-12 gap-x-4 col-span-full w-full py-4 border-gray-200 border-dashed items-center border-b-1">
+                    <div class="col-span-1 justify-self-end">
+                       <h3 class="text-gray-600">76</h3>
+                    </div>
+                    <div class="col-span-3 justify-self-start flex text-left">
+                       <h3 class="text-gray-600">Rental vacancy</h3>
+                    </div>
+                    <div class="col-span-4 justify-self-start flex text-left">
+                       <p>There aren't enough rental units available to meet pent-up demand, creating unsustainably low vacancy that can drive up prices.</p>
+                    </div>
+                    <div class="col-span-4 flex flex-col gap-y-1">
+                       <div class="grid grid-cols-12 gap-x-2 items-center">
+                          <div class="col-span-2 justify-self-end">
+                             <p class="text-gray-600">0%</p>
+                          </div>
+                          <div class="col-span-8 relative">
+                             <p class="absolute -top-[30px] -translate-x-[50%]" style="left: 92.2817px;"><b>6.9%</b></p>
+                             <p class="absolute -top-[12px] -translate-x-[50%] scale-75" style="left: 92.2817px;">▼</p>
+                             <p class="absolute top-[7px] -translate-x-[50%] scale-75" style="left: 98.9688px;">▲</p>
+                             <div class="flex flex-row bullet-chart cursor-pointer">
+                                <div class="h-[15px] bg-red-200" style="width: 98.9688px;"></div>
+                                <div class="h-[15px] flex-1 bg-green-200"></div>
+                             </div>
+                          </div>
+                          <div class="col-span-2 justify-self-start">
+                             <p class="text-gray-600">&gt;14.8%</p>
+                          </div>
+                       </div>
+                       <p class="text-gray-600">Stable target 7.4%</p>
+                    </div>
+                 </div>
+                 <div class="grid grid-cols-12 gap-x-4 col-span-full w-full py-4 border-gray-200 border-dashed items-center border-b-1">
+                    <div class="col-span-1 justify-self-end">
+                       <h3 class="text-gray-600">0</h3>
+                    </div>
+                    <div class="col-span-3 justify-self-start flex text-left">
+                       <h3 class="text-gray-600">Overcrowding</h3>
+                    </div>
+                    <div class="col-span-4 justify-self-start flex text-left">
+                       <p>There aren't more overcrowded units than the national average, so no adjustment is needed.</p>
+                    </div>
+                    <div class="col-span-4 flex flex-col gap-y-1">
+                       <div class="grid grid-cols-12 gap-x-2 items-center">
+                          <div class="col-span-2 justify-self-end">
+                             <p class="text-gray-600">0%</p>
+                          </div>
+                          <div class="col-span-8 relative">
+                             <p class="absolute -top-[30px] -translate-x-[50%]" style="left: 11.6434px;"><b>0.4%</b></p>
+                             <p class="absolute -top-[12px] -translate-x-[50%] scale-75" style="left: 11.6434px;">▼</p>
+                             <p class="absolute top-[7px] -translate-x-[50%] scale-75" style="left: 98.9688px;">▲</p>
+                             <div class="flex flex-row bullet-chart cursor-pointer">
+                                <div class="h-[15px] flex-1 bg-green-200"></div>
+                                <div class="h-[15px] flex-1 bg-red-200" style="width: 98.9688px;"></div>
+                             </div>
+                          </div>
+                          <div class="col-span-2 justify-self-start">
+                             <p class="text-gray-600">&gt;6.8%</p>
+                          </div>
+                       </div>
+                       <p class="text-gray-600">National avg 3.4%</p>
+                    </div>
+                 </div>
+                 <div class="grid grid-cols-12 gap-x-4 col-span-full w-full py-4 border-gray-200 border-dashed items-center border-b-0">
+                    <div class="col-span-1 justify-self-end">
+                       <h3 class="text-gray-600">0</h3>
+                    </div>
+                    <div class="col-span-3 justify-self-start flex text-left">
+                       <h3 class="text-gray-600">Substandard housing</h3>
+                    </div>
+                    <div class="col-span-4 justify-self-start flex text-left">
+                       <p>There aren't more substandard units than the national average, so no adjustment is needed.</p>
+                    </div>
+                    <div class="col-span-4 flex flex-col gap-y-1">
+                       <div class="grid grid-cols-12 gap-x-2 items-center">
+                          <div class="col-span-2 justify-self-end">
+                             <p class="text-gray-600">0%</p>
+                          </div>
+                          <div class="col-span-8 relative">
+                             <p class="absolute -top-[30px] -translate-x-[50%]" style="left: 49.4844px;"><b>0.2%</b></p>
+                             <p class="absolute -top-[12px] -translate-x-[50%] scale-75" style="left: 49.4844px;">▼</p>
+                             <p class="absolute top-[7px] -translate-x-[50%] scale-75" style="left: 98.9688px;">▲</p>
+                             <div class="flex flex-row bullet-chart cursor-pointer">
+                                <div class="h-[15px] flex-1 bg-green-200"></div>
+                                <div class="h-[15px] flex-1 bg-red-200" style="width: 98.9688px;"></div>
+                             </div>
+                          </div>
+                          <div class="col-span-2 justify-self-start">
+                             <p class="text-gray-600">&gt;0.8%</p>
+                          </div>
+                       </div>
+                       <p class="text-gray-600">National avg 0.4%</p>
+                    </div>
+                 </div>
+                 <div class="grid grid-cols-12 gap-x-4 col-span-full w-full py-2 border-t-4 border-gray-500 ">
+                    <div class="col-span-1 justify-self-end">
+                       <h3>1,437</h3>
+                    </div>
+                    <div class="col-span-10 justify-self-start">
+                       <h3>
+                          Total additional housing production<!-- --> <span class="text-gray-600">(9.8% of total growth)</span>
+                       </h3>
+                    </div>
+                 </div>
+                 <div class="grid grid-cols-12 gap-x-4 col-span-full w-full my-2">
+                    <div class="col-span-1 justify-self-end">
+                       <h3 class="text-gray-600">57</h3>
+                    </div>
+                    <div class="col-span-10 justify-self-start">
+                       <h3 class="text-gray-600">Annual housing production (0.4% annual growth)</h3>
+                    </div>
+                 </div>
+                 <div class="col-span-full w-full mt-2">
+                    <button id="export-to-png" role="button" onclick="exportToPNG()" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors w-fit justify-self-end">
+                        <i class="fas fa-download"></i>
+                        Export to PNG
+                    </button>
+                </div>
+              </div>
+           </div>
+        </div>
+     </main>
+      <div id="tooltip" class="absolute hidden bg-white text-gray-800 p-3 rounded-lg shadow-lg z-50 pointer-events-none border max-w-[250px]">
+         <h4>I'm a tooltip</h4>
+         <p>Additional information about this chart</p>
+      </div>
+      
+      <script>
+         // Tooltip functionality
+         const tooltip = document.getElementById('tooltip');
+         const bulletCharts = document.querySelectorAll('.bullet-chart');
+         
+         bulletCharts.forEach(chart => {
+            chart.addEventListener('mouseenter', (e) => {
+               tooltip.classList.remove('hidden');
+               updateTooltipPosition(e);
+            });
+            
+            chart.addEventListener('mousemove', (e) => {
+               updateTooltipPosition(e);
+            });
+            
+            chart.addEventListener('mouseleave', () => {
+               tooltip.classList.add('hidden');
+            });
+         });
+         
+         function updateTooltipPosition(e) {
+            const rect = e.target.getBoundingClientRect();
+            tooltip.style.left = (e.clientX + 10) + 'px';
+            tooltip.style.top = (e.clientY - tooltip.offsetHeight - 10) + 'px';
+         }
+         
+         // Export to PNG functionality
+         function exportToPNG() {
+            const content = document.querySelector('#net-growth-chart');
+            const button = document.querySelector('#export-to-png');
+            
+            // Hide the button and tooltip
+            button.style.display = 'none';
+            tooltip.classList.add('hidden');
+            
+            html2canvas(content, {
+               useCORS: true,
+               allowTaint: true,
+               scale: 2
+            }).then(canvas => {
+               const link = document.createElement('a');
+               link.download = 'net-growth-chart.png';
+               link.href = canvas.toDataURL();
+               link.click();
+               
+               // Show the button again
+               button.style.display = 'flex';
+            });
+         }
+      </script>
+   </body>
+</html>
