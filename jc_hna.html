@@ -90,7 +90,7 @@
             font-size: 14px;
             display: flex;
             flex-shrink: 1;
-            border-radius: 2;
+            border-radius: 4px;
             opacity: 0.95;
             border: #80808090;
         }
@@ -123,10 +123,11 @@
             line-height: 18px;
         }
  
-        .legend h4 {
+        .section-heading {
             margin: 0 0 10px;
-            font: 'Roboto', sans-serif;
+            font: 700 14px 'Roboto', sans-serif;
         }
+
  
         .legend div span {
             display: inline-block;
@@ -139,6 +140,18 @@
             text-wrap: nowrap;
         }
 
+        .overlay-span {
+            display: inline-block;
+            height: 10px;
+            margin-right: 5px;
+            width: 10px;
+            background-color: white;
+            vertical-align: middle;
+            padding-bottom: 0;
+            text-wrap: nowrap;
+            border-radius: 50%;
+        }
+
     </style>
 </head>
 <body>
@@ -147,17 +160,19 @@
             <option value="tracts-medIncome">Median Annual Household Income</option> 
             <option value="tracts-pctCostBurdenedRenters">Percent of Renters, Cost Burdened</option> 
             <option value="tracts-pctCostBurdenedOwners">Percent of Homeowners, Cost Burdened</option> 
+            <option value="tracts-pctHH">Percent Change in Households (2013-2023)</option>
+            <option value="tracts-conditions">Neighborhood Conditions</option>
             <option value="parcels-landuse">Property Class</option> 
             <option value="parcels-ownership">Property Tax Credits</option>
             <option value="parcels-pctLV">Land Value as Percent of Assessed Value</option>
             <option value="parcels-value">Parcel Value Per Acre</option>
-            <option value="tracts-layer">Johnson County</option>
+            <option value="admin-layer">Johnson County</option>
         </select>
         <div id="opacity-control" style="position: absolute; top: 75px; left: 30px; z-index: 10; background: #f2f0ef; padding: 8px; border-radius: 4px; font-family: Roboto, sans-serif; font-size: 14px;">
             <label for="opacitySlider">Layer Opacity:</label>
             <input type="range" id="opacitySlider" min="0" max="1" step="0.05" value="0.6">
         </div>
-        <div id="basemap-toggle" style="position: absolute; top: 120px; left: 30px; z-index: 10; background: #f2f0ef; padding: 8px; border-radius: 4px; font-family: Roboto, sans-serif; font-size: 14px;">
+        <div id="basemap-toggle" style="position: absolute; top: 120px; left: 30px; z-index: 10; background: #f2f0ef; padding: 8px; border-radius: 4px; font-family: Roboto, sans-serif; font-size: 14px;"> <!--replace with buttons in sidebar-->
           <label for="basemapStyle">Basemap:</label>
           <select id="basemapStyle">
               <option value="gray">Gray</option>
@@ -165,10 +180,18 @@
           </select>
       </div>
       <div id="layer-controls">
-        <label><input type="checkbox" class="layer-toggle" value="excludedCities-layer" checked>Excluded cities</label>
+        <h4 class="section-heading">Overlays</h4>
+        <label><input type="checkbox" class="layer-toggle" value="excludedCities-layer" checked><span class="overlay-span" style="background-color: #a9a9a9"></span>Excluded cities</label><br> <!--move whole checkbox system over to sidebar-->
+        <label><input type="checkbox" class="layer-toggle" value="smallCities-layer" checked><span class="overlay-span" style="background-color: #ffce0a"></span>Small cities</label><br>
+        <label><input type="checkbox" class="layer-toggle" value="villages-layer" checked><span class="overlay-span" style="background-color: #ffcebf"></span>Villages</label><br>
+        <label><input type="checkbox" class="layer-toggle" value="targetedGrowth-layer" checked><span class="overlay-span" style="background-color: #d67315 "></span>Targeted economic growth areas</label><br> <!--replace layer-->
+        <label><input type="checkbox" class="layer-toggle" value="parcels-newPermits2010"><span class="overlay-span" style="background-color: #cddea8"></span>New build permits, 2010-2019</label><br>
+        <label><input type="checkbox" class="layer-toggle" value="parcels-newPermits2020"><span class="overlay-span" style="background-color: #82ac22"></span>New build permits, 2020-present</label><br>
+        <label><input type="checkbox" class="layer-toggle" value="manufacturedHomes"><span class="overlay-span" style="background-color: #249bd6"></span>Manufactured home parks</label><br>
+        <label><input type="checkbox" id="toggleCounty" class="layer-toggle"><span class="overlay-span"></span>Hide surrounding counties</label> <!--replace layer-->
         </div>
         <div id="medIncomeLegend" class="legend" style="display: block;">
-            <h4>Median Annual Household Income (2023, USD)</h4>
+            <h4 class="section-heading">Median Annual Household Income (2023, USD)</h4>
             <div><span style="background-color: #980043"></span>$130,000 or more</div>
             <div><span style="background-color: #dd1c77"></span></div>
             <div><span style="background-color: #df65b0"></span></div>
@@ -177,7 +200,7 @@
             <div><span style="background-color: #425A7030"></span>No data</div>
         </div>
         <div id="landUseLegend" class="legend" style="display: none;"> 
-            <h4>Land Use</h4>
+            <h4 class="section-heading">Land Use</h4>
             <div><span style="background-color: #24910a"></span>Agriculture</div>
             <div><span style="background-color: #d4f088"></span>Agricultural/residential</div>
             <div><span style="background-color: #fff8bf"></span>Residential</div>
@@ -189,7 +212,7 @@
             <div><span style="background-color: #bdc9e1"></span>Unknown</div>
         </div>
         <div id="cbRentersLegend" class="legend" style="display: none;">
-            <h4>Cost Burdened Renters (2023)</h4>
+            <h4 class="section-heading">Cost Burdened Renters (2023)</h4>
             <div><span style="background-color: #016c59"></span>75%+</div>
             <div><span style="background-color: #1c9099"></span></div>
             <div><span style="background-color: #67a9cf"></span>50%</div>
@@ -198,7 +221,7 @@
             <div><span style="background-color: #425A7030"></span>No data</div>
         </div>
         <div id="cbOwnersLegend" class="legend" style="display: none;">
-            <h4>Cost Burdened Homeowners (2023)</h4>
+            <h4 class="section-heading">Cost Burdened Homeowners (2023)</h4>
             <div><span style="background-color: #810f7c"></span>35%+</div>
             <div><span style="background-color: #8856a7"></span></div>
             <div><span style="background-color: #8c96c6"></span>15%</div>
@@ -207,7 +230,7 @@
             <div><span style="background-color: #425A7030"></span>No data</div>
         </div>
         <div id="pctHHLegend" class="legend" style="display: none;">
-            <h4>Percent Change in Households (2013-2023)</h4>
+            <h4 class="section-heading">Percent Change in Households (2015-2023)</h4>
             <div><span style="background-color: #1b7837"></span>50%+</div>
             <div><span style="background-color: #7fbf7b"></span></div>
             <div><span style="background-color: #d9f0d3"></span></div>
@@ -218,13 +241,13 @@
             <div><span style="background-color: #425A7030"></span>No data</div>
         </div>
         <div id="ncLegend" class="legend" style="display: none">
-            <h4>Neighborhood Conditions Index</h4>
+            <h4 class="section-heading">Neighborhood Conditions Index</h4>
             <div><img src="https://raw.githubusercontent.com/CommunityScale/Muskogee/main/images/neighborhoodConditionsLegend.png" 
                 alt="Legend for Neighborhood Conditions Index"
                 style="max-width: 100%; height: auto; display: block;" ></div>
         </div>
         <div id="pctLVLegend" class="legend" style="display: none;">
-            <h4>Land Value as Percent of Assessed Value</h4>
+            <h4 class="section-heading">Land Value as Percent of Assessed Value</h4>
             <div><span style="background-color: #045a8d"></span>3% or less</div>
             <div><span style="background-color: #2b8cbe"></span></div>
             <div><span style="background-color: #74a9cf"></span>35%</div>
@@ -232,7 +255,7 @@
             <div><span style="background-color: #f1eef6"></span>90% or more</div>
         </div>
         <div id="parcelValueLegend" class="legend" style="display: none;">
-            <h4>Assessed Value Per Acre</h4>
+            <h4 class="section-heading">Assessed Value Per Acre</h4>
             <div><span style="background-color: #f2f0f7"></span>$24,000 or less</div>
             <div><span style="background-color: #cbc9e2"></span></div>
             <div><span style="background-color: #9e9ac8"></span>$327,000</div>
@@ -240,7 +263,7 @@
             <div><span style="background-color: #54278f"></span>$850,000 or more</div>
         </div>
         <div id="ownershipLegend" class="legend" style="display: none;">
-            <h4>Tax Credits by Parcel</h4> 
+            <h4 class="section-heading">Tax Credits by Parcel</h4> 
             <div><span style="background-color: #f2e22c"></span>Homestead Deduction (HMST)</div>
             <div><span style="background-color: #fa2173"></span>Military (MIL)</div>
             <div><span style="background-color: #559428"></span>Agricultural Land (AG)</div>
@@ -342,11 +365,13 @@
                 "#bdc9e1" //Unknown
             ]
 
+    //import * as turf from '@turf/turf';
+
     mapboxgl.accessToken = 'pk.eyJ1IjoiZW10em90MDEiLCJhIjoiY20zZ2kyd3RpMDRnajJscHoyMG5neGJldyJ9.poXi4pgd2CoXKV2B4kg1Cw ';
     let map;
     const BASEMAP_STYLES = {
       gray: 'mapbox://styles/emtzot01/cm6a8mjb5004g01qrd7cv07mq',
-      satellite: 'mapbox://styles/mapbox/satellite-streets-v12'
+      satellite: 'mapbox://styles/communityscale/cmc96uych026401s6577egc2r'
     };
 
     function initializeMap(styleKey = 'gray') {
@@ -366,9 +391,7 @@
         map.resize(); 
         }
 
-
-
-    map.on("load", () => {      
+    function addData (opacity = 0.6, visibleLayer = document.getElementById('layer-dropdown')) {
         map.addSource("tracts", {    
             type: "geojson",
             data: "https://raw.githubusercontent.com/CommunityScale/JohnsonCounty/main/iaBgs_selectCounties.geojson",
@@ -381,10 +404,22 @@
             promoteId: "OBJECTID"
         })
 
+        map.addSource("admin", {
+            type: "geojson",
+            data: "https://raw.githubusercontent.com/CommunityScale/JohnsonCounty/main/adminBoundaries_jcia.geojson",
+            promoteId: "OBJECTID"
+        })
+
         map.addSource("counties", {    
             type: "geojson",
             data: "https://raw.githubusercontent.com/CommunityScale/JohnsonCounty/main/iaCounties.geojson",
             promoteId: "GEOID"
+        })
+
+        map.addSource("villages",{
+            type: "geojson",
+            data: "https://raw.githubusercontent.com/CommunityScale/JohnsonCounty/main/villages_jco.geojson",
+            promoteId: "VILLAGE"
         })
 
         map.addSource("parcels", {
@@ -394,16 +429,28 @@
             promoteId: "PPN"
         })
 
-        map.addSource("mobileHomeParks", {
+        map.addSource("growthAreas", {
             type: "geojson",
-            data: "https://raw.githubusercontent.com/CommunityScale/JohnsonCounty/refs/heads/main/mobileHomes_jcia.geojson",
+            data: "https://raw.githubusercontent.com/CommunityScale/JohnsonCounty/main/targetedGrowthAreas_jcia.geojson",
+            promoteId: "OBJECTID"
+        })
+
+        map.addSource("newPermits", {
+            type: "geojson",
+            data: "https://raw.githubusercontent.com/CommunityScale/JohnsonCounty/main/recentPermits_jcia.geojson",
+            promoteId: "PPN"
+        })
+
+        map.addSource("manufacturedHomeParks", {
+            type: "geojson",
+            data: "https://raw.githubusercontent.com/CommunityScale/JohnsonCounty/main/mobileHomes_jcia.geojson",
             promoteId: "NAME"
         })
 
         map.addLayer({
-                id: "tracts-layer",  
+                id: "admin-layer",  
                 type: "fill",
-                source: "tracts",
+                source: "admin",
                 paint: {
                     'fill-color': communityScaleGray,
                     "fill-opacity": 0.6,
@@ -424,7 +471,7 @@
             "settlement-minor-label"
         )
 
-    map.addLayer({
+        map.addLayer({
             id: "tracts-medIncome",  
             type: "fill",
             source: "tracts",
@@ -618,9 +665,9 @@
 
     map.addLayer(
             {
-                id: 'mobileHomes',
+                id: 'manufacturedHomes',
                 type: 'circle',
-                source: 'mobileHomeParks',
+                source: 'manufacturedHomeParks',
                 paint: {
                     // Make circles larger as the user zooms from z12 to z22.
                     'circle-radius': {
@@ -629,12 +676,53 @@
                             [12, 4],
                             [22, 180]
                     ]},
-                    'circle-color': "#249bd6"}, 
-            layout: {
-                visibility: "visible"
-            }})
+                    'circle-color': "#249bd6"},
+                layout: {
+                    visibility: "none"
+                } 
+           })
 
-     map.addLayer({ 
+    map.addLayer( 
+            {
+                id: 'parcels-newPermits2020',
+                type: 'circle',
+                source: "newPermits",
+                paint: {
+                    'circle-radius': { 
+                        'base': 2,
+                        'stops': [
+                            [12, 3],
+                            [22, 18]
+                    ]},
+                    'circle-color': "#82ac22", //"#D1CBC1" agreeable gray a la Sherwin Williams, add color to legend      
+                }, 
+                layout: {
+                    visibility: "none"
+                },
+            filter: [">", ["get", "permitYr"], 2019]
+        })
+
+    map.addLayer( 
+            {
+                id: 'parcels-newPermits2010',
+                type: 'circle',
+                source: "newPermits",
+                paint: {
+                    'circle-radius': { 
+                        'base': 2,
+                        'stops': [
+                            [12, 3],
+                            [22, 18]
+                    ]},
+                    'circle-color': "#cddea8",   
+                }, 
+                layout: {
+                    visibility: "none"
+                },
+            filter: ["<", ["get", "permitYr"], 2019]
+        })
+
+    map.addLayer({ 
             id: "parcels-ownership",  
             type: "fill",
             source: "parcels",
@@ -749,12 +837,12 @@
 
     map.addLayer({
             id: "smallCities-layer",
-            type: "line",
+            type: "fill",
             source: "cities",
             paint: {
-                "line-color": "#ffce0a",
-                "line-opacity": 0.8,
-                "line-width": 3
+                "fill-color": "#ffce0a",
+                "fill-opacity": 0.8,
+                //"line-width": 3
                 },
             layout: {
                 visibility: "visible"
@@ -762,32 +850,59 @@
             filter: ["in", "NAME", ...citiesOfInterest]}
         )
 
+     map.addLayer({
+            id: "villages-layer",
+            type: "fill",
+            source: "villages",
+            paint: {
+                "fill-color": "#ffcebf",
+                "fill-opacity": 0.8,
+                //"line-width": 3
+                },
+                layout: {
+                    visibility: "visible"
+                }
+    })
+
     map.addLayer({
             id: "excludedCities-layer",
             type: "fill",
             source: "cities",
             paint: {
-                "fill-color": '#d6d6d6',
-                "fill-opacity": 1,
+                "fill-color": "#a9a9a9", //'dark gray'
+                "fill-opacity": 0.9,
                 },
             layout: {
-                visibility: "visible"
+                    visibility: "visible"
                 },
             filter: ["in", "NAME", ...excludedCities]},
-            "mobileHomes",
             "settlement-major-label", 
             "settlement-subdivision-label", 
             "settlement-minor-label"
         )
+
+    map.addLayer({
+            id: "targetedGrowth-layer",
+            type: "fill",
+            source: "growthAreas",
+            paint: {
+                "fill-color": "#d67315",
+                "fill-opacity": 0.8,
+                //"line-width": 2,
+                }, 
+            layout: {
+                    visibility: "visible"
+                }
+    })
     
     map.addLayer({
             id: "county-layer",
             type: "line",
             source: "counties",
             paint: {
-                "line-color": '#000000',
-                "line-opacity": 0.8,
-                "line-width": 5
+                "line-color": "black",
+                "line-opacity": 1,
+                "line-width": 3
                 },
             layout: {
                 visibility: "visible"
@@ -795,12 +910,122 @@
             filter: ["==", "NAME", placeOfInterest]}
         );
 
+        adjustMapSize();
+        window.addEventListener('resize', adjustMapSize)
+    }
 
-    //defaultView
-    adjustMapSize();
+    map.on("load", () => {
+        addData();
+    }); //change!!
+
+       
+    function layerLegendVisibility() {
+        const dropdown = document.getElementById('layer-dropdown');
+        const selectedLayerId = dropdown.value;
+
+        dataLayers.forEach(layerId => {
+            const visibility = (layerId === selectedLayerId) ? 'visible' : 'none';
+            if (map.getLayer(layerId)) {
+                map.setLayoutProperty(layerId, 'visibility', visibility);
+            }
     });
 
-    window.addEventListener('resize', adjustMapSize);
+        const persistentLayers = [ //double check these
+            "placeOfInterest-layer",
+            "road-label",
+            "settlement-major-label",
+            "settlement-subdivision-label",
+            "settlement-minor-label"
+        ];
+        persistentLayers.forEach(id => {
+            if (map.getLayer(id)) {
+            map.setLayoutProperty(id, 'visibility', 'visible');
+            }
+        });
+
+        const legends = document.querySelectorAll('.legend');
+            legends.forEach(legend => {
+                legend.style.display = 'none';
+            });
+
+        const legendDictionary = {
+            //'tracts-class-layer': 'ncLegend',
+            'tracts-medIncome': 'medIncomeLegend',
+            'tracts-pctCostBurdenedRenters': 'cbRentersLegend', 
+            'tracts-pctCostBurdenedOwners': 'cbOwnersLegend',
+            //'tracts-pctHH': pctHHLegend,
+            'parcels-landuse': 'landuseLegend',
+            'parcels-pctLV': 'pctLVLegend',
+            'parcels-value': 'parcelValueLegend',
+            'parcels-ownership': 'ownershipLegend'
+            
+        };
+
+        const legendId = legendDictionary[selectedLayerId];
+            if (legendId) {
+                document.getElementById(legendId).style.display = 'block';
+        }
+    }
+
+    document.getElementById('layer-dropdown').addEventListener('change', layerLegendVisibility);
+
+    function getOpacityExp(property, baseOpacity) {
+        return [
+            "case",
+            ["==", ["get", property], null], 0.2,
+            ["boolean", ["feature-state", "hover"], false], 0.95,
+            baseOpacity
+        ];
+    }
+
+    document.getElementById("opacitySlider").addEventListener("input", function (e) {
+        const newOpacity = parseFloat(e.target.value);
+
+        const props = {
+            //"tracts-class-layer": "class",
+            "parcels-landuse": "ParcelType",
+            "parcels-pctLV": "pctLV",
+            "parcels-value": "acreVal",
+            'tracts-medIncome': "medIncome",
+            'tracts-pctCostBurdenedRenters': 'pctRent30',
+            'tracts-pctCostBurdenedOwners': 'pctOwned30'
+        };
+
+        dataLayers.forEach(layerId => {
+            const prop = props[layerId];
+            if (map.getLayer(layerId)) {
+                map.setPaintProperty(
+                    layerId,
+                    "fill-opacity",
+                    getOpacityExp(prop, newOpacity)
+                );
+            }
+        });
+    });
+
+    function updateLayerOpacity() {
+        const currentOpacity = parseFloat(document.getElementById("opacitySlider").value);
+        const props = {
+            "parcels-landuse": "ParcelType",
+            "parcels-pctLV": "pctLV",
+            "parcels-value": "acreVal",
+            'tracts-medIncome': "medIncome",
+            'tracts-pctCostBurdenedRenters': 'pctRent30',
+            'tracts-pctCostBurdenedOwners': 'pctOwned30'
+        };
+
+        dataLayers.forEach(layerId => {
+            const prop = props[layerId];
+            if (map.getLayer(layerId)) {
+                map.setPaintProperty(
+                    layerId,
+                    "fill-opacity",
+                    getOpacityExp(prop, currentOpacity)
+                );
+            }
+        });
+    }
+  
 
     const checkboxes = document.querySelectorAll('.layer-toggle');
 
@@ -810,8 +1035,6 @@
         const visibility = checkbox.checked ? 'visible' : 'none';
         if (map.getLayer(layerId)) {
             map.setLayoutProperty(layerId, 'visibility', visibility);
-            map.setLayoutProperty("smallCities-layer", 'visibility', 'visible');
-            map.setLayoutProperty("mobileHomes", 'visibility', 'visible');
             map.setLayoutProperty("county-layer", 'visibility', 'visible');
             map.setLayoutProperty("road-label", 'visibility', 'visible');
             map.setLayoutProperty("settlement-major-label", 'visibility', 'visible');
@@ -819,6 +1042,27 @@
             map.setLayoutProperty("settlement-minor-label", 'visibility', 'visible');;
         }})})
   
+
+    const countyFIPS = "103"; // Johnson County fips code
+    const tractLayerIds = [
+       //"admin-layer",
+        "tracts-medIncome",
+        "tracts-pctCostBurdenedRenters",
+        "tracts-pctCostBurdenedOwners",
+        //"tracts-pctHH"
+    ];
+
+    document.getElementById("toggleCounty").addEventListener("change", (e) => {
+        const showOnlyCounty = e.target.checked;
+        const filter = showOnlyCounty
+            ? ["==", ["get", "COUNTY"], countyFIPS]
+            : null;
+
+        tractLayerIds.forEach(id => {
+            map.setFilter(id, filter);
+        });
+    });
+
     map.on('click', (e) => {
         const [selectedGeo] = map.queryRenderedFeatures(e.point, {               
             layers: ["tracts-medIncome"]
@@ -842,7 +1086,7 @@
 
     map.on("click", (e)=> {
         const [ selectedGeo ]= map.queryRenderedFeatures(e.point, {
-            layers: ["tracts-layer"]
+            layers: ["admin-layer"]
         });
 
         if (selectedGeo) {
@@ -969,13 +1213,85 @@
             .addTo(map);
     }});
 
+    map.on('click', (e) => { //excluded cities
+        const [selectedGeo] = map.queryRenderedFeatures(e.point, {               
+            layers: ["excludedCities-layer"]
+        });
+
+        if (selectedGeo) {
+            new mapboxgl.Popup({ closeButton: true }, { clickToClose: true })
+            .setLngLat(selectedGeo.geometry.coordinates[0][0])
+            .setHTML(`
+                <div class="mapboxgl-popup">
+                <div class="mapboxgl-popup-close-button">x</div>
+                <div class="mapboxgl-popup-header">${selectedGeo.properties.NAME}</div>
+                </div>
+            </div>`)
+            .addTo(map);
+    }});
+
+    map.on('click', (e) => { //small cities
+        const [selectedGeo] = map.queryRenderedFeatures(e.point, {               
+            layers: ["smallCities-layer"]
+        });
+
+        if (selectedGeo) {
+            new mapboxgl.Popup({ closeButton: true }, { clickToClose: true })
+            .setLngLat(selectedGeo.geometry.coordinates[0][0])
+            .setHTML(`
+                <div class="mapboxgl-popup">
+                <div class="mapboxgl-popup-close-button">x</div>
+                <div class="mapboxgl-popup-header">${selectedGeo.properties.NAME}</div>
+                </div>
+            </div>`)
+            .addTo(map);
+    }});
+
+    map.on('click', (e) => { //villages
+        const [selectedGeo] = map.queryRenderedFeatures(e.point, {               
+            layers: ["villages-layer"]
+        });
+
+        if (selectedGeo) {
+            new mapboxgl.Popup({ closeButton: true }, { clickToClose: true })
+            .setLngLat(selectedGeo.geometry.coordinates[0][0])
+            .setHTML(`
+                <div class="mapboxgl-popup">
+                <div class="mapboxgl-popup-close-button">x</div>
+                <div class="mapboxgl-popup-header">${selectedGeo.properties.VILLAGE}</div>
+                </div>
+            </div>`)
+            .addTo(map);
+    }});
+
+
+    map.on('click', (e) => { //targeted growth areas 
+        const [selectedGeo] = map.queryRenderedFeatures(e.point, {               
+            layers: ["targetedGrowth-layer"]
+        });
+
+        if (selectedGeo) {
+            const tifHeader = 'TIF';
+            const displayUse = selectedGeo.properties.LAND_USE;
+
+            new mapboxgl.Popup({ closeButton: true }, { clickToClose: true })
+            .setLngLat(selectedGeo.geometry.coordinates[0][0])
+            .setHTML(`
+                <div class="mapboxgl-popup">
+                <div class="mapboxgl-popup-close-button">x</div>
+                <div class="mapboxgl-popup-header">${tifHeader}</div>
+                <div class="mapboxgl-popup-content">${displayUse}
+                </div>
+            </div>`)
+            .addTo(map);
+    }});
 
     const dataLayers = [
         'tracts-medIncome', 
         'tracts-pctCostBurdenedRenters', 
         'tracts-pctCostBurdenedOwners',
         'tracts-pctHH',
-        'tracts-layer',
+        'admin-layer',
         'parcels-landuse',
         'parcels-pctLV',
         'parcels-value',
@@ -1000,8 +1316,6 @@
     });
         
         map.setLayoutProperty(selectedLayer, 'visibility', 'visible');
-        map.setLayoutProperty("smallCities-layer", 'visibility', 'visible');
-        map.setLayoutProperty("mobileHomes", 'visibility', 'visible');
         map.setLayoutProperty("county-layer", 'visibility', 'visible');
         map.setLayoutProperty("road-label", 'visibility', 'visible');
         map.setLayoutProperty("settlement-major-label", 'visibility', 'visible');
@@ -1056,7 +1370,7 @@
             { id: 'tracts-pctCostBurdenedRenters', source: 'tracts'},
             { id: 'tracts-pctCostBurdenedOwners', source: 'tracts' },
             { id: 'tracts-pctHH', source: 'tracts' },
-            { id: 'tracts-layer', source: 'tracts' },
+            { id: 'admin-layer', source: 'admin' },
             { id: 'parcels-landuse', source: 'parcels'},
             { id: 'parcels-value', source: 'parcels'},
             { id: 'parcels-pctLV', source: 'parcels'},

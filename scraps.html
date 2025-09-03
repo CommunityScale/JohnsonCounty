@@ -1,0 +1,118 @@
+//     map.addLayer({
+    //         id: "tracts-medIncome",  //use this to play with dynamically generating the breaks !!
+    //         type: "fill",
+    //         source: "tracts",
+    //         paint: {
+    //             "fill-color": [
+    //                 "case", ["==", ["get", "medIncome"], null], communityScaleGray,
+    //                 ["interpolate", 
+    //                 ["linear"],
+    //                 ["get", "medIncome"],
+    //                 15000,
+    //                 medIncomePalette[0], 
+    //                 56000,
+    //                 medIncomePalette[1],
+    //                 73000,
+    //                 medIncomePalette[2],
+    //                 95000,
+    //                 medIncomePalette[3],
+    //                 130000,
+    //                 medIncomePalette[4]]],
+    //             "fill-outline-color": "white",
+    //             "fill-opacity": [
+    //                 "case", ["==", ["get", "medIncome"], null], 0.3,
+    //                 ["case",
+    //                 ["boolean", ["feature-state", "hover"], false],
+    //                 0.95,
+    //                 0.66
+    //         ]]
+    //          },
+    //          layout: {
+    //             visibility: "visible"
+    //          }
+    //     },
+    //     "settlement-major-label", 
+    //     "settlement-subdivision-label", 
+    //     "settlement-minor-label"
+    // ) 
+
+
+    // map.addLayer({      
+    //         id: "tracts-pctCostBurdenedRenters",  
+    //         type: "fill",
+    //         source: "tracts",
+    //         paint: {
+    //             "fill-color": [
+    //                 "case", ["==", ["get", "pctRent30"], null], communityScaleGray,
+    //                 ["interpolate", 
+    //                 ["linear"],
+    //                 ["get", "pctRent30"],
+    //                 0,
+    //                 cbRentersPalette[0], 
+    //                 0.25,
+    //                 cbRentersPalette[1],
+    //                 0.50,
+    //                 cbRentersPalette[2],
+    //                 0.60,
+    //                 cbRentersPalette[3],
+    //                 0.75,
+    //                 cbRentersPalette[4]]],
+    //             "fill-outline-color": "white",
+    //             "fill-opacity": [
+    //                 "case", ["==", ["get", "pctRent30"], null], 0.3,
+    //                 ["case",
+    //                 ["boolean", ["feature-state", "hover"], false],
+    //                 0.95,
+    //                 0.66
+    //         ]]
+    //          },
+    //          layout: {
+    //             visibility: "none"
+    //          }
+    //     },
+    //     "settlement-major-label", 
+    //     "settlement-subdivision-label", 
+    //     "settlement-minor-label"
+    // )
+    
+
+    // map.addLayer({      
+    //         id: "tracts-pctCostBurdenedOwners",  
+    //         type: "fill",
+    //         source: "tracts",
+    //         paint: {
+    //             "fill-color": [
+    //                 "case", ["==", ["get", "pctOwned30"], null], communityScaleGray,
+    //                 ["interpolate",
+    //                 ["linear"],
+    //                 ["get", "pctOwned30"],
+    //                 0,
+    //                 cbOwnersPalette[0],
+    //                 0.11,
+    //                 cbOwnersPalette[1], 
+    //                 0.15,
+    //                 cbOwnersPalette[2],
+    //                 0.22,
+    //                 cbOwnersPalette[3],
+    //                 0.35,
+    //                 cbOwnersPalette[4],
+    //             ]],
+    //             "fill-outline-color": "white",
+    //             "fill-opacity": [
+    //                 "case", ["==", ["get", "pctOwned30"], null], 0.3,
+    //                 ["case",
+    //                 ["boolean", ["feature-state", "hover"], false],
+    //                 0.95,
+    //                 0.66
+    //         ]]
+    //          },
+    //          layout: {
+    //             visibility: "none"
+    //          }
+    //     },
+    //     "settlement-major-label", 
+    //     "settlement-subdivision-label", 
+    //     "settlement-minor-label"
+    // )
+
+ 
