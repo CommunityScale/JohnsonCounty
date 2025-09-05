@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="./tailwind.config.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            'sans': ['Roboto', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Arial', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <!-- Material Icons CDN -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+  <style>
+    /* Additional styling to match the original SVG appearance */
+    .material-icons-outlined {
+      font-size: 1.25rem;
+      /* Equivalent to h-5 w-5 */
+      width: 1.25rem;
+      height: 1.25rem;
+    }
+  </style>
+</head>
+
+<body class="bg-gray-50 min-h-screen">
+  <!-- Header -->
+  <header class="bg-white shadow">
+    <nav class="mx-auto flex max-w-7xl items-center justify-between gap-x-6 p-6 lg:px-8" aria-label="Global">
+      <div class="flex lg:flex-1">
+        <a href="#" class="-m-1.5 p-1.5">
+          <span class="sr-only">Your Company</span>
+          <img class="h-8 w-auto" src="cslogo.svg" alt="" />
+        </a>
+        <h1 class="hidden lg:block ml-4 text-xl font-bold text-gray-900 self-center">Housing Forecast</h1>
+      </div>
+      <div class="hidden lg:flex lg:gap-x-12">
+        <a href="#" class="text-sm/6 font-semibold text-gray-900">Product</a>
+        <a href="#" class="text-sm/6 font-semibold text-gray-900">Features</a>
+        <a href="#" class="text-sm/6 font-semibold text-gray-900">Marketplace</a>
+        <a href="#" class="text-sm/6 font-semibold text-gray-900">Company</a>
+      </div>
+      <div class="flex flex-1 items-center justify-end gap-x-6">
+        <div class="relative hidden sm:block">
+          <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <svg class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z" clip-rule="evenodd" />
+            </svg>
+          </div>
+          <input type="search" placeholder="Search..." class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-gray-500 focus:border-gray-500 sm:text-sm">
+        </div>
+        <a href="#" class="rounded-md bg-gray-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600 whitespace-nowrap">Sign up</a>
+      </div>
+      <div class="flex lg:hidden">
+        <button type="button" class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700" onclick="toggleMobileMenu()">
+          <span class="sr-only">Open main menu</span>
+          <svg class="size-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+          </svg>
+        </button>
+      </div>
+    </nav>
+
+    <!-- Mobile menu -->
+    <div id="mobile-menu" class="lg:hidden hidden" role="dialog" aria-modal="true">
+      <div class="fixed inset-0 z-50"></div>
+      <div class="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white p-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
+        <div class="flex items-center gap-x-6">
+          <a href="#" class="-m-1.5 p-1.5">
+            <span class="sr-only">Your Company</span>
+            <img class="h-8 w-auto" src="cslogo.svg" alt="" />
+          </a>
+          <a href="#" class="ml-auto rounded-md bg-gray-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600 whitespace-nowrap">Sign up</a>
+          <button type="button" class="-m-2.5 rounded-md p-2.5 text-gray-700" onclick="toggleMobileMenu()">
+            <span class="sr-only">Close menu</span>
+            <svg class="size-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+        <div class="mt-6 flow-root">
+          <div class="-my-6 divide-y divide-gray-500/10">
+            <div class="space-y-2 py-6">
+              <a href="#" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50">Product</a>
+              <a href="#" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50">Features</a>
+              <a href="#" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50">Marketplace</a>
+              <a href="#" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50">Company</a>
+            </div>
+            <div class="py-6">
+              <!-- Mobile search -->
+              <div class="relative mb-4">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <svg class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                    <path fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z" clip-rule="evenodd" />
+                  </svg>
+                </div>
+                <input type="search" placeholder="Search..." class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-gray-500 focus:border-gray-500">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Breadcrumbs -->
+  <nav class="flex border-t border-b border-gray-200 bg-white" aria-label="Breadcrumb">
+    <ol role="list" class="mx-auto flex w-full max-w-7xl space-x-4 px-4 sm:px-6 lg:px-8">
+      <li class="flex">
+        <div class="flex items-center">
+          <a href="#" class="ml-1 text-sm font-medium text-gray-500 hover:text-gray-700">US</a>
+        </div>
+      </li>
+      <li class="flex">
+        <div class="flex items-center">
+          <svg class="h-full w-6 shrink-0 text-gray-200" viewBox="0 0 24 44" preserveAspectRatio="none" fill="currentColor" aria-hidden="true">
+            <path d="M.293 0l22 22-22 22h1.414l22-22-22-22H.293z" />
+          </svg>
+          <a href="#" class="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700">Ohio</a>
+        </div>
+      </li>
+      <li class="flex">
+        <div class="flex items-center">
+          <svg class="h-full w-6 shrink-0 text-gray-200" viewBox="0 0 24 44" preserveAspectRatio="none" fill="currentColor" aria-hidden="true">
+            <path d="M.293 0l22 22-22 22h1.414l22-22-22-22H.293z" />
+          </svg>
+          <a href="#" class="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700">County Name</a>
+        </div>
+      </li>
+      <li class="flex">
+        <div class="flex items-center">
+          <svg class="h-full w-6 shrink-0 text-gray-200" viewBox="0 0 24 44" preserveAspectRatio="none" fill="currentColor" aria-hidden="true">
+            <path d="M.293 0l22 22-22 22h1.414l22-22-22-22H.293z" />
+          </svg>
+          <a href="#" class="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700" aria-current="page">Upper Arlington</a>
+        </div>
+      </li>
+    </ol>
+  </nav>
+
+  <!-- Intro section -->
+  <div class="bg-white">
+    <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
+      <div class="flex flex-col lg:flex-row lg:items-end lg:gap-8 p-6 lg:p-0">
+        <!-- Map Card - Shows first on mobile, second on desktop -->
+        <div class="order-1 lg:order-2 lg:flex-1 mb-8 lg:mb-0 py-0 lg:py-6">
+          <div class="overflow-hidden rounded-lg bg-white shadow-sm">
+            <iframe src="mapTitleCard.html" title="Map" loading="lazy" class="w-full h-[200px] lg:h-[300px] border-0"></iframe>
+          </div>
+        </div>
+
+        <!-- Text Content - Shows second on mobile, first on desktop -->
+        <div class="order-2 lg:order-1 lg:flex-1 lg:py-6">
+          <h1 class="text-3xl font-semibold tracking-tight text-pretty text-gray-900 sm:text-4xl">Upper Arlington</h1>
+          <!-- Table start -->
+          <div class="inline-block min-w-full pt-2 pb-0 align-left px-0">
+            <table class="min-w-full divide-y divide-gray-300">
+              <tbody class="divide-y divide-gray-200 bg-white">
+                <tr>
+                  <td class="py-2 pr-3 text-sm font-semibold text-right whitespace-nowrap w-0">$109,000</td>
+                  <td class="py-2 pl-3 text-sm whitespace-nowrap">
+                    <span class="text-gray-900">Columbus HUD Area median income </span>
+                    <span class="text-gray-500">(2025)</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="py-2 pr-3 text-sm font-semibold text-right whitespace-nowrap w-0">14,665</td>
+                  <td class="py-2 pl-3 text-sm whitespace-nowrap">
+                    <span class="text-gray-900">Households </span>
+                    <span class="text-gray-500">(estimate&nbsp;2025)</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="py-2 pr-3 text-sm font-semibold text-right whitespace-nowrap w-0">2.51</td>
+                  <td class="py-2 pl-3 text-sm whitespace-nowrap">
+                    <span class="text-gray-900">Average people per household </span>
+                    <span class="text-gray-500">(2023)</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="py-2 pr-3 text-sm font-semibold text-right whitespace-nowrap w-0">77%</td>
+                  <td class="py-2 pl-3 text-sm whitespace-nowrap">
+                    <span class="text-gray-900">Owner-occupied </span>
+                    <span class="text-gray-500">(2023)</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <!-- end of table -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+<!-- Main Content -->
+<main class="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
+  <!-- Two Column Container for Desktop -->
+  <div class="lg:flex lg:gap-6">
+    
+    <!-- Left Column -->
+    <div class="lg:w-1/2 max-w-[850px] lg:max-w-none mx-auto space-y-6">
+      
+      <!-- Affordability Card -->
+      <div class="divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow-sm">
+        <div class="p-6">
+          <iframe title="Median affordability [mockup]" aria-label="Interactive line chart" id="datawrapper-chart-cCWcR" src="https://datawrapper.dwcdn.net/cCWcR/1/" scrolling="no" frameborder="0" style="width: 0; min-width: 100% !important; border: none;" height="296" data-external="1"></iframe>
+          <script type="text/javascript">!function () { "use strict"; window.addEventListener("message", (function (a) { if (void 0 !== a.data["datawrapper-height"]) { var e = document.querySelectorAll("iframe"); for (var t in a.data["datawrapper-height"]) for (var r, i = 0; r = e[i]; i++)if (r.contentWindow === a.source) { var d = a.data["datawrapper-height"][t] + "px"; r.style.height = d } } })) }();
+          </script>
+        </div>
+        <div class="px-4 py-4 sm:px-6">
+          <button id="sourcesToggleAfford" class="flex items-center justify-between w-full text-left text-sm font-medium text-gray-900 hover:text-gray-700 focus:outline-none">
+            <div class="flex items-center">
+              <span class="material-icons-outlined mr-2 text-gray-400">
+                ssid_chart
+              </span>
+              Contributing factors to affordability
+            </div>
+            <svg id="chevronIconAfford" class="h-5 w-5 text-gray-400 transform transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+            </svg>
+          </button>
+
+          <!-- Sources Section (Initially Hidden) -->
+          <div id="sourcesDetailsAfford" class="hidden mt-2 pt-2 border-t border-gray-100">
+            <!-- Table start -->
+            <div class="flow-root">
+              <div class="overflow-x-auto">
+                <div class="inline-block min-w-full align-middle">
+                  <table class="min-w-full divide-y divide-gray-300">
+                    <tbody class="divide-y divide-gray-200 bg-white">
+                      <tr>
+                        <td class="py-2 pr-3 text-sm font-bold text-right whitespace-nowrap text-gray-900">$597,535</td>
+                        <td class="px-2 py-2 text-sm text-left whitespace-nowrap text-gray-500">Median home price (June 2025)</td>
+                      </tr>
+                      <tr>
+                        <td class="py-2 pr-3 text-sm font-bold text-right whitespace-nowrap text-gray-900">6.65%</td>
+                        <td class="px-2 py-2 text-sm text-left whitespace-nowrap text-gray-500">Mortgage rate (FRED, June 2025)</td>
+                      </tr>
+                      <tr>
+                        <td class="py-2 pr-3 text-sm font-bold text-right whitespace-nowrap text-gray-900">2.68%</td>
+                        <td class="px-2 py-2 text-sm text-left whitespace-nowrap text-gray-500">Property tax rate (estimate, 2025)</td>
+                      </tr>
+                      <tr>
+                        <td class="py-2 pr-3 text-sm font-bold text-right whitespace-nowrap text-gray-900">0.04%</td>
+                        <td class="px-2 py-2 text-sm text-left whitespace-nowrap text-gray-500">Homeowners insurance as percentage of home value (treasury.gov estimate, 2025)</td>
+                      </tr>
+                      <tr>
+                        <td class="py-2 pr-3 text-sm font-bold text-right whitespace-nowrap text-gray-900">30%</td>
+                        <td class="px-2 py-2 text-sm text-left whitespace-nowrap text-gray-500">Percent of household income spent on housing costs</td>
+                      </tr>
+                      <tr>
+                        <td class="py-2 pr-3 text-sm font-bold text-right whitespace-nowrap text-gray-900">20%</td>
+                        <td class="px-2 py-2 text-sm text-left whitespace-nowrap text-gray-500">Downpayment assumption</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div> <!-- end of table -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Layer cake -->
+      <div class="divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow-sm">
+        <div class="p-6">
+          <iframe title="Household growth by AMI Champaign" aria-label="Interactive area chart" id="datawrapper-chart-ouDHf" src="https://datawrapper.dwcdn.net/ouDHf/1/" scrolling="no" frameborder="0" style="width: 0; min-width: 100% !important; border: none;" height="445" data-external="1"></iframe>
+          <script type="text/javascript">!function () { "use strict"; window.addEventListener("message", (function (a) { if (void 0 !== a.data["datawrapper-height"]) { var e = document.querySelectorAll("iframe"); for (var t in a.data["datawrapper-height"]) for (var r, i = 0; r = e[i]; i++)if (r.contentWindow === a.source) { var d = a.data["datawrapper-height"][t] + "px"; r.style.height = d } } })) }();
+          </script>
+        </div>
+        <div class="px-4 py-4 sm:px-6">
+          <button id="sourcesToggleCake" class="flex items-center justify-between w-full text-left text-sm font-medium text-gray-900 hover:text-gray-700 focus:outline-none">
+            <div class="flex items-center">
+              <span class="material-icons-outlined mr-2 text-gray-400">
+                monetization_on
+              </span>
+              Income group details
+            </div>
+            <svg id="chevronIconCake" class="h-5 w-5 text-gray-400 transform transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+            </svg>
+          </button>
+
+          <!-- Sources Section (Initially Hidden) -->
+          <div id="sourcesDetailsCake" class="hidden mt-2 pt-2 border-t border-gray-100">
+            <!-- Table start -->
+            <div>
+              <div class="flow-root">
+                <div class="overflow-x-auto">
+                  <div class="inline-block min-w-full align-middle">
+                    <table class="min-w-full divide-y divide-gray-300">
+                      <thead>
+                        <tr>
+                          <th scope="col" class="py-3.5 pr-3 text-left text-sm font-semibold text-gray-900 align-bottom">AMI group</th>
+                          <th scope="col" class="px-2 py-3.5 text-right text-sm font-semibold text-gray-900 align-bottom">Household income</th>
+                          <th scope="col" class="px-2 py-3.5 text-right text-sm font-semibold text-gray-900 align-bottom">Households</th>
+                          <th scope="col" class="px-2 py-3.5 text-right text-sm font-semibold text-gray-900 align-bottom max-w-[120px]">Max monthly housing costs</th>
+                          <th scope="col" class="px-2 py-3.5 text-right text-sm font-semibold text-gray-900 align-bottom max-w-[100px]">Max purchase price</th>
+                          <th scope="col" class="px-2 py-3.5 text-right text-sm font-semibold text-gray-900 align-bottom max-w-[80px]">Bedrooms demand avg.</th>
+                          <th scope="col" class="px-2 py-3.5 text-right text-sm font-semibold text-gray-900 align-bottom max-w-[80px]">Income earners avg.</th>
+                          <th scope="col" class="px-2 py-3.5 text-right text-sm font-semibold text-gray-900 align-bottom max-w-[90px]">Householder age avg.</th>
+                        </tr>
+                      </thead>
+                      <tbody class="divide-y divide-gray-200 bg-white">
+                        <tr>
+                          <td class="py-2 pr-3 text-sm font-medium whitespace-nowrap text-gray-900">&lt;50%</td>
+                          <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">&lt;$50K</td>
+                          <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">1,924</td>
+                          <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">&lt;$1,250</td>
+                          <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">$136K</td>
+                          <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">2.0</td>
+                          <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">0.4</td>
+                          <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">60</td>
+                        </tr>
+                        <tr>
+                          <td class="py-2 pr-3 text-sm font-medium whitespace-nowrap text-gray-900">50-80%</td>
+                          <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">$50K - $80K</td>
+                          <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">1,772</td>
+                          <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">&lt;$2,000</td>
+                          <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">&lt;$217K</td>
+                          <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">2.4</td>
+                          <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">0.9</td>
+                          <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">56</td>
+                        </tr>
+                        <tr>
+                          <td class="py-2 pr-3 text-sm font-medium whitespace-nowrap text-gray-900">80-120%</td>
+                          <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">$80K - $120K</td>
+                          <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">1,867</td>
+                          <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">&lt;$3,000</td>
+                          <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">&lt;$333K</td>
+                          <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">2.7</td>
+                          <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">1.4</td>
+                          <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">54</td>
+                        </tr>
+                        <tr>
+                          <td class="py-2 pr-3 text-sm font-medium whitespace-nowrap text-gray-900">120-150%</td>
+                          <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">$120K - $150K</td>
+                          <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">1,302</td>
+                          <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">&lt;$3,750</td>
+                          <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">&lt;$417K</td>
+                          <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">2.9</td>
+                          <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">1.7</td>
+                          <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">53</td>
+                        </tr>
+                        <tr>
+                          <td class="py-2 pr-3 text-sm font-medium whitespace-nowrap text-gray-900">150-190%</td>
+                          <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">$150K - $200K</td>
+                          <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">1,698</td>
+                          <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">&lt;$5,000</td>
+                          <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">&lt;$560K</td>
+                          <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">3.1</td>
+                          <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">1.8</td>
+                          <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">54</td>
+                        </tr>
+                        <tr>
+                          <td class="py-2 pr-3 text-sm font-medium whitespace-nowrap text-gray-900">&gt;190%</td>
+                          <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">&gt;$200K</td>
+                          <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">5,826</td>
+                          <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">&gt;$5,000</td>
+                          <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">&gt;$560K</td>
+                          <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">3.2</td>
+                          <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">1.8</td>
+                          <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">52</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div> <!-- end of table -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Household characteristics chart -->
+      <div class="divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow-sm">
+        <div class="p-6">
+          <iframe title="Households characteristics by income" aria-label="Stacked Bars" id="datawrapper-chart-d8qkI" src="https://datawrapper.dwcdn.net/d8qkI/1/" scrolling="no" frameborder="0" style="width: 0; min-width: 100% !important; border: none;" height="510" data-external="1"></iframe>
+          <script type="text/javascript">!function () { "use strict"; window.addEventListener("message", (function (a) { if (void 0 !== a.data["datawrapper-height"]) { var e = document.querySelectorAll("iframe"); for (var t in a.data["datawrapper-height"]) for (var r, i = 0; r = e[i]; i++)if (r.contentWindow === a.source) { var d = a.data["datawrapper-height"][t] + "px"; r.style.height = d } } })) }();
+          </script>
+        </div>
+        <div class="px-4 py-4 sm:px-6">
+          <button id="sourcesToggleHouseholds1" class="flex items-center justify-between w-full text-left text-sm font-medium text-gray-900 hover:text-gray-700 focus:outline-none">
+            <div class="flex items-center">
+              <span class="material-icons-outlined mr-2 text-gray-400">
+                info
+              </span>
+              Household data sources
+            </div>
+            <svg id="chevronIconHouseholds1" class="h-5 w-5 text-gray-400 transform transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+            </svg>
+          </button>
+
+          <!-- Sources Section (Initially Hidden) -->
+          <div id="sourcesDetailsHouseholds1" class="hidden mt-2 pt-2 border-t border-gray-100">
+            <p class="text-sm text-gray-600">
+              This 4-bedroom, 3.5-bathroom home in Upper Arlington was built in 2019 and features 5,035 square feet of living space on a 0.54-acre lot. The property is located in Franklin County and represents a modern single-family residential home. Market analysis shows competitive pricing relative to comparable properties in the area.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Housing stock -->
+      <div class="divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow-sm">
+        <div class="p-6">
+          <iframe title="Housing stock characteristics by tenure" aria-label="Stacked Bars" id="datawrapper-chart-FNlHV" src="https://datawrapper.dwcdn.net/FNlHV/1/" scrolling="no" frameborder="0" style="width: 0; min-width: 100% !important; border: none;" height="511" data-external="1"></iframe>
+          <script type="text/javascript">!function () { "use strict"; window.addEventListener("message", (function (a) { if (void 0 !== a.data["datawrapper-height"]) { var e = document.querySelectorAll("iframe"); for (var t in a.data["datawrapper-height"]) for (var r, i = 0; r = e[i]; i++)if (r.contentWindow === a.source) { var d = a.data["datawrapper-height"][t] + "px"; r.style.height = d } } })) }();
+          </script>
+        </div>
+        <div class="px-4 py-4 sm:px-6">
+          <button id="sourcesToggleStock" class="flex items-center justify-between w-full text-left text-sm font-medium text-gray-900 hover:text-gray-700 focus:outline-none">
+            <div class="flex items-center">
+              <span class="material-icons-outlined mr-2 text-gray-400">
+                house
+              </span>
+              Housing stock sources
+            </div>
+            <svg id="chevronIconStock" class="h-5 w-5 text-gray-400 transform transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+            </svg>
+          </button>
+
+          <!-- Sources Section (Initially Hidden) -->
+          <div id="sourcesDetailsStock" class="hidden mt-2 pt-2 border-t border-gray-100">
+            <p class="text-sm text-gray-600">
+              This 4-bedroom, 3.5-bathroom home in Upper Arlington was built in 2019 and features 5,035 square feet of living space on a 0.54-acre lot. The property is located in Franklin County and represents a modern single-family residential home. Market analysis shows competitive pricing relative to comparable properties in the area.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Compare to similar communities -->
+      <div class="divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow-sm">
+        <div class="p-6">
+          <iframe title="Inflation-adjusted median household income" aria-label="Interactive line chart" id="datawrapper-chart-F0Qu8" src="https://datawrapper.dwcdn.net/F0Qu8/6/" scrolling="no" frameborder="0" style="width: 0; min-width: 100% !important; border: none;" height="391" data-external="1"></iframe>
+          <script type="text/javascript">!function () { "use strict"; window.addEventListener("message", (function (a) { if (void 0 !== a.data["datawrapper-height"]) { var e = document.querySelectorAll("iframe"); for (var t in a.data["datawrapper-height"]) for (var r = 0; r < e.length; r++)if (e[r].contentWindow === a.source) { var i = a.data["datawrapper-height"][t] + "px"; e[r].style.height = i } } })) }();
+          </script>
+        </div>
+        <div class="px-4 py-4 sm:px-6">
+          <button id="sourcesToggleCompare" class="flex items-center justify-between w-full text-left text-sm font-medium text-gray-900 hover:text-gray-700 focus:outline-none">
+            <div class="flex items-center">
+              <span class="material-icons-outlined mr-2 text-gray-400">
+                info
+              </span>
+              Sources
+            </div>
+            <svg id="chevronIconCompare" class="h-5 w-5 text-gray-400 transform transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+            </svg>
+          </button>
+
+          <!-- Sources Section (Initially Hidden) -->
+          <div id="sourcesDetailsCompare" class="hidden mt-2 pt-2 border-t border-gray-100">
+            <p class="text-sm text-gray-600">
+              This 4-bedroom, 3.5-bathroom home in Upper Arlington was built in 2019 and features 5,035 square feet of living space on a 0.54-acre lot. The property is located in Franklin County and represents a modern single-family residential home. Market analysis shows competitive pricing relative to comparable properties in the area.
+            </p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Right Column -->
+    <div class="lg:w-1/2 max-w-[850px] lg:max-w-none mx-auto space-y-6 mt-6 lg:mt-0">
+      
+      <!-- Population card -->
+      <div class="divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow-sm">
+        <div class="p-6">
+          <iframe title="Population by age cohort" aria-label="Interactive area chart" id="datawrapper-chart-5oHvN" src="https://datawrapper.dwcdn.net/5oHvN/1/" scrolling="no" frameborder="0" style="width: 0; min-width: 100% !important; border: none;" height="445" data-external="1"></iframe>
+          <script type="text/javascript">!function () { "use strict"; window.addEventListener("message", (function (a) { if (void 0 !== a.data["datawrapper-height"]) { var e = document.querySelectorAll("iframe"); for (var t in a.data["datawrapper-height"]) for (var r, i = 0; r = e[i]; i++)if (r.contentWindow === a.source) { var d = a.data["datawrapper-height"][t] + "px"; r.style.height = d } } })) }();
+          </script>
+        </div>
+        <div class="px-4 py-4 sm:px-6">
+          <button id="sourcesToggle" class="flex items-center justify-between w-full text-left text-sm font-medium text-gray-900 hover:text-gray-700 focus:outline-none">
+            <div class="flex items-center">
+              <span class="material-icons-outlined mr-2 text-gray-400">
+                people
+              </span>
+              Demographic forecast details
+            </div>
+            <svg id="chevronIcon" class="h-5 w-5 text-gray-400 transform transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+            </svg>
+          </button>
+
+          <!-- Sources Section (Initially Hidden) -->
+          <div id="sourcesDetails" class="hidden mt-2 pt-2 border-t border-gray-100">
+            <p class="text-sm text-gray-600">
+              This 4-bedroom, 3.5-bathroom home in Upper Arlington was built in 2019 and features 5,035 square feet of living space on a 0.54-acre lot. The property is located in Franklin County and represents a modern single-family residential home. Market analysis shows competitive pricing relative to comparable properties in the area.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Change in household types chart -->
+      <div class="divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow-sm">
+        <div class="p-6">
+          <iframe title="Change in household types from 2015 to 2023" aria-label="Grouped Columns" id="datawrapper-chart-avbdG" src="https://datawrapper.dwcdn.net/avbdG/1/" scrolling="no" frameborder="0" style="width: 0; min-width: 100% !important; border: none;" height="344" data-external="1"></iframe>
+          <script type="text/javascript">!function () { "use strict"; window.addEventListener("message", (function (a) { if (void 0 !== a.data["datawrapper-height"]) { var e = document.querySelectorAll("iframe"); for (var t in a.data["datawrapper-height"]) for (var r, i = 0; r = e[i]; i++)if (r.contentWindow === a.source) { var d = a.data["datawrapper-height"][t] + "px"; r.style.height = d } } })) }();
+          </script>
+        </div>
+        <div class="px-4 py-4 sm:px-6">
+          <button id="sourcesToggleHouseholds2" class="flex items-center justify-between w-full text-left text-sm font-medium text-gray-900 hover:text-gray-700 focus:outline-none">
+            <div class="flex items-center">
+              <span class="material-icons-outlined mr-2 text-gray-400">
+                info
+              </span>
+              Household data sources
+            </div>
+            <svg id="chevronIconHouseholds2" class="h-5 w-5 text-gray-400 transform transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+            </svg>
+          </button>
+
+          <!-- Sources Section (Initially Hidden) -->
+          <div id="sourcesDetailsHouseholds2" class="hidden mt-2 pt-2 border-t border-gray-100">
+            <p class="text-sm text-gray-600">
+              This 4-bedroom, 3.5-bathroom home in Upper Arlington was built in 2019 and features 5,035 square feet of living space on a 0.54-acre lot. The property is located in Franklin County and represents a modern single-family residential home. Market analysis shows competitive pricing relative to comparable properties in the area.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Demand -->
+      <div class="divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow-sm">
+        <div class="p-6">
+          <iframe title="Additional housing supply needed 2025-2035" aria-label="Table" id="datawrapper-chart-SUOGQ" src="https://datawrapper.dwcdn.net/SUOGQ/2/" scrolling="no" frameborder="0" style="width: 0; min-width: 100% !important; border: none;" height="375" data-external="1"></iframe>
+          <script type="text/javascript">!function () { "use strict"; window.addEventListener("message", (function (a) { if (void 0 !== a.data["datawrapper-height"]) { var e = document.querySelectorAll("iframe"); for (var t in a.data["datawrapper-height"]) for (var r, i = 0; r = e[i]; i++)if (r.contentWindow === a.source) { var d = a.data["datawrapper-height"][t] + "px"; r.style.height = d } } })) }();
+          </script>
+        </div>
+        <div class="px-4 py-4 sm:px-6">
+          <button id="sourcesToggleDemand" class="flex items-center justify-between w-full text-left text-sm font-medium text-gray-900 hover:text-gray-700 focus:outline-none">
+            <div class="flex items-center">
+              <span class="material-icons-outlined mr-2 text-gray-400">
+                calculate
+              </span>
+              Housing demand methodology
+            </div>
+            <svg id="chevronIconDemand" class="h-5 w-5 text-gray-400 transform transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+            </svg>
+          </button>
+
+          <!-- Sources Section (Initially Hidden) -->
+          <div id="sourcesDetailsDemand" class="hidden mt-2 pt-2 border-t border-gray-100">
+            <p class="text-sm text-gray-600">
+              This 4-bedroom, 3.5-bathroom home in Upper Arlington was built in 2019 and features 5,035 square feet of living space on a 0.54-acre lot. The property is located in Franklin County and represents a modern single-family residential home. Market analysis shows competitive pricing relative to comparable properties in the area.
+            </p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Map - Full Width -->
+  <div class="max-w-[850px] lg:max-w-none mx-auto mt-6">
+    <div class="divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow-sm">
+      <iframe src="https://communityscale.github.io/UpperArlington/mapstable.html" title="Housing Map & Table" loading="lazy" height="400" class="w-full border-0"></iframe>
+    </div>
+  </div>
+
+</main>
+
+<script>
+  // Toggle functions for each card
+  function toggleSourcesAfford() {
+    const details = document.getElementById('sourcesDetailsAfford');
+    const chevron = document.getElementById('chevronIconAfford');
+    details.classList.toggle('hidden');
+    chevron.classList.toggle('rotate-180');
+  }
+
+  function toggleSources() {
+    const details = document.getElementById('sourcesDetails');
+    const chevron = document.getElementById('chevronIcon');
+    details.classList.toggle('hidden');
+    chevron.classList.toggle('rotate-180');
+  }
+
+  function toggleSourcesCake() {
+    const details = document.getElementById('sourcesDetailsCake');
+    const chevron = document.getElementById('chevronIconCake');
+    details.classList.toggle('hidden');
+    chevron.classList.toggle('rotate-180');
+  }
+
+  function toggleSourcesHouseholds1() {
+    const details = document.getElementById('sourcesDetailsHouseholds1');
+    const chevron = document.getElementById('chevronIconHouseholds1');
+    details.classList.toggle('hidden');
+    chevron.classList.toggle('rotate-180');
+  }
+
+  function toggleSourcesHouseholds2() {
+    const details = document.getElementById('sourcesDetailsHouseholds2');
+    const chevron = document.getElementById('chevronIconHouseholds2');
+    details.classList.toggle('hidden');
+    chevron.classList.toggle('rotate-180');
+  }
+
+  function toggleSourcesStock() {
+    const details = document.getElementById('sourcesDetailsStock');
+    const chevron = document.getElementById('chevronIconStock');
+    details.classList.toggle('hidden');
+    chevron.classList.toggle('rotate-180');
+  }
+
+  function toggleSourcesDemand() {
+    const details = document.getElementById('sourcesDetailsDemand');
+    const chevron = document.getElementById('chevronIconDemand');
+    details.classList.toggle('hidden');
+    chevron.classList.toggle('rotate-180');
+  }
+
+  function toggleSourcesCompare() {
+    const details = document.getElementById('sourcesDetailsCompare');
+    const chevron = document.getElementById('chevronIconCompare');
+    details.classList.toggle('hidden');
+    chevron.classList.toggle('rotate-180');
+  }
+
+  // Add event listeners
+  document.getElementById('sourcesToggleAfford').addEventListener('click', toggleSourcesAfford);
+  document.getElementById('sourcesToggle').addEventListener('click', toggleSources);
+  document.getElementById('sourcesToggleCake').addEventListener('click', toggleSourcesCake);
+  document.getElementById('sourcesToggleHouseholds1').addEventListener('click', toggleSourcesHouseholds1);
+  document.getElementById('sourcesToggleHouseholds2').addEventListener('click', toggleSourcesHouseholds2);
+  document.getElementById('sourcesToggleStock').addEventListener('click', toggleSourcesStock);
+  document.getElementById('sourcesToggleDemand').addEventListener('click', toggleSourcesDemand);
+  document.getElementById('sourcesToggleCompare').addEventListener('click', toggleSourcesCompare);
+</script>
+
+  <!-- Footer -->
+  <footer class="bg-white mt-8">
+    <div class="mx-auto max-w-7xl px-6 py-12 lg:px-8 lg:py-16">
+      <div class="xl:grid xl:grid-cols-3 xl:gap-8">
+        <img class="h-9" src="cslogo.svg" alt="Company name" />
+
+        <div class="mt-16 grid grid-cols-2 gap-8 xl:col-span-2 xl:mt-0">
+          <div class="md:grid md:grid-cols-2 md:gap-8">
+            <div>
+              <h3 class="text-sm/6 font-semibold text-gray-900">Solutions</h3>
+              <ul role="list" class="mt-6 space-y-4">
+                <li><a href="#" class="text-sm/6 text-gray-600 hover:text-gray-900">Marketing</a></li>
+                <li><a href="#" class="text-sm/6 text-gray-600 hover:text-gray-900">Analytics</a></li>
+                <li><a href="#" class="text-sm/6 text-gray-600 hover:text-gray-900">Automation</a></li>
+                <li><a href="#" class="text-sm/6 text-gray-600 hover:text-gray-900">Commerce</a></li>
+                <li><a href="#" class="text-sm/6 text-gray-600 hover:text-gray-900">Insights</a></li>
+              </ul>
+            </div>
+            <div class="mt-10 md:mt-0">
+              <h3 class="text-sm/6 font-semibold text-gray-900">Support</h3>
+              <ul role="list" class="mt-6 space-y-4">
+                <li><a href="#" class="text-sm/6 text-gray-600 hover:text-gray-900">Submit ticket</a></li>
+                <li><a href="#" class="text-sm/6 text-gray-600 hover:text-gray-900">Documentation</a></li>
+                <li><a href="#" class="text-sm/6 text-gray-600 hover:text-gray-900">Guides</a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="md:grid md:grid-cols-2 md:gap-8">
+            <div>
+              <h3 class="text-sm/6 font-semibold text-gray-900">Company</h3>
+              <ul role="list" class="mt-6 space-y-4">
+                <li><a href="#" class="text-sm/6 text-gray-600 hover:text-gray-900">About</a></li>
+                <li><a href="#" class="text-sm/6 text-gray-600 hover:text-gray-900">Blog</a></li>
+                <li><a href="#" class="text-sm/6 text-gray-600 hover:text-gray-900">Jobs</a></li>
+                <li><a href="#" class="text-sm/6 text-gray-600 hover:text-gray-900">Press</a></li>
+              </ul>
+            </div>
+            <div class="mt-10 md:mt-0">
+              <h3 class="text-sm/6 font-semibold text-gray-900">Legal</h3>
+              <ul role="list" class="mt-6 space-y-4">
+                <li><a href="#" class="text-sm/6 text-gray-600 hover:text-gray-900">Terms of service</a></li>
+                <li><a href="#" class="text-sm/6 text-gray-600 hover:text-gray-900">Privacy policy</a></li>
+                <li><a href="#" class="text-sm/6 text-gray-600 hover:text-gray-900">License</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function toggleMobileMenu() {
+      const menu = document.getElementById('mobile-menu');
+      menu.classList.toggle('hidden');
+    }
+
+    function togglePropertyDetails() {
+      const details = document.getElementById('propertyDetails');
+      const chevron = document.getElementById('chevronIcon');
+
+      details.classList.toggle('hidden');
+      chevron.classList.toggle('rotate-180');
+    }
+
+    // Add event listener for property details toggle
+    document.getElementById('detailsToggle').addEventListener('click', togglePropertyDetails);
+  </script>
+</body>
+
+</html>

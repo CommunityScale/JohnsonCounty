@@ -1,0 +1,1219 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Basic Meta Tags -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Modern dashboard interface for data visualization and analytics. Clean, responsive design with real-time insights and comprehensive reporting tools.">
+  <meta name="keywords" content="dashboard, analytics, data visualization, business intelligence, reporting, charts, metrics">
+  <meta name="author" content="HF Mock Dashboard">
+  <meta name="robots" content="index, follow">
+  <meta name="language" content="en">
+  <meta name="theme-color" content="#3B82F6">
+  <meta name="color-scheme" content="light dark">
+
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://hfmock.pages.dev/">
+
+  <!-- Title -->
+  <title>Place - Housing Forecast - CommunityScale</title>
+
+  <!-- OpenGraph Meta Tags -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="HF Mock Dashboard">
+  <meta property="og:title" content="HF Mock Dashboard - Modern Data Analytics Platform">
+  <meta property="og:description" content="Professional dashboard interface for data visualization and analytics. Real-time insights with intuitive design.">
+  <meta property="og:url" content="https://hfmock.pages.dev/">
+  <meta property="og:image" content="https://hfmock.pages.dev/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="HF Mock Dashboard Interface Screenshot">
+  <meta property="og:locale" content="en_US">
+
+  <!-- Twitter Card Meta Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="HF Mock Dashboard - Modern Data Analytics Platform">
+  <meta name="twitter:description" content="Professional dashboard interface for data visualization and analytics. Real-time insights with intuitive design.">
+  <meta name="twitter:image" content="https://hfmock.pages.dev/og-image.jpg">
+  <meta name="twitter:image:alt" content="HF Mock Dashboard Interface Screenshot">
+  <meta name="twitter:site" content="@communityscale">
+  <meta name="twitter:creator" content="@communityscale">
+
+  <!-- Security Headers -->
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta http-equiv="X-Frame-Options" content="DENY">
+  <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+  <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+  <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()">
+
+  <!-- Performance & Caching -->
+  <meta http-equiv="Cache-Control" content="public, max-age=31536000">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://cdn.tailwindcss.com">
+  <link rel="dns-prefetch" href="//www.googletagmanager.com">
+
+  <!-- Favicons -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#3B82F6">
+  <meta name="msapplication-TileColor" content="#3B82F6">
+  <meta name="msapplication-config" content="/browserconfig.xml">
+
+  <!-- Web App Manifest
+  <link rel="manifest" href="/manifest.json">
+  <meta name="application-name" content="HF Mock Dashboard">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="HF Dashboard">
+   -->
+
+  <!-- Google Analytics 4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'GA_MEASUREMENT_ID', {
+      page_title: 'Dashboard',
+      page_location: window.location.href,
+      send_page_view: true,
+      anonymize_ip: true,
+      allow_google_signals: false,
+      cookie_flags: 'SameSite=Strict;Secure'
+    });
+  </script>
+
+  <!-- Structured Data (JSON-LD) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "CommunityScale Housing Forecast",
+    "description": "Housing forecast and housing needs assessment for [place]",
+    "url": "https://hfmock.pages.dev/",
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "Web Browser",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "author": {
+      "@type": "Organization",
+      "name": "CommunityScale Housing Forecast",
+      "url": "https://hfmock.pages.dev/"
+    }
+  }
+  </script>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="./tailwind.config.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            'sans': ['Roboto', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Arial', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Material Icons CDN -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+  <style>
+    /* Additional styling to match the original SVG appearance */
+    .material-icons-outlined {
+      font-size: 1.25rem;
+      /* Equivalent to h-5 w-5 */
+      width: 1.25rem;
+      height: 1.25rem;
+    }
+
+    /* Critical CSS for performance */
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-display: swap;
+    }
+  </style>
+</head>
+
+<body class="bg-gray-50 min-h-screen">
+  <!-- Header -->
+  <header class="bg-white shadow">
+    <nav class="mx-auto flex max-w-5xl items-center justify-between gap-x-6 p-6 lg:px-8" aria-label="Global">
+      <div class="flex lg:flex-1">
+        <a href="#" class="-m-1.5 p-1.5">
+          <span class="sr-only">CommunityScale Housing Forecast</span>
+          <img class="h-8 w-auto" src="cslogo.svg" alt="" />
+        </a>
+        <h1 class="hidden lg:block ml-4 text-xl font-bold text-gray-900 self-center">Housing Forecast</h1>
+      </div>
+      <div class="hidden lg:flex lg:gap-x-12">
+        <a href="#" class="text-sm/6 font-semibold text-gray-900">Docs</a>
+        <a href="#" class="text-sm/6 font-semibold text-gray-900">About</a>
+        <a href="#" class="text-sm/6 font-semibold text-gray-900">CommunityScale</a>
+        <a href="#" class="text-sm/6 font-semibold text-gray-900">Subscribe</a>
+      </div>
+      <div class="flex flex-1 items-center justify-end gap-x-6">
+        <div class="relative hidden sm:block">
+          <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <svg class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z" clip-rule="evenodd" />
+            </svg>
+          </div>
+          <input type="search" placeholder="Search..." class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-gray-500 focus:border-gray-500 sm:text-sm">
+        </div>
+        <a href="#" class="rounded-md bg-gray-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600 whitespace-nowrap">Sign up</a>
+      </div>
+      <div class="flex lg:hidden">
+        <button type="button" class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700" onclick="toggleMobileMenu()">
+          <span class="sr-only">Open main menu</span>
+          <svg class="size-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+          </svg>
+        </button>
+      </div>
+    </nav>
+
+    <!-- Mobile menu -->
+    <div id="mobile-menu" class="lg:hidden hidden" role="dialog" aria-modal="true">
+      <div class="fixed inset-0 z-50"></div>
+      <div class="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white p-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
+        <div class="flex items-center gap-x-6">
+          <a href="#" class="-m-1.5 p-1.5">
+            <span class="sr-only">Your Company</span>
+            <img class="h-8 w-auto" src="cslogo.svg" alt="" />
+          </a>
+          <a href="#" class="ml-auto rounded-md bg-gray-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600 whitespace-nowrap">Sign up</a>
+          <button type="button" class="-m-2.5 rounded-md p-2.5 text-gray-700" onclick="toggleMobileMenu()">
+            <span class="sr-only">Close menu</span>
+            <svg class="size-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+        <div class="mt-6 flow-root">
+          <div class="-my-6 divide-y divide-gray-500/10">
+            <div class="space-y-2 py-6">
+              <a href="#" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50">Product</a>
+              <a href="#" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50">Features</a>
+              <a href="#" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50">Marketplace</a>
+              <a href="#" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50">Company</a>
+            </div>
+            <div class="py-6">
+              <!-- Mobile search -->
+              <div class="relative mb-4">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <svg class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                    <path fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z" clip-rule="evenodd" />
+                  </svg>
+                </div>
+                <input type="search" placeholder="Search..." class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-gray-500 focus:border-gray-500">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Breadcrumbs -->
+  <nav class="flex border-t border-b border-gray-200 bg-white" aria-label="Breadcrumb">
+    <ol role="list" class="mx-auto flex w-full max-w-5xl space-x-4 px-4 sm:px-6 lg:px-8">
+      <li class="flex">
+        <div class="flex items-center">
+          <a href="#" class="ml-1 text-sm font-medium text-gray-500 hover:text-gray-700">US</a>
+        </div>
+      </li>
+      <li class="flex">
+        <div class="flex items-center">
+          <svg class="h-full w-6 shrink-0 text-gray-200" viewBox="0 0 24 44" preserveAspectRatio="none" fill="currentColor" aria-hidden="true">
+            <path d="M.293 0l22 22-22 22h1.414l22-22-22-22H.293z" />
+          </svg>
+          <a href="#" class="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700">Ohio</a>
+        </div>
+      </li>
+      <li class="flex">
+        <div class="flex items-center">
+          <svg class="h-full w-6 shrink-0 text-gray-200" viewBox="0 0 24 44" preserveAspectRatio="none" fill="currentColor" aria-hidden="true">
+            <path d="M.293 0l22 22-22 22h1.414l22-22-22-22H.293z" />
+          </svg>
+          <a href="#" class="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700">County Name</a>
+        </div>
+      </li>
+      <li class="flex">
+        <div class="flex items-center">
+          <svg class="h-full w-6 shrink-0 text-gray-200" viewBox="0 0 24 44" preserveAspectRatio="none" fill="currentColor" aria-hidden="true">
+            <path d="M.293 0l22 22-22 22h1.414l22-22-22-22H.293z" />
+          </svg>
+          <a href="#" class="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700" aria-current="page">Upper Arlington</a>
+        </div>
+      </li>
+    </ol>
+  </nav>
+
+<div class="relative isolate overflow-hidden bg-gray-900 py-12 sm:py-16">
+  <div class="hidden sm:absolute sm:-top-10 sm:right-1/2 sm:-z-10 sm:mr-10 sm:block sm:transform-gpu sm:blur-3xl" aria-hidden="true">
+    <div class="aspect-1097/845 w-274.25 bg-linear-to-tr from-[#ff4694] to-[#776fff] opacity-20" style="clip-path: polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)"></div>
+  </div>
+  <div class="absolute -top-52 left-1/2 -z-10 -translate-x-1/2 transform-gpu blur-3xl sm:top-[-28rem] sm:ml-16 sm:translate-x-0 sm:transform-gpu" aria-hidden="true">
+    <div class="aspect-1097/845 w-274.25 bg-linear-to-tr from-[#ff4694] to-[#776fff] opacity-20" style="clip-path: polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)"></div>
+  </div>
+  <div class="mx-auto max-w-5xl px-4 lg:px-8">
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+    <!-- Text and heading -->
+    <div>
+      <h2 class="text-5xl font-semibold tracking-tight text-white sm:text-7xl">Upper Arlington</h2>
+      <p class="mt-8 text-lg font-medium text-pretty text-gray-300 sm:text-xl/8">
+        The Housing Forecast compiles key housing metrics for Upper Arlington, OH to help assess community needs, anticipate change, and make smarter policy decisions. <!-- Dig into the data and uncover the trends driving the housing story in Upper Arlington.-->
+      </p>
+    </div>
+    <div class="overflow-hidden rounded-lg bg-white shadow-sm">
+      <iframe src="mapTitleCard.html" title="Map" loading="lazy" class="w-full h-[200px] lg:h-[300px] border-0"></iframe>
+    </div>
+  </div>
+    <div class="mx-auto mt-10 max-w-2xl lg:mx-0 lg:max-w-none">
+      <div class="grid grid-cols-1 gap-x-8 gap-y-6 text-base/7 font-semibold text-white sm:grid-cols-2 md:flex lg:gap-x-10">
+        <a href="#Affordability">Affordability <span aria-hidden="true">&rarr;</span></a>
+        <a href="#Growth">Growth <span aria-hidden="true">&rarr;</span></a>
+        <a href="#">Demographics <span aria-hidden="true">&rarr;</span></a>
+        <a href="#">Housing stock <span aria-hidden="true">&rarr;</span></a>
+        <a href="#">Production target <span aria-hidden="true">&rarr;</span></a>
+        <a href="#">Maps <span aria-hidden="true">&rarr;</span></a>
+      </div>
+      <dl class="mt-6 grid grid-cols-1 gap-8 sm:mt-8 sm:grid-cols-2 lg:grid-cols-4">
+        <div class="flex flex-col-reverse gap-1">
+          <dt class="text-base/7 text-gray-300">Median income</dt>
+          <dd class="text-4xl font-semibold tracking-tight text-white">$118k</dd>
+        </div>
+        <div class="flex flex-col-reverse gap-1">
+          <dt class="text-base/7 text-gray-300">Typical home price</dt>
+          <dd class="text-4xl font-semibold tracking-tight text-white">$645k</dd>
+        </div>
+        <div class="flex flex-col-reverse gap-1">
+          <dt class="text-base/7 text-gray-300">Cost-burdened households</dt>
+          <dd class="text-4xl font-semibold tracking-tight text-white">31%</dd>
+        </div>
+        <div class="flex flex-col-reverse gap-1">
+          <dt class="text-base/7 text-gray-300">10-year growth rate</dt>
+          <dd class="text-4xl font-semibold tracking-tight text-white">39%</dd>
+        </div>
+      </dl>
+    </div>
+  </div>
+</div>
+
+
+  
+
+
+  <!-- Main Content -->
+  <main class="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8 space-y-6">
+
+
+
+
+
+
+
+
+
+    <!-- 01 Affordability Chart Card -->
+    <div class="sm:mx-auto sm:max-w-5xl divide-y divide-gray-200 overflow-hidden sm:rounded-lg bg-white shadow-sm" id="Affordability">
+      <div class="px-4 py-5 sm:p-6">
+        <p class="text-base/7 font-semibold text-indigo-600">Affordability</p>
+        <h1 class="mt-2 text-4xl font-semibold tracking-tight text-pretty text-gray-900 sm:text-5xl">Who can afford to buy here?</h1>
+        <div class="flex flex-col md:flex-row gap-6">
+          <div class="md:w-3/6">
+            <p class="mt-6 text-xl/8 text-gray-700">Is the median household income enough to buy a typical home?</p>
+            <p class="mt-4 text-gray-700 pb-2">One simple measure of housing affordability is whether or not the typical local income can afford the typical house on the market. This chart compares [place]’s median listing price with the maximum price affordable to a household earning [place]’s median income. A wider gap means a higher barrier to entry for homebuyers.</p>
+          </div>
+      
+      <div class="py-8 md:w-3/6">
+            <iframe title="Median affordability [mockup]" aria-label="Interactive line chart" id="datawrapper-chart-cCWcR" src="https://datawrapper.dwcdn.net/cCWcR/1/" scrolling="no" frameborder="0" style="width: 0; min-width: 100% !important; border: none;" height="296" data-external="1"></iframe>
+            <script type="text/javascript">!function () { "use strict"; window.addEventListener("message", (function (a) { if (void 0 !== a.data["datawrapper-height"]) { var e = document.querySelectorAll("iframe"); for (var t in a.data["datawrapper-height"]) for (var r, i = 0; r = e[i]; i++)if (r.contentWindow === a.source) { var d = a.data["datawrapper-height"][t] + "px"; r.style.height = d } } })) }();
+            </script>
+          </div>
+        </div>
+      </div>
+      <div class="px-4 py-4 sm:px-6">
+        <button id="sourcesToggleAfford" class="flex items-center justify-between w-full text-left text-sm font-medium text-gray-900 hover:text-gray-700 focus:outline-none">
+          <div class="flex items-center">
+            <span class="material-icons-outlined mr-2 text-gray-400">
+              ssid_chart
+            </span>
+            Contributing factors to affordability
+          </div>
+          <svg id="chevronIconAfford" class="h-5 w-5 text-gray-400 transform transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+          </svg>
+        </button>
+
+        <!-- Sources Section (Initially Hidden) -->
+        <div id="sourcesDetailsAfford" class="hidden mt-2 pt-2 border-t border-gray-100">
+          <!-- Table start -->
+          <p class="text-gray-700 pb-2">Housing costs include more than just the mortgage or rent payment. The table below details the inputs and assumptions behind the chart above. “Affordability” is defined as paying no more than 30% of a household’s income on housing costs.</p>
+          <div class="flow-root">
+            <div class="overflow-x-auto">
+              <div class="inline-block min-w-full align-middle">
+                <table class="min-w-full divide-y divide-gray-300">
+                  <tbody class="divide-y divide-gray-200 bg-white">
+                    <tr>
+                      <td class="py-2 pr-3 text-sm font-bold text-right whitespace-nowrap text-gray-900">$597,535</td>
+                      <td class="px-2 py-2 text-sm text-left whitespace-nowrap text-gray-500">Median home price (June 2025)</td>
+                    </tr>
+                    <tr>
+                      <td class="py-2 pr-3 text-sm font-bold text-right whitespace-nowrap text-gray-900">6.65%</td>
+                      <td class="px-2 py-2 text-sm text-left whitespace-nowrap text-gray-500">Mortgage rate (FRED, June 2025)</td>
+                    </tr>
+                    <tr>
+                      <td class="py-2 pr-3 text-sm font-bold text-right whitespace-nowrap text-gray-900">2.68%</td>
+                      <td class="px-2 py-2 text-sm text-left whitespace-nowrap text-gray-500">Property tax rate (estimate, 2025)</td>
+                    </tr>
+                    <tr>
+                      <td class="py-2 pr-3 text-sm font-bold text-right whitespace-nowrap text-gray-900">0.04%</td>
+                      <td class="px-2 py-2 text-sm text-left whitespace-nowrap text-gray-500">Homeowners insurance as percentage of home value (treasury.gov estimate, 2025)</td>
+                    </tr>
+                    <tr>
+                      <td class="py-2 pr-3 text-sm font-bold text-right whitespace-nowrap text-gray-900">20%</td>
+                      <td class="px-2 py-2 text-sm text-left whitespace-nowrap text-gray-500">Downpayment assumption</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div> <!-- end of table -->
+        </div>
+      </div>
+
+      <script>
+        function toggleSourcesAfford() {
+          const details = document.getElementById('sourcesDetailsAfford');
+          const chevron = document.getElementById('chevronIconAfford');
+
+          details.classList.toggle('hidden');
+          chevron.classList.toggle('rotate-180');
+        }
+
+        // Add event listener for sources toggle in population card
+        document.getElementById('sourcesToggleAfford').addEventListener('click', toggleSourcesAfford);
+      </script>
+    </div>
+
+<!-- 03 Layer Cake Chart Card -->
+    <div class="sm:mx-auto sm:max-w-5xl divide-y divide-gray-200 overflow-hidden sm:rounded-lg bg-white shadow-sm" id="Growth">
+      <div class="px-4 py-5 sm:p-6">
+        <p class="text-base/7 font-semibold text-indigo-600">Growth</p>
+        <h1 class="mt-2 text-4xl font-semibold tracking-tight text-pretty text-gray-900 sm:text-5xl">How fast is Upper Arlington growing?</h1>
+      <div class="px-4 py-5 sm:p-6">
+        <div class="flex flex-col md:flex-row gap-6">
+      <div class="md:w-3/6">
+        <p class="mt-6 text-xl/8 text-gray-700">Is Upper Arlington growing equitably or are some income groups changing faster than others?</p>
+        <p class="mt-4 text-gray-700 pb-2">One simple measure of housing affordability is whether or not the typical local income can afford the typical house on the market. This chart compares [place]’s median listing price with the maximum price affordable to a household earning [place]’s median income. A wider gap means a higher barrier to entry for homebuyers.</p>
+      </div>
+          <div class="py-8 md:w-3/6">
+            <iframe title="Household growth by AMI Champaign" aria-label="Interactive area chart" id="datawrapper-chart-ouDHf" src="https://datawrapper.dwcdn.net/ouDHf/1/" scrolling="no" frameborder="0" style="width: 0; min-width: 100% !important; border: none;" height="445" data-external="1"></iframe>
+            <script type="text/javascript">!function () { "use strict"; window.addEventListener("message", (function (a) { if (void 0 !== a.data["datawrapper-height"]) { var e = document.querySelectorAll("iframe"); for (var t in a.data["datawrapper-height"]) for (var r, i = 0; r = e[i]; i++)if (r.contentWindow === a.source) { var d = a.data["datawrapper-height"][t] + "px"; r.style.height = d } } })) }();
+            </script>
+          </div>
+        </div>
+      </div>
+      <div class="px-4 py-4 sm:px-6">
+        <button id="sourcesToggleCake" class="flex items-center justify-between w-full text-left text-sm font-medium text-gray-900 hover:text-gray-700 focus:outline-none">
+          <div class="flex items-center">
+            <span class="material-icons-outlined mr-2 text-gray-400">
+              monetization_on
+            </span>
+            Income group details
+          </div>
+          <svg id="chevronIconCake" class="h-5 w-5 text-gray-400 transform transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+          </svg>
+        </button>
+
+        <!-- Sources Section (Initially Hidden) -->
+        <div id="sourcesDetailsCake" class="hidden mt-2 pt-2 border-t border-gray-100">
+          <!-- Table start -->
+          <div>
+            <div class="flow-root">
+              <div class="overflow-x-auto">
+                <div class="inline-block min-w-full align-middle">
+                  <table class="min-w-full divide-y divide-gray-300">
+                    <thead>
+                      <tr>
+                        <th scope="col" class="py-3.5 pr-3 text-left text-sm font-semibold text-gray-900 align-bottom">AMI group</th>
+                        <th scope="col" class="px-2 py-3.5 text-right text-sm font-semibold text-gray-900 align-bottom">Household income</th>
+                        <th scope="col" class="px-2 py-3.5 text-right text-sm font-semibold text-gray-900 align-bottom">Households</th>
+                        <th scope="col" class="px-2 py-3.5 text-right text-sm font-semibold text-gray-900 align-bottom max-w-[120px]">Max monthly housing costs</th>
+                        <th scope="col" class="px-2 py-3.5 text-right text-sm font-semibold text-gray-900 align-bottom max-w-[100px]">Max purchase price</th>
+                        <th scope="col" class="px-2 py-3.5 text-right text-sm font-semibold text-gray-900 align-bottom max-w-[80px]">Bedrooms demand avg.</th>
+                        <th scope="col" class="px-2 py-3.5 text-right text-sm font-semibold text-gray-900 align-bottom max-w-[80px]">Income earners avg.</th>
+                        <th scope="col" class="px-2 py-3.5 text-right text-sm font-semibold text-gray-900 align-bottom max-w-[90px]">Householder age avg.</th>
+                      </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200 bg-white">
+                      <tr>
+                        <td class="py-2 pr-3 text-sm font-medium whitespace-nowrap text-gray-900">&lt;50%</td>
+                        <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">&lt;$50K</td>
+                        <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">1,924</td>
+                        <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">&lt;$1,250</td>
+                        <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">$136K</td>
+                        <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">2.0</td>
+                        <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">0.4</td>
+                        <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">60</td>
+                      </tr>
+                      <tr>
+                        <td class="py-2 pr-3 text-sm font-medium whitespace-nowrap text-gray-900">50-80%</td>
+                        <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">$50K - $80K</td>
+                        <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">1,772</td>
+                        <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">&lt;$2,000</td>
+                        <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">&lt;$217K</td>
+                        <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">2.4</td>
+                        <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">0.9</td>
+                        <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">56</td>
+                      </tr>
+                      <tr>
+                        <td class="py-2 pr-3 text-sm font-medium whitespace-nowrap text-gray-900">80-120%</td>
+                        <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">$80K - $120K</td>
+                        <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">1,867</td>
+                        <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">&lt;$3,000</td>
+                        <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">&lt;$333K</td>
+                        <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">2.7</td>
+                        <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">1.4</td>
+                        <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">54</td>
+                      </tr>
+                      <tr>
+                        <td class="py-2 pr-3 text-sm font-medium whitespace-nowrap text-gray-900">120-150%</td>
+                        <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">$120K - $150K</td>
+                        <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">1,302</td>
+                        <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">&lt;$3,750</td>
+                        <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">&lt;$417K</td>
+                        <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">2.9</td>
+                        <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">1.7</td>
+                        <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">53</td>
+                      </tr>
+                      <tr>
+                        <td class="py-2 pr-3 text-sm font-medium whitespace-nowrap text-gray-900">150-190%</td>
+                        <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">$150K - $200K</td>
+                        <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">1,698</td>
+                        <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">&lt;$5,000</td>
+                        <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">&lt;$560K</td>
+                        <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">3.1</td>
+                        <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">1.8</td>
+                        <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">54</td>
+                      </tr>
+                      <tr>
+                        <td class="py-2 pr-3 text-sm font-medium whitespace-nowrap text-gray-900">&gt;190%</td>
+                        <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">&gt;$200K</td>
+                        <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">5,826</td>
+                        <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">&gt;$5,000</td>
+                        <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">&gt;$560K</td>
+                        <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">3.2</td>
+                        <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">1.8</td>
+                        <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">52</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div> <!-- end of table -->
+        </div>
+      </div>
+
+      <script>
+        // Script to toggle the visibility of the "Income group details" section in the Layer cake card
+        function toggleSourcesCake() {
+          const details = document.getElementById('sourcesDetailsCake');
+          const chevron = document.getElementById('chevronIconCake');
+
+          details.classList.toggle('hidden');
+          chevron.classList.toggle('rotate-180');
+        }
+
+        // Add event listener for sources toggle in the Layer cake card
+        document.getElementById('sourcesToggleCake').addEventListener('click', toggleSourcesCake);
+      </script>
+    </div>
+    </div>
+
+    <!-- 02 Population Age Chart Card -->
+    <div class="sm:mx-auto sm:max-w-3xl divide-y divide-gray-200 overflow-hidden sm:rounded-lg bg-white shadow-sm">
+      <div class="px-4 py-5 sm:px-6">
+        <h3 class="text-lg font-medium leading-6 text-gray-900">How is the population growing by age group?</h3>
+      </div>
+      <div class="px-4 py-5 sm:p-6">
+        <div class="flex flex-col md:flex-row gap-6">
+          <div class="md:w-2/6">
+            <p class="text-gray-700 pb-2">This chart illustrates trends in population by age cohort, both historic and projected. The projection is based on recent trends extended. Depending on economic, policy, and other conditions, the future age distribution may vary over time.
+            </p>
+
+
+          </div>
+          <div class="md:w-4/6">
+            <iframe title="Population by age cohort" aria-label="Interactive area chart" id="datawrapper-chart-5oHvN" src="https://datawrapper.dwcdn.net/5oHvN/1/" scrolling="no" frameborder="0" style="width: 0; min-width: 100% !important; border: none;" height="445" data-external="1"></iframe>
+            <script type="text/javascript">!function () { "use strict"; window.addEventListener("message", (function (a) { if (void 0 !== a.data["datawrapper-height"]) { var e = document.querySelectorAll("iframe"); for (var t in a.data["datawrapper-height"]) for (var r, i = 0; r = e[i]; i++)if (r.contentWindow === a.source) { var d = a.data["datawrapper-height"][t] + "px"; r.style.height = d } } })) }();
+            </script>
+          </div>
+        </div>
+      </div>
+      <div class="px-4 py-4 sm:px-6">
+        <button id="sourcesToggle" class="flex items-center justify-between w-full text-left text-sm font-medium text-gray-900 hover:text-gray-700 focus:outline-none">
+          <div class="flex items-center">
+            <span class="material-icons-outlined mr-2 text-gray-400">
+              people
+            </span>
+            About demographic projections
+          </div>
+          <svg id="chevronIcon" class="h-5 w-5 text-gray-400 transform transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+          </svg>
+        </button>
+
+        <!-- Sources Section (Initially Hidden) -->
+        <div id="sourcesDetails" class="hidden mt-2 pt-2 border-t border-gray-100">
+          <p class="text-sm text-gray-600">
+            This population projection method divides people into age groups and tracks how each group changes over time. It analyzes past patterns to predict future population changes using annual change ratios and birth rates.
+          </p>
+        </div>
+      </div>
+
+      <script>
+        function toggleSources() {
+          const details = document.getElementById('sourcesDetails');
+          const chevron = document.getElementById('chevronIcon');
+
+          details.classList.toggle('hidden');
+          chevron.classList.toggle('rotate-180');
+        }
+
+        // Add event listener for sources toggle
+        document.getElementById('sourcesToggle').addEventListener('click', toggleSources);
+      </script>
+    </div>
+
+
+    
+
+    <!-- 04 Household Characteristics Charts Card -->
+    <div class="sm:mx-auto sm:max-w-3xl divide-y divide-gray-200 overflow-hidden sm:rounded-lg bg-white shadow-sm">
+      <div class="px-4 py-5 sm:px-6">
+        <h3 class="text-lg font-medium leading-6 text-gray-900">Who lives here today?</h3>
+      </div>
+      <div class="px-4 py-5 sm:p-6">
+        <div class="flex flex-col md:flex-row gap-6">
+          <div class="md:w-2/6">
+            <p class="text-gray-700 pb-2">Households may have different structure type preferences depending on characteristics such as household size, income, employment, presence of children, age of individuals, and lifestyle choices. Understanding the housing stock in corresponding terms helps assess how well existing units align with existing households' ideals.</p>
+          </div>
+          <div class="md:w-4/6">
+            <iframe title="[Place]'s households characteristics by income" aria-label="Stacked Bars" id="datawrapper-chart-JBQcT" src="https://datawrapper.dwcdn.net/JBQcT/1/" scrolling="no" frameborder="0" style="width: 0; min-width: 100% !important; border: none;" height="635" data-external="1"></iframe>
+            <script type="text/javascript">!function () { "use strict"; window.addEventListener("message", (function (a) { if (void 0 !== a.data["datawrapper-height"]) { var e = document.querySelectorAll("iframe"); for (var t in a.data["datawrapper-height"]) for (var r, i = 0; r = e[i]; i++)if (r.contentWindow === a.source) { var d = a.data["datawrapper-height"][t] + "px"; r.style.height = d } } })) }();
+            </script>
+          </div>
+        </div>
+      </div>
+
+      <!-- Changing household types dropdown -->
+      <div class="px-4 py-4 sm:px-6">
+        <button id="typesToggle" class="flex items-center justify-between w-full text-left text-sm font-medium text-gray-900 hover:text-gray-700 focus:outline-none">
+          <div class="flex items-center">
+            <span class="material-icons-outlined mr-2 text-gray-400">
+              analytics
+            </span>
+            <span class="hidden sm:inline">Changing household types</span>
+            <span class="sm:hidden">Types</span>
+          </div>
+          <svg id="chevronIconTypes" class="h-5 w-5 text-gray-400 transform transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+          </svg>
+        </button>
+
+        <!-- Types Chart Section (Initially Hidden) -->
+        <div id="typesDetails" class="hidden mt-2 pt-2 border-t border-gray-100">
+          <div class="flex flex-col gap-6">
+            <div class="w-full">
+              <iframe title="Change in household types from 2015 to 2023" aria-label="Grouped Columns" id="datawrapper-chart-avbdG" src="https://datawrapper.dwcdn.net/avbdG/1/" scrolling="no" frameborder="0" style="width: 0; min-width: 100% !important; border: none;" height="344" data-external="1"></iframe>
+              <script type="text/javascript">!function () { "use strict"; window.addEventListener("message", (function (a) { if (void 0 !== a.data["datawrapper-height"]) { var e = document.querySelectorAll("iframe"); for (var t in a.data["datawrapper-height"]) for (var r, i = 0; r = e[i]; i++)if (r.contentWindow === a.source) { var d = a.data["datawrapper-height"][t] + "px"; r.style.height = d } } })) }();
+              </script>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cost burden dropdown -->
+      <div class="px-4 py-4 sm:px-6">
+        <button id="burdenToggle" class="flex items-center justify-between w-full text-left text-sm font-medium text-gray-900 hover:text-gray-700 focus:outline-none">
+          <div class="flex items-center">
+            <span class="material-icons-outlined mr-2 text-gray-400">
+              account_balance_wallet
+            </span>
+            <span class="hidden sm:inline">More details about cost burden</span>
+            <span class="sm:hidden">Burden</span>
+          </div>
+          <svg id="chevronIconBurden" class="h-5 w-5 text-gray-400 transform transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+          </svg>
+        </button>
+
+        <!-- Cost Burden Chart Section (Initially Hidden) -->
+        <div id="burdenDetails" class="hidden mt-2 pt-2 border-t border-gray-100">
+          <div class="flex flex-col md:flex-row gap-6">
+            <div class="md:w-2/6">
+              <p class="text-gray-700 pb-2">Cost burden measures the percentage of household income spent on housing costs. Households spending more than 30% of their income on housing are considered cost-burdened, while those spending more than 50% are severely cost-burdened. This analysis helps identify which income groups face the greatest housing affordability challenges.</p>
+            </div>
+            <div class="md:w-4/6">
+              <iframe title="Cost burdened households by income group in [place]" aria-label="Stacked Bars" id="datawrapper-chart-McV6g" src="https://datawrapper.dwcdn.net/McV6g/1/" scrolling="no" frameborder="0" style="width: 0; min-width: 100% !important; border: none;" height="348" data-external="1"></iframe>
+              <script type="text/javascript">!function () { "use strict"; window.addEventListener("message", (function (a) { if (void 0 !== a.data["datawrapper-height"]) { var e = document.querySelectorAll("iframe"); for (var t in a.data["datawrapper-height"]) for (var r, i = 0; r = e[i]; i++)if (r.contentWindow === a.source) { var d = a.data["datawrapper-height"][t] + "px"; r.style.height = d } } })) }();
+              </script>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sources dropdown -->
+      <div class="px-4 py-4 sm:px-6">
+        <button id="sourcesTogglePop" class="flex items-center justify-between w-full text-left text-sm font-medium text-gray-900 hover:text-gray-700 focus:outline-none">
+          <div class="flex items-center">
+            <span class="material-icons-outlined mr-2 text-gray-400">
+              info
+            </span>
+            Household data sources
+          </div>
+          <svg id="chevronIconPop" class="h-5 w-5 text-gray-400 transform transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+          </svg>
+        </button>
+
+        <!-- Sources Section (Initially Hidden) -->
+        <div id="sourcesDetailsHouseholds" class="hidden mt-2 pt-2 border-t border-gray-100">
+          <p class="text-sm text-gray-600">
+            This analysis cross-tabulates household demographic characteristics with income levels using Public Use Microdata Sample (PUMS) data from the American Community Survey. Income groups are defined based on Area Median Income (AMI) thresholds obtained from HUD, creating six bins of AMI. These AMI-based thresholds are converted to dollar amounts for each year and adjusted for inflation to ensure temporal consistency. For each characteristic, the analysis counts weighted households falling within each income bin, using PUMS household weights where relevant.
+          </p>
+        </div>
+      </div>
+
+      <script>
+        function toggleSourcesHouseholds() {
+          const details = document.getElementById('sourcesDetailsHouseholds');
+          const chevron = document.getElementById('chevronIconPop');
+
+          details.classList.toggle('hidden');
+          chevron.classList.toggle('rotate-180');
+        }
+
+        function toggleTypesChart() {
+          const details = document.getElementById('typesDetails');
+          const chevron = document.getElementById('chevronIconTypes');
+
+          details.classList.toggle('hidden');
+          chevron.classList.toggle('rotate-180');
+        }
+
+        function toggleBurdenChart() {
+          const details = document.getElementById('burdenDetails');
+          const chevron = document.getElementById('chevronIconBurden');
+
+          details.classList.toggle('hidden');
+          chevron.classList.toggle('rotate-180');
+        }
+
+        // Add event listener for sources toggle in population card
+        document.getElementById('sourcesTogglePop').addEventListener('click', toggleSourcesHouseholds);
+
+        // Add event listener for types chart toggle
+        document.getElementById('typesToggle').addEventListener('click', toggleTypesChart);
+
+        // Add event listener for burden chart toggle
+        document.getElementById('burdenToggle').addEventListener('click', toggleBurdenChart);
+      </script>
+    </div>
+
+    <!-- 05 Housing Stock Chart Card -->
+    <div class="sm:mx-auto sm:max-w-3xl divide-y divide-gray-200 overflow-hidden sm:rounded-lg bg-white shadow-sm">
+      <div class="px-4 py-5 sm:px-6">
+        <h3 class="text-lg font-medium leading-6 text-gray-900">What housing is on the ground today?</h3>
+      </div>
+      <div class="px-4 py-5 sm:p-6">
+        <div class="flex flex-col md:flex-row gap-6">
+          <div class="md:w-2/6">
+            <p class="text-gray-700 pb-2">Inventory of the current local housing stock by tenure, including structure type and bedroom count.</p>
+          </div>
+          <div class="md:w-4/6">
+            <iframe title="Housing stock characteristics by tenure" aria-label="Stacked Bars" id="datawrapper-chart-FNlHV" src="https://datawrapper.dwcdn.net/FNlHV/1/" scrolling="no" frameborder="0" style="width: 0; min-width: 100% !important; border: none;" height="511" data-external="1"></iframe>
+            <script type="text/javascript">!function () { "use strict"; window.addEventListener("message", (function (a) { if (void 0 !== a.data["datawrapper-height"]) { var e = document.querySelectorAll("iframe"); for (var t in a.data["datawrapper-height"]) for (var r, i = 0; r = e[i]; i++)if (r.contentWindow === a.source) { var d = a.data["datawrapper-height"][t] + "px"; r.style.height = d } } })) }();
+            </script>
+          </div>
+        </div>
+      </div>
+      <div class="px-4 py-4 sm:px-6">
+        <button id="sourcesToggleStock" class="flex items-center justify-between w-full text-left text-sm font-medium text-gray-900 hover:text-gray-700 focus:outline-none">
+          <div class="flex items-center">
+            <span class="material-icons-outlined mr-2 text-gray-400">
+              house
+            </span>
+            Housing stock sources
+          </div>
+          <svg id="chevronIconStock" class="h-5 w-5 text-gray-400 transform transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+          </svg>
+        </button>
+
+        <!-- Sources Section (Initially Hidden) -->
+        <div id="sourcesDetailsStock" class="hidden mt-2 pt-2 border-t border-gray-100">
+          <p class="text-sm text-gray-600">
+            This analysis characterizes the local housing inventory across multiple dimensions using American Community Survey (ACS) data supplemented by Public Use Microdata Sample (PUMS) analysis. Housing tenure is derived from ACS table B25003, which categorizes all housing units as owner-occupied, renter-occupied, or vacant. Structure type classification uses ACS table B25024 to group housing units into five categories: single-family detached, single-family attached and 2-4 unit buildings, 5-49 unit buildings, 50+ unit buildings, and other structures (including mobile homes). Bedroom distribution is extracted from ACS table B25041, categorizing units as studio/1-bedroom, 2-bedroom, 3-bedroom, or 4+ bedroom homes. Cross-tabulations between tenure and both structure type (B25032) and bedroom count (B25042) reveal how different housing configurations serve owner versus renter households.
+          </p>
+        </div>
+      </div>
+
+      <script>
+        function toggleSourcesStock() {
+          const details = document.getElementById('sourcesDetailsStock');
+          const chevron = document.getElementById('chevronIconStock');
+
+          details.classList.toggle('hidden');
+          chevron.classList.toggle('rotate-180');
+        }
+
+        // Add event listener for sources toggle in stock card
+        document.getElementById('sourcesToggleStock').addEventListener('click', toggleSourcesStock);
+      </script>
+    </div>
+
+    <!-- 06 Demand Chart Card -->
+    <div class="sm:mx-auto sm:max-w-3xl divide-y divide-gray-200 overflow-hidden sm:rounded-lg bg-white shadow-sm">
+      <div class="px-4 py-5 sm:px-6">
+        <h3 class="text-lg font-medium leading-6 text-gray-900">How much new housing supply is needed?</h3>
+      </div>
+      <div class="px-4 py-5 sm:p-6">
+        <div class="flex flex-col gap-6">
+          <div class="w-full">
+            <p class="text-gray-700">
+              This 10-year housing production target accounts for projected household growth plus adjustments intended to relieve underlying market pressures, such as pent up demand and current shortages.
+            </p>
+          </div>
+          <div class="w-full">
+            <!-- Housing Production Analysis table start -->
+            <div class="flow-root">
+              <div class="overflow-x-auto">
+                <div class="inline-block min-w-full align-middle">
+                  <table class="min-w-full">
+                    <tbody class="bg-white">
+                      <tr>
+                        <td class="py-2 pr-3 text-sm font-bold text-gray-900 text-right align-top whitespace-nowrap w-0">1,437</td>
+                        <td class="px-2 py-2 w-full">
+                          <div class="text-sm font-bold text-gray-900">Total 10-year housing production target (2025-2035)</div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td colspan="2" class="pt-2 pb-2">
+                          <div class="border-t-2 border-gray-400"></div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="py-2 pr-3 text-sm font-semibold text-gray-900 text-right align-top whitespace-nowrap w-0">1,133</td>
+                        <td class="px-2 py-2 w-full">
+                          <div class="text-sm font-semibold text-gray-900">Net growth in households</div>
+                          <div class="text-sm text-gray-600">Projected total household growth from 2025 to 2035 is <span class="font-medium">9.8%</span>.</div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td colspan="2" class="py-0">
+                          <div class="border-b border-dotted border-gray-300"></div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="py-2 pr-3 text-sm font-semibold text-gray-900 text-right align-top whitespace-nowrap w-0">62</td>
+                        <td class="px-2 py-2 w-full">
+                          <div class="text-sm font-semibold text-gray-900">Replacement housing</div>
+                          <div class="text-sm text-gray-600">Annual replacement rate for overall housing stock is <span class="font-medium">0.1%</span></div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td colspan="2" class="py-0">
+                          <div class="border-b border-dotted border-gray-300"></div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="py-2 pr-3 text-sm font-semibold text-gray-900 text-right align-top whitespace-nowrap w-0">166</td>
+                        <td class="px-2 py-2 w-full">
+                          <div class="text-sm font-semibold text-gray-900">Ownership vacancy adjustment</div>
+                          <div class="text-sm text-gray-600">Owner-occupied vacancy is <span class="text-red-600 font-medium">0.4%</span>, below the minimum stable target of 1.5%</div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td colspan="2" class="py-0">
+                          <div class="border-b border-dotted border-gray-300"></div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="py-2 pr-3 text-sm font-semibold text-gray-900 text-right align-top whitespace-nowrap w-0">76</td>
+                        <td class="px-2 py-2 w-full">
+                          <div class="text-sm font-semibold text-gray-900">Rental vacancy adjustment</div>
+                          <div class="text-sm text-gray-600">Rental vacancy is <span class="text-red-600 font-medium">6.9%</span>, below the minimum stable target of 7.4%</div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td colspan="2" class="py-0">
+                          <div class="border-b border-dotted border-gray-300"></div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="py-2 pr-3 text-sm font-semibold text-gray-900 text-right align-top whitespace-nowrap w-0">0</td>
+                        <td class="px-2 py-2 w-full">
+                          <div class="text-sm font-semibold text-gray-900">Overcrowding adjustment</div>
+                          <div class="text-sm text-gray-600">Overcrowding rate is <span class="text-green-600 font-medium">0.4%</span>, below the National avg. of 3.4%</div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td colspan="2" class="py-0">
+                          <div class="border-b border-dotted border-gray-300"></div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="py-2 pr-3 text-sm font-semibold text-gray-900 text-right align-top whitespace-nowrap w-0">0</td>
+                        <td class="px-2 py-2 w-full">
+                          <div class="text-sm font-semibold text-gray-900">Substandard housing adjustment</div>
+                          <div class="text-sm text-gray-600">Substandard housing rate is <span class="text-green-600 font-medium">0.2%</span>, below the National avg. of 0.4%</div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <!-- Housing Production Analysis table end -->
+          </div>
+        </div>
+      </div>
+      <div class="px-4 py-4 sm:px-6">
+        <button id="sourcesToggleDemand" class="flex items-center justify-between w-full text-left text-sm font-medium text-gray-900 hover:text-gray-700 focus:outline-none">
+          <div class="flex items-center">
+            <span class="material-icons-outlined mr-2 text-gray-400">
+              calculate
+            </span>
+            Housing demand methodology
+          </div>
+          <svg id="chevronIconDemand" class="h-5 w-5 text-gray-400 transform transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+          </svg>
+        </button>
+
+        <!-- Sources Section (Initially Hidden) -->
+        <div id="sourcesDetailsDemand" class="hidden mt-2 pt-2 border-t border-gray-100">
+          <p class="text-sm text-gray-600 mb-3">
+            <strong>10-Year Housing Production Target Methodology</strong>
+          </p>
+          <p class="text-sm text-gray-600 mb-2">
+            The housing production target represents the total number of new housing units needed over a 10-year period to accommodate projected growth while addressing existing market imbalances. This comprehensive approach accounts for six distinct components of housing need.
+          </p>
+          <p class="text-sm text-gray-600 mb-2">
+            <strong>Net Household Growth</strong> forms the baseline demand, calculated by projecting net positive household growth as described earlier. The household formation rate captures demographic shifts and changing living arrangements over the forecast period.
+          </p>
+          <p class="text-sm text-gray-600 mb-2">
+            <strong>Replacement Housing</strong> accounts for units lost to demolition, disaster, or conversion to non-residential use. The annual replacement rate is calculated from historical patterns in the American Community Survey's year-built data (B25034), identifying the typical rate at which older housing stock exits the market.
+          </p>
+          <p class="text-sm text-gray-600 mb-2">
+            <strong>Vacancy Adjustments</strong> ensure healthy market functioning by comparing current vacancy rates to minimum stability targets. For owner-occupied units, a 1.5% vacancy rate enables normal market turnover for home sales. For rentals, a 7.4% vacancy rate (derived from historical market equilibrium analysis) allows reasonable choice and mobility. When current rates fall below these thresholds, additional units are needed to restore market fluidity. The adjustment equals the existing housing stock multiplied by the gap between target and actual vacancy rates. Source: Belsky, E. S., Drew, R. B., & McCue, D. (2007). Projecting the Underlying Demand for New Housing Units: Inferences from the Past, Assumptions about the Future (W07-7). Joint Center for Housing Studies, Harvard University.
+          </p>
+          <p class="text-sm text-gray-600 mb-2">
+            <strong>Overcrowding and Substandard Housing Adjustments</strong> address existing deficiencies in housing quality. Overcrowding (more than one person per room) and substandard conditions (lacking complete plumbing or kitchen facilities) are compared to national averages from ACS data. If local rates exceed national benchmarks, additional units are prescribed to provide adequate housing options. These adjustments equal zero when local conditions are less than the national norms.
+          </p>
+          <p class="text-sm text-gray-600">
+            The total production target sums all component to address market health and housing adequacy.
+          </p>
+        </div>
+        </div>
+
+        <script>
+          function toggleSourcesDemand() {
+            const details = document.getElementById('sourcesDetailsDemand');
+            const chevron = document.getElementById('chevronIconDemand');
+
+            details.classList.toggle('hidden');
+            chevron.classList.toggle('rotate-180');
+          }
+
+          // Add event listener for sources toggle in population card
+          document.getElementById('sourcesToggleDemand').addEventListener('click', toggleSourcesDemand);
+        </script>
+      </div>
+
+      <!-- 07 Map Card -->
+      <div class="w-full max-w-none divide-y divide-gray-200 overflow-hidden sm:rounded-lg bg-white shadow-sm">
+        <div class="px-4 py-5 sm:px-6">
+          <h3 class="text-lg font-medium leading-6 text-gray-900">Map</h3>
+        </div>
+
+        <iframe src="https://communityscale.github.io/UpperArlington/mapstable.html" title="Housing Map" loading="lazy" height="400" class="w-full border-0">
+        </iframe>
+      </div>
+
+      <!-- 09 Comparison Charts Card -->
+      <div class="w-full max-w-none divide-y divide-gray-200 overflow-hidden sm:rounded-lg bg-white shadow-sm">
+        <!-- Header -->
+        <div class="px-4 py-5 sm:px-6">
+          <h3 class="text-lg font-medium leading-6 text-gray-900">How does [place] compare to similar communities?</h3>
+        </div>
+
+        <!-- Content Section -->
+        <div class="px-4 py-5 sm:p-6">
+          <!-- Full-width text -->
+          <div class="mb-6">
+            <p class="text-gray-700">Households may have different structure type preferences depending on characteristics such as household size, income, employment, presence of children, age of individuals, and lifestyle choices. Understanding the housing stock in corresponding terms helps assess how well existing units align with existing households' ideals.</p>
+          </div>
+
+          <!-- Two columns with charts -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Chart 1 -->
+            <div>
+              <iframe title="Average household size" aria-label="Interactive line chart" id="datawrapper-chart-PIrmY" src="https://datawrapper.dwcdn.net/PIrmY/2/" scrolling="no" frameborder="0" style="width: 0; min-width: 100% !important; border: none;" height="296" data-external="1"></iframe>
+            </div>
+
+            <!-- Chart 2 -->
+            <div>
+              <iframe title="Inflation-adjusted median household income" aria-label="Interactive line chart" id="datawrapper-chart-1Bz7b" src="https://datawrapper.dwcdn.net/1Bz7b/1/" scrolling="no" frameborder="0" style="width: 0; min-width: 100% !important; border: none;" height="296" data-external="1"></iframe>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sources Section -->
+        <div class="px-4 py-4 sm:px-6">
+          <button id="sourcesToggleCompare" class="flex items-center justify-between w-full text-left text-sm font-medium text-gray-900 hover:text-gray-700 focus:outline-none">
+            <div class="flex items-center">
+              <span class="material-icons-outlined mr-2 text-gray-400">
+                compare_arrows
+              </span>
+              More comparison data
+            </div>
+            <svg id="chevronIconCompare" class="h-5 w-5 text-gray-400 transform transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+            </svg>
+          </button>
+
+          <!-- Sources Section (Initially Hidden) -->
+          <div id="sourcesDetailsCompare" class="hidden mt-2 pt-2 border-t border-gray-100">
+<!-- Table start -->
+<div>
+  <div class="flow-root">
+    <div class="overflow-x-auto">
+      <div class="inline-block min-w-full align-middle">
+        <table class="min-w-full divide-y divide-gray-300">
+          <thead>
+            <tr>
+              <th scope="col" class="py-3.5 pr-3 text-left text-sm font-semibold text-gray-900 align-bottom">Place</th>
+              <th scope="col" class="px-2 py-3.5 text-right text-sm font-semibold text-gray-900 align-bottom">Households</th>
+              <th scope="col" class="px-2 py-3.5 text-right text-sm font-semibold text-gray-900 align-bottom">Household growth 2010-2023</th>
+              <th scope="col" class="px-2 py-3.5 text-right text-sm font-semibold text-gray-900 align-bottom">65+ households</th>
+              <th scope="col" class="px-2 py-3.5 text-right text-sm font-semibold text-gray-900 align-bottom">Median household income</th>
+              <th scope="col" class="px-2 py-3.5 text-right text-sm font-semibold text-gray-900 align-bottom">Vacant units</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-200 bg-white">
+            <tr>
+              <td class="py-2 pr-3 text-sm font-medium whitespace-nowrap text-gray-900">Carmel, IN</td>
+              <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">38,160</td>
+              <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">36.17%</td>
+              <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">25.98%</td>
+              <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">$138,640</td>
+              <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">5.72%</td>
+            </tr>
+            <tr>
+              <td class="py-2 pr-3 text-sm font-medium whitespace-nowrap text-gray-900">Brookline, MA</td>
+              <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">27,210</td>
+              <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">11.17%</td>
+              <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">26.48%</td>
+              <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">$144,850</td>
+              <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">5.18%</td>
+            </tr>
+            <tr>
+              <td class="py-2 pr-3 text-sm font-medium whitespace-nowrap text-gray-900">Oak Park, IL</td>
+              <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">23,267</td>
+              <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">6.06%</td>
+              <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">28.21%</td>
+              <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">$111,267</td>
+              <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">5.70%</td>
+            </tr>
+            <tr>
+              <td class="py-2 pr-3 text-sm font-medium whitespace-nowrap text-gray-900">Dublin, OH</td>
+              <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">17,797</td>
+              <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">25.84%</td>
+              <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">24.56%</td>
+              <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">$159,940</td>
+              <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">3.39%</td>
+            </tr>
+            <tr>
+              <td class="py-2 pr-3 text-sm font-bold whitespace-nowrap" style="color: #6875e7;">Upper Arlington, OH</td>
+              <td class="px-2 py-2 text-sm text-right font-bold whitespace-nowrap" style="color: #6875e7;">14,389</td>
+              <td class="px-2 py-2 text-sm text-right font-bold whitespace-nowrap" style="color: #6875e7;">8.29%</td>
+              <td class="px-2 py-2 text-sm text-right font-bold whitespace-nowrap" style="color: #6875e7;">33.73%</td>
+              <td class="px-2 py-2 text-sm text-right font-bold whitespace-nowrap" style="color: #6875e7;">$155,523</td>
+              <td class="px-2 py-2 text-sm text-right font-bold whitespace-nowrap" style="color: #6875e7;">4.85%</td>
+            </tr>
+            <tr>
+              <td class="py-2 pr-3 text-sm font-medium whitespace-nowrap text-gray-900">Manhattan, NY</td>
+              <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">14,258</td>
+              <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">2.50%</td>
+              <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">23.48%</td>
+              <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">$178,571</td>
+              <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">16.00%</td>
+            </tr>
+            <tr>
+              <td class="py-2 pr-3 text-sm font-medium whitespace-nowrap text-gray-900">Westfield, NJ</td>
+              <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">10,989</td>
+              <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">3.61%</td>
+              <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">20.29%</td>
+              <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">$198,042</td>
+              <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">5.50%</td>
+            </tr>
+            <tr>
+              <td class="py-2 pr-3 text-sm font-medium whitespace-nowrap text-gray-900">Needham, MA</td>
+              <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">10,971</td>
+              <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">1.35%</td>
+              <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">29.48%</td>
+              <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">$226,875</td>
+              <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">5.62%</td>
+            </tr>
+            <tr>
+              <td class="py-2 pr-3 text-sm font-medium whitespace-nowrap text-gray-900">Lexington, MA</td>
+              <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">10,909</td>
+              <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">-5.41%</td>
+              <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">27.35%</td>
+              <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">$206,190</td>
+              <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">6.24%</td>
+            </tr>
+            <tr>
+              <td class="py-2 pr-3 text-sm font-medium whitespace-nowrap text-gray-900">Birmingham, MI</td>
+              <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">8,815</td>
+              <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">1.35%</td>
+              <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">29.45%</td>
+              <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">$130,648</td>
+              <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">4.01%</td>
+            </tr>
+            <tr>
+              <td class="py-2 pr-3 text-sm font-medium whitespace-nowrap text-gray-900">Great Neck village, NY</td>
+              <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">3,916</td>
+              <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">3.46%</td>
+              <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">27.48%</td>
+              <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">$157,500</td>
+              <td class="px-2 py-2 text-sm text-right whitespace-nowrap text-gray-500">4.46%</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div> <!-- end of table -->
+          </div>
+        </div>
+
+
+        <!-- Scripts -->
+        <script>
+          function toggleSourcesCompare() {
+            const details = document.getElementById('sourcesDetailsCompare');
+            const chevron = document.getElementById('chevronIconCompare');
+
+            details.classList.toggle('hidden');
+            chevron.classList.toggle('rotate-180');
+          }
+
+          // Add event listener for sources toggle in population card
+          document.getElementById('sourcesToggleCompare').addEventListener('click', toggleSourcesCompare);
+        </script>
+
+      </div>
+
+      <!-- Datawrapper responsive height script -->
+      <script type="text/javascript">
+        !function () { "use strict"; window.addEventListener("message", (function (a) { if (void 0 !== a.data["datawrapper-height"]) { var e = document.querySelectorAll("iframe"); for (var t in a.data["datawrapper-height"]) for (var r = 0; r < e.length; r++)if (e[r].contentWindow === a.source) { var i = a.data["datawrapper-height"][t] + "px"; e[r].style.height = i } } })) }();
+      </script>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-white mt-8">
+    <div class="mx-auto max-w-7xl px-6 py-12 lg:px-8 lg:py-16">
+      <div class="xl:grid xl:grid-cols-3 xl:gap-8">
+        <img class="h-9" src="cslogo.svg" alt="Company name" />
+
+        <div class="mt-16 grid grid-cols-2 gap-8 xl:col-span-2 xl:mt-0">
+          <div class="md:grid md:grid-cols-2 md:gap-8">
+            <div>
+              <h3 class="text-sm/6 font-semibold text-gray-900">Solutions</h3>
+              <ul role="list" class="mt-6 space-y-4">
+                <li><a href="#" class="text-sm/6 text-gray-600 hover:text-gray-900">Marketing</a></li>
+                <li><a href="#" class="text-sm/6 text-gray-600 hover:text-gray-900">Analytics</a></li>
+                <li><a href="#" class="text-sm/6 text-gray-600 hover:text-gray-900">Automation</a></li>
+                <li><a href="#" class="text-sm/6 text-gray-600 hover:text-gray-900">Commerce</a></li>
+                <li><a href="#" class="text-sm/6 text-gray-600 hover:text-gray-900">Insights</a></li>
+              </ul>
+            </div>
+            <div class="mt-10 md:mt-0">
+              <h3 class="text-sm/6 font-semibold text-gray-900">Support</h3>
+              <ul role="list" class="mt-6 space-y-4">
+                <li><a href="#" class="text-sm/6 text-gray-600 hover:text-gray-900">Submit ticket</a></li>
+                <li><a href="#" class="text-sm/6 text-gray-600 hover:text-gray-900">Documentation</a></li>
+                <li><a href="#" class="text-sm/6 text-gray-600 hover:text-gray-900">Guides</a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="md:grid md:grid-cols-2 md:gap-8">
+            <div>
+              <h3 class="text-sm/6 font-semibold text-gray-900">Company</h3>
+              <ul role="list" class="mt-6 space-y-4">
+                <li><a href="#" class="text-sm/6 text-gray-600 hover:text-gray-900">About</a></li>
+                <li><a href="#" class="text-sm/6 text-gray-600 hover:text-gray-900">Blog</a></li>
+                <li><a href="#" class="text-sm/6 text-gray-600 hover:text-gray-900">Jobs</a></li>
+                <li><a href="#" class="text-sm/6 text-gray-600 hover:text-gray-900">Press</a></li>
+              </ul>
+            </div>
+            <div class="mt-10 md:mt-0">
+              <h3 class="text-sm/6 font-semibold text-gray-900">Legal</h3>
+              <ul role="list" class="mt-6 space-y-4">
+                <li><a href="#" class="text-sm/6 text-gray-600 hover:text-gray-900">Terms of service</a></li>
+                <li><a href="#" class="text-sm/6 text-gray-600 hover:text-gray-900">Privacy policy</a></li>
+                <li><a href="#" class="text-sm/6 text-gray-600 hover:text-gray-900">License</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function toggleMobileMenu() {
+      const menu = document.getElementById('mobile-menu');
+      menu.classList.toggle('hidden');
+    }
+
+    function togglePropertyDetails() {
+      const details = document.getElementById('propertyDetails');
+      const chevron = document.getElementById('chevronIcon');
+
+      details.classList.toggle('hidden');
+      chevron.classList.toggle('rotate-180');
+    }
+
+    // Add event listener for property details toggle
+    document.getElementById('detailsToggle').addEventListener('click', togglePropertyDetails);
+  </script>
+</body>
+
+</html>
