@@ -20,7 +20,6 @@
 { "type": "Feature", "properties": { "NAME": "Golfview Mobile Home Court", "ADDRESS1": "1 Golfview Ct", "CITY": "North Liberty", "ZIPCODE": "52317", "LABEL": "Golfview" }, "geometry": { "type": "Point", "coordinates": [ -91.604798800376585, 41.734770878445943 ] } },
 { "type": "Feature", "properties": { "NAME": "Holiday Mobile Home Court", "ADDRESS1": "1 Holiday Lodge Rd", "CITY": "North Liberty", "ZIPCODE": "52317", "LABEL": "Holiday Lodge" }, "geometry": { "type": "Point", "coordinates": [ -91.605247685118954, 41.739024281419148 ] } },
 { "type": "Feature", "properties": { "NAME": "Beyonder Getaway at Sleepy Hollow", "ADDRESS1": "3340 Black Hawk Ave NW", "CITY": "Oxford", "ZIPCODE": "52322", "LABEL": "Beyonder Getaway" }, "geometry": { "type": "Point", "coordinates": [ -91.801962069978146, 41.690622465823523 ] } },
-{ "type": "Feature", "properties": { "NAME": "Knollwood Mobile Home Park", "ADDRESS1": "3036 Highway 1 NE", "CITY": "Iowa City", "ZIPCODE": "52240", "LABEL": "Knollwood" }, "geometry": { "type": "Point", "coordinates": [ -91.480392011279292, 41.711660275675804 ] } },
-{ "type": "Feature", "properties": { "NAME": "Louis and Evelyn Kral", "ADDRESS1": "101 E North St", "CITY": "Solon", "ZIPCODE": "52333", "LABEL": "Kral Mobile Home Court" }, "geometry": { "type": "Point", "coordinates": [ -91.494999772507001, 41.80782083276862 ] } }
+{ "type": "Feature", "properties": { "NAME": "Knollwood Mobile Home Park", "ADDRESS1": "3036 Highway 1 NE", "CITY": "Iowa City", "ZIPCODE": "52240", "LABEL": "Knollwood" }, "geometry": { "type": "Point", "coordinates": [ -91.480392011279292, 41.711660275675804 ] } }
 ]
 }
