@@ -1,5 +1,7 @@
-# [Website](https://communityscale.github.io/DowntownSyracuse/)
-  
+<a href="https://communityscale.com">
+    <img src="https://raw.githubusercontent.com/CommunityScale/media-kit/main/png/communityscale-wordmark-black.png" alt="CommunityScale Wordmark Black" height="30">
+</a>
+
 This website consists of a responsive CSS boilerplate and HTML, no compiling or installing. The interactive charts are hosted indefinitely on Datawrapper. 
 
 This is a secure and open source storage solution where the dashboard can live forever, for free. We can direct a custom URL to this webpage. Users can also migrate the dashboard to their own server by downloading these files.
