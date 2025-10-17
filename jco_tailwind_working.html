@@ -81,15 +81,19 @@
     <!-- Layer toggle - add all layers that will be in the dropdown menu  -->
     <div class="mb-4">
       <select id="layer-select" class="w-full border border-gray-300 rounded px-2 py-1">
-        <option value="tracts-medIncome">Median Annual Household Income</option> 
+        <option value="tracts-medIncome">Median Annual Household Income</option> <!--break above with title-->
         <option value="tracts-pctCostBurdenedRenters">Percent of Renters, Cost Burdened</option> 
         <option value="tracts-pctCostBurdenedOwners">Percent of Homeowners, Cost Burdened</option> 
         <!--<option value="tracts-pctHH">Percent Change in Households (2013-2023)</option>-->
-        <!--<option value="tracts-conditions">Neighborhood Conditions</option>-->
-        <option value="parcels-landuse">Property Class</option> 
-        <option value="parcels-ownership">Property Tax Credits</option>
-        <option value="parcels-pctLV">Land Value as Percent of Assessed Value</option>
+        <option value="parcels-landuse">Property Class</option> <!--break above with subtitle-->
+        <!--<option value="parcels-ownership">Property Tax Credits</option>
+        <option value="parcels-pctLV">Land Value as Percent of Assessed Value</option>-->
         <option value="parcels-value">Parcel Value Per Acre</option>
+        <option value="parcels-revenue">Tax Revenue Per Acre</option>
+        <!--<option value="zoning-small-cities">Zoning</option>--> <!--break above with subtitle-->
+       <!-- <option value="future-land-use">Future Land Use</option>
+        <option value="zoning-allowable-density">Allowable density</option>
+        <option value="zoning-allowable-use">Allowable use</option> -->
         <option value="admin-layer">Johnson County</option> <!--maybe just use outlines here?? add as toggle?? idk -->
     </select>
     <div class="mt-2 flex items-center justify-between">
@@ -512,7 +516,7 @@
 
         map.addSource("parcels", {
             type: "geojson",
-            data: 'https://raw.githubusercontent.com/CommunityScale/JohnsonCounty/main/uninc_parcels_jcia.geojson', //replace with a tileset if feeling nice 
+            data: 'jcia_uninc_parcels_251017.geojson', //replace with a tileset if feeling nice 
             promoteId: "PPN"
         })
 
@@ -612,20 +616,20 @@ const interpolateLayers = [
             colors: medIncomePalette, //replaced with medIncomePalette for color consistency 
             defaultViz: "none"
         },
-        // {
-        //     id: "parcels-pctLV",
-        //     property: "pctLandVal",
-        //     data_source: "parcels",
-        //     source_url: "https://raw.githubusercontent.com/CommunityScale/JohnsonCounty/main/uninc_parcels_jcia.geojson",
-        //     colors: landValuePalette,
-        //     defaultViz: "none"
-        // },
+        {
+            id: "parcels-revenue",
+            property: "revperacre",
+            data_source: "parcels",
+            source_url: "/jcia_uninc_parcels_251017.geojson",
+            colors: medIncomePalette,
+            defaultViz: "none"
+        },
         {
             id: "parcels-value",
             property: "acreVal",
             data_source: "parcels",
-            source_url: "https://raw.githubusercontent.com/CommunityScale/JohnsonCounty/main/uninc_parcels_jcia.geojson",
-            colors: parcelValuePalette,
+            source_url: "/jcia_uninc_parcels_251017.geojson",
+            colors: medIncomePalette,
             defaultViz: "none"
         }
     ]
@@ -752,74 +756,74 @@ const interpolateLayers = [
             }, 
             labelLayerId)
 
-    map.addLayer({ 
-            id: "parcels-pctLV",  
-            type: "fill",
-            source: "parcels",
-            paint: {
-                "fill-color": [
-                    "case", ["==", ["get", "pctLandVal"], null], communityScaleGray,
-                    ["interpolate", 
-                    ["linear"],
-                    ["get", "pctLandVal"],
-                    0.03,
-                    landValuePalette[4], 
-                    0.15,
-                    landValuePalette[3],
-                    0.35,
-                    landValuePalette[2],
-                    0.65,
-                    landValuePalette[1],
-                    0.90,
-                    landValuePalette[0]]],
-                "fill-outline-color": "#545453",
-                "fill-opacity": [
-                    "case", ["==", ["get", "pctLandVal"], null], 0.3,
-                    ["case",
-                    ["boolean", ["feature-state", "hover"], false],
-                    0.95,
-                    0.66
-            ]]
-             },
-             layout: {
-                visibility: "none"
-             }
-        },
-        labelLayerId
-    )
+    // map.addLayer({ 
+    //         id: "parcels-pctLV",  
+    //         type: "fill",
+    //         source: "parcels",
+    //         paint: {
+    //             "fill-color": [
+    //                 "case", ["==", ["get", "pctLandVal"], null], communityScaleGray,
+    //                 ["interpolate", 
+    //                 ["linear"],
+    //                 ["get", "pctLandVal"],
+    //                 0.03,
+    //                 landValuePalette[4], 
+    //                 0.15,
+    //                 landValuePalette[3],
+    //                 0.35,
+    //                 landValuePalette[2],
+    //                 0.65,
+    //                 landValuePalette[1],
+    //                 0.90,
+    //                 landValuePalette[0]]],
+    //             "fill-outline-color": "#545453",
+    //             "fill-opacity": [
+    //                 "case", ["==", ["get", "pctLandVal"], null], 0.3,
+    //                 ["case",
+    //                 ["boolean", ["feature-state", "hover"], false],
+    //                 0.95,
+    //                 0.66
+    //         ]]
+    //          },
+    //          layout: {
+    //             visibility: "none"
+    //          }
+    //     },
+    //     labelLayerId
+    // )
 
-    map.addLayer({ 
-            id: "parcels-ownership",  
-            type: "fill",
-            source: "parcels",
-                //filter by residential??
-            paint: {
-                "fill-color": [
-                    "match",
-                    ["get", "credits"], //update palette
-                        "HMST", taxCreditPalette[0].color, 
-                        "AG", taxCreditPalette[2].color,
-                        "MIL", taxCreditPalette[1].color, 
-                        "S42", taxCreditPalette[3].color,
-                        "HMST,AG", taxCreditPalette[5].color,
-                        "HMST,MIL", taxCreditPalette[4].color,
-                        "HMST,AG,MI", taxCreditPalette[6].color,
-                        "NONE", taxCreditPalette[7].color,
-                        taxCreditPalette[7].color
-                        ],
-                "fill-outline-color": "#545453",
-                "fill-opacity": [
-                    "case", ["==", ["get", "credits"], null], 0.3,
-                    ["case",
-                    ["boolean", ["feature-state", "hover"], false],
-                    0.95,
-                    0.66
-            ]]},
-             layout: {
-                visibility: "none"
-            }},
-            labelLayerId
-    ) 
+    // map.addLayer({ 
+    //         id: "parcels-ownership",  
+    //         type: "fill",
+    //         source: "parcels",
+    //             //filter by residential??
+    //         paint: {
+    //             "fill-color": [
+    //                 "match",
+    //                 ["get", "credits"], //update palette
+    //                     "HMST", taxCreditPalette[0].color, 
+    //                     "AG", taxCreditPalette[2].color,
+    //                     "MIL", taxCreditPalette[1].color, 
+    //                     "S42", taxCreditPalette[3].color,
+    //                     "HMST,AG", taxCreditPalette[5].color,
+    //                     "HMST,MIL", taxCreditPalette[4].color,
+    //                     "HMST,AG,MI", taxCreditPalette[6].color,
+    //                     "NONE", taxCreditPalette[7].color,
+    //                     taxCreditPalette[7].color
+    //                     ],
+    //             "fill-outline-color": "#545453",
+    //             "fill-opacity": [
+    //                 "case", ["==", ["get", "credits"], null], 0.3,
+    //                 ["case",
+    //                 ["boolean", ["feature-state", "hover"], false],
+    //                 0.95,
+    //                 0.66
+    //         ]]},
+    //          layout: {
+    //             visibility: "none"
+    //         }},
+    //         labelLayerId
+    // ) 
 
     map.addLayer({     
             id: "tracts-pctHH",  //replace with crosswalked ctysds 
@@ -1022,7 +1026,7 @@ const interpolateLayers = [
                       12, 3,
                       22, 20
                       ],
-                    'circle-color': "#cddea8",   
+                    'circle-color': "#c6dd0e", 
                 }, 
                 layout: {
                     visibility: "none"
@@ -1095,9 +1099,10 @@ const allFillLayers = [
     'tracts-pctCostBurdenedRenters', 
     'tracts-pctCostBurdenedOwners',
     'parcels-landuse',
-    'parcels-pctLV',
+    'parcels-revenue',
+    //'parcels-pctLV',
     'parcels-value',
-    'parcels-ownership',
+    //'parcels-ownership',
     'admin-layer'
 
 ];
@@ -1456,6 +1461,7 @@ layerSelect.addEventListener('change', (e) => {
             "parcels-landuse": "PropClass", //ParcelType??
             "parcels-pctLV": "pctLandVal",
             "parcels-value": "acreVal",
+            "parcels": "revperacre",
             'tracts-medIncome': "medIncome",
             'tracts-pctCostBurdenedRenters': 'pctRent30',
             'tracts-pctCostBurdenedOwners': 'pctOwned30'
@@ -1479,6 +1485,7 @@ layerSelect.addEventListener('change', (e) => {
             "parcels-landuse": "PropClass", //make sure property names exist...
             "parcels-pctLV": "pctLandVal",
             "parcels-value": "acreVal",
+            "parcels-revenue": "revperacre",
             'tracts-medIncome': "medIncome",
             'tracts-pctCostBurdenedRenters': 'pctRent30',
             'tracts-pctCostBurdenedOwners': 'pctOwned30'
@@ -1540,7 +1547,8 @@ layerSelect.addEventListener('change', (e) => {
             "parcels-pctLV", 
             "parcels-value",
             "parcels-landuse",
-            "parcels-ownership",
+            "parcels-revenue",
+            //"parcels-ownership",
             "tracts-medIncome",
             "tracts-pctCostBurdenedRenters",
             "tracts-pctCostBurdenedOwners",
@@ -1668,6 +1676,15 @@ layerSelect.addEventListener('change', (e) => {
                 html = `
                 <div class="popup-header">${parcelDisplayName}</div>
                 <div class="popup-content">Tax credits received applied to this parcel: ${displayCredits}.
+                </div>`;
+            break;
+            }
+
+            case "parcels-revenue": {
+                const revenue = (Math.round((attributes.revperacre * 1000)/ 1000));
+                html = `
+                <div class="popup-header">${parcelDisplayName}</div>
+                <div class="popup-content">${revenue != null ? `This parcel yields an estimated $${revenue.toLocaleString()} per acre in tax revenue.` : 'No available data.'}
                 </div>`;
             break;
             }
