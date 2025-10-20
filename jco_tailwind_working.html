@@ -97,9 +97,9 @@
         </optgroup>
         <optgroup label="Zoning audit">
             <!--<option value="zoning-small-cities">Zoning</option>--> <!--break above with subtitle-->
-            <!-- <option value="future-land-use">Future Land Use</option>
+            <option value="future-land-use">Future Land Use</option>
             <option value="zoning-allowable-density">Allowable density</option>
-            <option value="zoning-allowable-use">Allowable use</option> -->
+            <option value="zoning-allowable-use">Allowable use</option>
           </optgroup>
           <optgroup label="Other"></optgroup>
             <option value="admin-layer">Johnson County</option> <!--maybe just use outlines here?? add as toggle?? idk -->
@@ -356,10 +356,13 @@
         'tracts-pctCostBurdenedOwners',
         'tracts-pctHH',
         'admin-layer',
-        'parcels-landuse',
-        'parcels-pctLV',
+        'parcels-landuse',,
         'parcels-value',
-        'parcels-ownership'
+        "parcels-revenue",
+        "future-land-use",
+        "zoning-allowable-use",
+        "zoning",
+        "zoning-allowable-density"
         ];
 
     const overlayLayers = [ // all overlay layers need to be listed here
@@ -370,7 +373,7 @@
         "parcels-newPermits2010",
         "parcels-newPermits2020",
         "manufacturedHomes",
-        "targetedGrowth-layer"
+        "targetedGrowth-layer" //needed??
         ];
 
     //all palettes here!!
@@ -430,6 +433,18 @@
                 { key: "HMST,AG,MI", color: '#8b63ba', label: "Homestead, Agriculture, Military" },
                 { key: "NONE", color: '#bdc9e1', label: "None"}
             ]
+
+    const futureLandUsePalette = [
+                { key: "Residential", color: "#ffff00", label: "Residential" },
+                { key: "Commercial", color: "#ff0000", label: "Commercial" },
+                { key: "Preservation", color: "#00cc00", label: "Preservation" },
+                { key: "Conservation Development", color: "#7fde00", label: "Conservation Development" },
+                { key: "Intense Commercial/Low Intensity Industrial", color: "#af01f9", label: "Intense Commercial/Low Intensity Industrial" },
+                { key: "Public", color: "#006600", label: "Public" },
+                { key: "Industrial", color: "#0072ff", label: "Industrial" },
+                { color: "#d9ead3", label: "Agriculture" },
+            ]
+
     const landUsePalette = [ //only set this up for custom legends unless there is a way to set inner html of breaks/stops dynamically??
                 { key: "A", color: "#24910a", label: "Agriculture" },
                 { key: "A,AD", color: "#d4f088", label: "Agricultural/residential" },
@@ -443,9 +458,31 @@
                 { color: "#bdc9e1", label: "Unknown" }
             ]
 
+    const allowedHousingPalette = [
+                { key: 1, color: "#eff3ff", label: "Single family" },
+                { key: 2, color: "#bdd7e7", label: "Single family or two-family" },
+                { key: 3, color: "#6baed6", label: "Single family, two-family, or multifamily"},
+                { key: 4, color: "#ff00ff", label: "Mixed use" },
+                { key: 5, color: "#9900ff", label: "Mobile home" },
+                { key: 0, color: "#d9ead3", label: "Agriculture or non-residential" }
+            ]
+
+    const allowedDensityPalette = [
+                { key: 0, label: "Less than 1", color: "#ffffd4" },
+                { key: 1, label: "1 unit/acre", color: "#fee391" },
+                { key: 2,	label: "2-4 units/acre", color:	"#fec44f" },
+                { key: 3, label: "5-9 units/acre", color: "#fe9929" },
+                { key: 4, label: "10-20 units/acre", color: "#d95f0e" },
+                { key: 5, label: "20+ units/acre", color: "#993404" },
+                { key: 6, label: "Non-residential", color: "#d9ead3" }
+            ]
+
     const palettesByLayer = {
             'parcels-landuse': landUsePalette,
-            'parcels-ownership': taxCreditPalette
+            'parcels-ownership': taxCreditPalette,
+            'zoning-allowable-use': allowedHousingPalette,
+            'zoning-allowable-density': allowedDensityPalette,
+            'future-land-use': futureLandUsePalette
   //best way to match palettes to their respective layers ?? particularly for categorical layers
 };
 
@@ -529,10 +566,16 @@
             promoteId: "PPN"
         })
 
-        map.addSource("growthAreas", {
+        map.addSource("flu-2018", {
             type: "geojson",
-            data: "https://raw.githubusercontent.com/CommunityScale/JohnsonCounty/main/targetedGrowthAreas_jcia.geojson",
+            data: "future_land_use_2018.geojson",
             promoteId: "OBJECTID"
+        })
+
+        map.addSource("zoning-non-metro", {
+            type: 'geojson',
+            data: 'JCIA_Merged_Zoning_File_251017.geojson',
+            promoteId: ''
         })
 
         map.addSource("newPermits", {
@@ -754,6 +797,97 @@ const interpolateLayers = [
                     "fill-outline-color": communityScaleGray,
                     "fill-opacity": [
                     "case", ["==", ["get", "PropClass"], null], 0.3,
+                    ["case",
+                    ["boolean", ["feature-state", "hover"], false],
+                    0.95,
+                    0.66
+            ]]},
+                layout: {
+                    visibility: "none"
+                }
+            }, 
+            labelLayerId)
+
+            map.addLayer({
+                id: "zoning-allowable-use", 
+                type: "fill",
+                source: "zoning-non-metro",
+                paint: {
+                    "fill-color": [
+                        "match",
+                        ["get", "HousingTyp"],
+                        allowedHousingPalette[0].key, allowedHousingPalette[0].color, 
+                        allowedHousingPalette[1].key, allowedHousingPalette[1].color,
+                        allowedHousingPalette[2].key, allowedHousingPalette[2].color,
+                        allowedHousingPalette[3].key, allowedHousingPalette[3].color,
+                        allowedHousingPalette[4].key, allowedHousingPalette[4].color,
+                        allowedHousingPalette[5].key, allowedHousingPalette[5].color,
+                        "#fff"
+                    ],
+                    "fill-outline-color": "white",
+                    "fill-opacity": [
+                    "case", ["==", ["get", "HousingTyp"], null], 0.3,
+                    ["case",
+                    ["boolean", ["feature-state", "hover"], false],
+                    0.95,
+                    0.66
+            ]]},
+                layout: {
+                    visibility: "none"
+                }
+            }, 
+            labelLayerId)
+
+            map.addLayer({
+                id: "zoning-allowable-density", 
+                type: "fill",
+                source: "zoning-non-metro",
+                paint: {
+                    "fill-color": [
+                        "match",
+                        ["get", "Density"],
+                        allowedDensityPalette[0].key, allowedDensityPalette[0].color, 
+                        allowedDensityPalette[1].key, allowedDensityPalette[1].color, 
+                        allowedDensityPalette[2].key, allowedDensityPalette[2].color, 
+                        allowedDensityPalette[3].key, allowedDensityPalette[3].color, 
+                        allowedDensityPalette[4].key, allowedDensityPalette[4].color, 
+                        allowedDensityPalette[5].key, allowedDensityPalette[5].color,
+                        "#fff"
+                    ],
+                    "fill-outline-color": "white",
+                    "fill-opacity": [
+                    "case", ["==", ["get", "Density"], null], 0.3,
+                    ["case",
+                    ["boolean", ["feature-state", "hover"], false],
+                    0.95,
+                    0.66
+            ]]},
+                layout: {
+                    visibility: "none"
+                }
+            }, 
+            labelLayerId)
+
+    map.addLayer({
+                id: "future-land-use", 
+                type: "fill",
+                source: "flu-2018",
+                paint: {
+                    "fill-color": [
+                        "match",
+                        ["get", "LAND_USE"],
+                        futureLandUsePalette[0].key, futureLandUsePalette[0].color,
+                        futureLandUsePalette[1].key, futureLandUsePalette[1].color,
+                        futureLandUsePalette[2].key, futureLandUsePalette[2].color,
+                        futureLandUsePalette[3].key, futureLandUsePalette[3].color,
+                        futureLandUsePalette[4].key, futureLandUsePalette[4].color,
+                        futureLandUsePalette[5].key, futureLandUsePalette[5].color,
+                        futureLandUsePalette[6].key, futureLandUsePalette[6].color,
+                        futureLandUsePalette[7].color
+                    ],
+                    "fill-outline-color": communityScaleGray,
+                    "fill-opacity": [
+                    "case", ["==", ["get", "LAND_USE"], null], 0.3,
                     ["case",
                     ["boolean", ["feature-state", "hover"], false],
                     0.95,
@@ -1112,7 +1246,10 @@ const allFillLayers = [
     //'parcels-pctLV',
     'parcels-value',
     //'parcels-ownership',
-    'admin-layer'
+    'admin-layer',
+    "future-land-use",
+    'zoning-allowable-density',
+    'zoning-allowable-use'
 
 ];
 
@@ -1497,7 +1634,8 @@ layerSelect.addEventListener('change', (e) => {
             "parcels-revenue": "revperacre",
             'tracts-medIncome': "medIncome",
             'tracts-pctCostBurdenedRenters': 'pctRent30',
-            'tracts-pctCostBurdenedOwners': 'pctOwned30'
+            'tracts-pctCostBurdenedOwners': 'pctOwned30',
+            'future-land-use': 'LAND_USE'
         };
 
         dataLayers.forEach(layerId => {
@@ -1567,7 +1705,8 @@ layerSelect.addEventListener('change', (e) => {
             "smallCities-layer",
             "villages-layer",
             "manufacturedHomes",
-            "targetedGrowth-layer"
+            "targetedGrowth-layer",
+            "future-land-use"
         ]
 
         const visiblePopupLayers = popUpLayers.filter(id => {
