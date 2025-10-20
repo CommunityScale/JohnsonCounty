@@ -81,21 +81,30 @@
     <!-- Layer toggle - add all layers that will be in the dropdown menu  -->
     <div class="mb-4">
       <select id="layer-select" class="w-full border border-gray-300 rounded px-2 py-1">
-        <option value="tracts-medIncome">Median Annual Household Income</option> <!--break above with title-->
-        <option value="tracts-pctCostBurdenedRenters">Percent of Renters, Cost Burdened</option> 
-        <option value="tracts-pctCostBurdenedOwners">Percent of Homeowners, Cost Burdened</option> 
-        <!--<option value="tracts-pctHH">Percent Change in Households (2013-2023)</option>-->
-        <option value="parcels-landuse">Property Class</option> <!--break above with subtitle-->
-        <!--<option value="parcels-ownership">Property Tax Credits</option>
-        <option value="parcels-pctLV">Land Value as Percent of Assessed Value</option>-->
-        <option value="parcels-value">Parcel Value Per Acre</option>
-        <option value="parcels-revenue">Tax Revenue Per Acre</option>
-        <!--<option value="zoning-small-cities">Zoning</option>--> <!--break above with subtitle-->
-       <!-- <option value="future-land-use">Future Land Use</option>
-        <option value="zoning-allowable-density">Allowable density</option>
-        <option value="zoning-allowable-use">Allowable use</option> -->
-        <option value="admin-layer">Johnson County</option> <!--maybe just use outlines here?? add as toggle?? idk -->
-    </select>
+        <optgroup label="Housing and demographics">
+          <option value="tracts-medIncome">Median Annual Household Income</option> <!--break above with title-->
+          <option value="tracts-pctCostBurdenedRenters">Percent of Renters, Cost Burdened</option> 
+          <option value="tracts-pctCostBurdenedOwners">Percent of Homeowners, Cost Burdened</option> 
+        </optgroup>
+
+        <optgroup label="Property">
+          <!--<option value="tracts-pctHH">Percent Change in Households (2013-2023)</option>-->
+          <option value="parcels-landuse">Property Class</option> <!--break above with subtitle-->
+          <!--<option value="parcels-ownership">Property Tax Credits</option>
+          <option value="parcels-pctLV">Land Value as Percent of Assessed Value</option>-->
+          <option value="parcels-value">Parcel Value Per Acre</option>
+          <option value="parcels-revenue">Tax Revenue Per Acre</option>
+        </optgroup>
+        <optgroup label="Zoning audit">
+            <!--<option value="zoning-small-cities">Zoning</option>--> <!--break above with subtitle-->
+            <!-- <option value="future-land-use">Future Land Use</option>
+            <option value="zoning-allowable-density">Allowable density</option>
+            <option value="zoning-allowable-use">Allowable use</option> -->
+          </optgroup>
+          <optgroup label="Other"></optgroup>
+            <option value="admin-layer">Johnson County</option> <!--maybe just use outlines here?? add as toggle?? idk -->
+          </optgroup>
+      </select>
     <div class="mt-2 flex items-center justify-between">
         <label for="layer-select" class="font-medium">Select layer</label>
         <button id="clear-map" class="hover:text-red-600"><span class="material-icons align-text-bottom">refresh</span></button> <!--needs java!!-->
