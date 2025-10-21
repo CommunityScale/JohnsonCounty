@@ -127,7 +127,7 @@
   <!-- Header -->
   <button
   id="overlay-toggle"
-  class="w-full px-2 py-2 flex items-center justify-between bg-gray-100 hover:bg-gray-200 font-medium"
+  class="w-full px-2 py-2 flex items-center justify-between hover:bg-gray-50 font-medium"
   >
 
   <span class="flex items-center gap-1">
@@ -218,37 +218,12 @@
   </div>
 </div>
  
-<!--Data!! currently commented out as there is no use for this rn!! -->
-<!--<div id="data-wrapper" class="border-t border-gray-300 w-full">--> <!--took out margin border here--> 
-  <!-- Header -->
-  <!--<button
-  id="data-toggle"
-  class="w-full px-2 py-2 flex items-center justify-between bg-gray-100 hover:bg-gray-200 font-medium"
-  >
-  <span class="flex items-center gap-1">
-      <span class="material-icons align-text-bottom">data_array</span>
-      Sources / something else here!!
-    </span>
-    <svg id="data-arrow" class="w-4 h-4 transition-transform transform" xmlns="http://www.w3.org/2000/svg" fill="none"
-      viewBox="0 0 24 24" stroke="currentColor">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-    </svg>
-  </button> -->
-
-  <!-- Hidden content -->
-  <!-- <div id="data-content" class="hidden px-2 py-2 space-y-2 bg-white">
-    <label class="flex items-center gap-2">
-      <input type="checkbox" class="overlay-toggle" value="town-layer" checked />
-      <span><p>Community boundaries</p></span> --> <!--blurb that changes dyamically!! based on data source --probably to include in layers//content for other dropdown should we want that!!-->
-    <!--</label>
-  </div>
-</div> -->
 </div>
 
 <!-- Basemap settings toggle - relocate this in the scrollable part (but still have the panel open towards the top)?? -->
 <div id="basemap-toggle" class="border-t border-gray-300 mt-4 pt-2">
   <button
-    class="w-full flex items-center justify-between px-2 py-2 hover:bg-gray-100 text-sm font-medium"
+    class="w-full flex items-center justify-between px-2 py-2 hover:bg-gray-50 text-sm font-medium"
     onclick="toggleBasemapSettings()"
   >
   <span class="flex items-center gap-1">
@@ -301,7 +276,7 @@
 
 </div>
 
-<footer class="border-t border-gray-300 bg-gray-50 px-4 py-3 text-sm text-gray-700 flex items-center gap-3">
+<footer class="border-t border-gray-300 px-4 py-3 text-sm text-gray-700 flex items-center gap-3">
   <a href="https://communityscale.io" target="_blank" rel="noopener noreferrer">
       <img
         src="https://communityscale.io/wp-content/uploads/2024/01/white-on-black-with-edges-150x150.png"
@@ -459,22 +434,22 @@
             ]
 
     const allowedHousingPalette = [
-                { key: 1, color: "#eff3ff", label: "Single family" },
-                { key: 2, color: "#bdd7e7", label: "Single family or two-family" },
-                { key: 3, color: "#6baed6", label: "Single family, two-family, or multifamily"},
-                { key: 4, color: "#ff00ff", label: "Mixed use" },
-                { key: 5, color: "#9900ff", label: "Mobile home" },
-                { key: 0, color: "#d9ead3", label: "Agriculture or non-residential" }
+                { key: "1", color: "#eff3ff", label: "Single family (SF)" },
+                { key: "2", color: "#bdd7e7", label: "SF or two-family (2F)" },
+                { key: "3", color: "#6baed6", label: "SF, 2F, or multifamily"},
+                { key: "4", color: "#ff00ff", label: "Mixed use" },
+                { key: "5", color: "#9900ff", label: "Mobile home" },
+                { key: "0", color: "#d9ead3", label: "Agriculture or non-residential" }
             ]
 
     const allowedDensityPalette = [
-                { key: 0, label: "Less than 1", color: "#ffffd4" },
-                { key: 1, label: "1 unit/acre", color: "#fee391" },
-                { key: 2,	label: "2-4 units/acre", color:	"#fec44f" },
-                { key: 3, label: "5-9 units/acre", color: "#fe9929" },
-                { key: 4, label: "10-20 units/acre", color: "#d95f0e" },
-                { key: 5, label: "20+ units/acre", color: "#993404" },
-                { key: 6, label: "Non-residential", color: "#d9ead3" }
+                { key: "0", label: "Less than 1", color: "#ffffd4" },
+                { key: "1", label: "1 unit/acre", color: "#fee391" },
+                { key: "2",	label: "2-4 units/acre", color:	"#fec44f" },
+                { key: "3", label: "5-9 units/acre", color: "#fe9929" },
+                { key: "4", label: "10-20 units/acre", color: "#d95f0e" },
+                { key: "5", label: "20+ units/acre", color: "#993404" },
+                { key: "6", label: "Non-residential", color: "#d9ead3" }
             ]
 
     const palettesByLayer = {
@@ -572,10 +547,16 @@
             promoteId: "OBJECTID"
         })
 
+        map.addSource("growthAreas", {
+            type: "geojson",
+            data: "targetedGrowthAreas_jcia.geojson",
+            promoteId: "OBJECTID"
+        })
+
         map.addSource("zoning-non-metro", {
             type: 'geojson',
             data: 'JCIA_Merged_Zoning_File_251017.geojson',
-            promoteId: ''
+            promoteId: 'OBJECTID'
         })
 
         map.addSource("newPermits", {
@@ -739,23 +720,6 @@ const interpolateLayers = [
 
     function addAllOtherLayers() { //all categorical, overlay, base geo layers 
        
-        // map.addLayer({
-        //         id: "admin-layer",  
-        //         type: "fill",
-        //         source: "admin",
-        //         paint: {
-        //             'fill-color': communityScaleGray,
-        //             "fill-outline-color": "white",
-        //             "fill-opacity": [
-        //             "case", ["==", ["get", "OBJECTID"], null], 0.3,
-        //             0.66
-        //             ]},
-        //         layout: {
-        //             visibility: "none"
-        //         }
-        //     },
-        //     labelLayerId
-        // )
 
         map.addLayer({
             id: "admin-layer",
@@ -815,7 +779,7 @@ const interpolateLayers = [
                 paint: {
                     "fill-color": [
                         "match",
-                        ["get", "HousingTyp"],
+                        ["to-string", ["get", "HousingTyp"]],
                         allowedHousingPalette[0].key, allowedHousingPalette[0].color, 
                         allowedHousingPalette[1].key, allowedHousingPalette[1].color,
                         allowedHousingPalette[2].key, allowedHousingPalette[2].color,
@@ -845,13 +809,14 @@ const interpolateLayers = [
                 paint: {
                     "fill-color": [
                         "match",
-                        ["get", "Density"],
+                        ["to-string", ["get", "Density"]],
                         allowedDensityPalette[0].key, allowedDensityPalette[0].color, 
                         allowedDensityPalette[1].key, allowedDensityPalette[1].color, 
                         allowedDensityPalette[2].key, allowedDensityPalette[2].color, 
                         allowedDensityPalette[3].key, allowedDensityPalette[3].color, 
                         allowedDensityPalette[4].key, allowedDensityPalette[4].color, 
                         allowedDensityPalette[5].key, allowedDensityPalette[5].color,
+                        allowedDensityPalette[6].key, allowedDensityPalette[6].color,
                         "#fff"
                     ],
                     "fill-outline-color": "white",
@@ -1101,7 +1066,7 @@ const interpolateLayers = [
                 map.addLayer({
                     id: "targetedGrowth-layer",
                     type: "fill",
-                    source: "growthAreas",
+                    source: "growthAreas", //filter!!
                     paint: {
                         "fill-pattern": "pattern"
                     },
@@ -1209,6 +1174,14 @@ map.on('style.load', () => {
 
 
 map.on('load', () => {
+
+    Object.keys(palettesByLayer).forEach(layerId => {
+      palettesByLayer[layerId] = palettesByLayer[layerId].map(entry => ({
+        ...entry,
+        key: String(entry.key)
+      }));
+    });
+
     addSources();
 
     map.once('idle', async () => {
@@ -1603,14 +1576,15 @@ layerSelect.addEventListener('change', (e) => {
         const newOpacity = parseFloat(e.target.value);
 
         const props = { //opacity properties/data fill properties 
-            //"tracts-class-layer": "class",
-            "parcels-landuse": "PropClass", //ParcelType??
-            "parcels-pctLV": "pctLandVal",
+            "parcels-landuse": "PropClass", 
             "parcels-value": "acreVal",
             "parcels": "revperacre",
             'tracts-medIncome': "medIncome",
             'tracts-pctCostBurdenedRenters': 'pctRent30',
-            'tracts-pctCostBurdenedOwners': 'pctOwned30'
+            'tracts-pctCostBurdenedOwners': 'pctOwned30',
+            'zoning-allowable-density': 'Density',
+            'zoning-allowable-housing': 'HousingTyp',
+            'future-land-use': "LAND_USE"
         };
 
         dataLayers.forEach(layerId => {
@@ -1628,14 +1602,15 @@ layerSelect.addEventListener('change', (e) => {
     function updateLayerOpacity() {
         const currentOpacity = parseFloat(document.getElementById("opacity").value);
         const props = {
-            "parcels-landuse": "PropClass", //make sure property names exist...
-            "parcels-pctLV": "pctLandVal",
+          "parcels-landuse": "PropClass", 
             "parcels-value": "acreVal",
-            "parcels-revenue": "revperacre",
+            "parcels": "revperacre",
             'tracts-medIncome': "medIncome",
             'tracts-pctCostBurdenedRenters': 'pctRent30',
             'tracts-pctCostBurdenedOwners': 'pctOwned30',
-            'future-land-use': 'LAND_USE'
+            'zoning-allowable-density': 'Density',
+            'zoning-allowable-housing': 'HousingTyp',
+            'future-land-use': "LAND_USE"
         };
 
         dataLayers.forEach(layerId => {
@@ -1689,24 +1664,33 @@ layerSelect.addEventListener('change', (e) => {
         });
     });
 
+    function getLabelFromPalette(layerId, rawValue) {
+        const palette = palettesByLayer?.[layerId];
+        if (!palette) return rawValue; // no palette for this layer
+
+        const match = palette.find(p => String(p.key) === String(rawValue));
+        return match ? match.label : rawValue;
+      }
+
+
     map.on('click', (e) => { //pop-up logic!! just add additional layers to the array and case logic below to create new pop-up!!
         const popUpLayers = [
             "parcels-pctLV", 
             "parcels-value",
             "parcels-landuse",
             "parcels-revenue",
-            //"parcels-ownership",
             "tracts-medIncome",
             "tracts-pctCostBurdenedRenters",
             "tracts-pctCostBurdenedOwners",
-            //"tracts-pctHH", //not yet available
             "admin-layer", 
             "excludedCities-layer",
             "smallCities-layer",
             "villages-layer",
             "manufacturedHomes",
             "targetedGrowth-layer",
-            "future-land-use"
+            "future-land-use",
+            "zoning-allowable-use",
+            "zoning-allowable-density"
         ]
 
         const visiblePopupLayers = popUpLayers.filter(id => {
@@ -1774,25 +1758,57 @@ layerSelect.addEventListener('change', (e) => {
             break;
             }
 
-            case "tracts-pctHH": { //will need to be updated!! with ctysds if available (not often used in Midwest??)
-                const pctChangeHH = attributes.pctChangeHH;
-                const roundedPctChangeHH = Math.round(pctChangeHH * 1000) / 10
-                const displayPctChangeHH = pctChangeHH === null || pctChangeHH === undefined ? 'No available data' : `${attributes.NAME} saw a ${roundedPctChangeHH}% change in the number of households (2015-2023).`;
+            // case "tracts-pctHH": { //will need to be updated!! with ctysds if available (not often used in Midwest??)
+            //     const pctChangeHH = attributes.pctChangeHH;
+            //     const roundedPctChangeHH = Math.round(pctChangeHH * 1000) / 10
+            //     const displayPctChangeHH = pctChangeHH === null || pctChangeHH === undefined ? 'No available data' : `${attributes.NAME} saw a ${roundedPctChangeHH}% change in the number of households (2015-2023).`;
+            //     html = `
+            //     <div class="popup-header">${attributes.NAME}</div>
+            //     <div class="popup-content">${displayPctChangeHH}
+            //     </div>`;
+            // break;
+            // }
+
+            // case "parcels-pctLV": {
+            //     const pctLandValue = attributes.pctLandVal;
+            //     html = `
+            //     <div class="popup-header">${parcelDisplayName}</div>
+            //     <div class="popup-content">${pctLandValue != null ? `Land value accounts for ${Math.round(pctLandValue * 1000) / 10}% of Parcel #${selectedGeo.properties.PPN}'s total assessed value.` : 'No available data.'}
+            //     </div>`;
+            // break;
+            // }
+
+            case "future-land-use": {
+                const futureUse = attributes.LAND_USE;
                 html = `
-                <div class="popup-header">${attributes.NAME}</div>
-                <div class="popup-content">${displayPctChangeHH}
-                </div>`;
+                <div class="popup-header">${futureUse}</div>`;
             break;
             }
 
-            case "parcels-pctLV": {
-                const pctLandValue = attributes.pctLandVal;
-                html = `
-                <div class="popup-header">${parcelDisplayName}</div>
-                <div class="popup-content">${pctLandValue != null ? `Land value accounts for ${Math.round(pctLandValue * 1000) / 10}% of Parcel #${selectedGeo.properties.PPN}'s total assessed value.` : 'No available data.'}
+            case "zoning-allowable-density": {
+              const zone = attributes.ZONE_D;
+              const city = attributes.layer;
+              const zoneLabel = getLabelFromPalette(geoId, attributes.Density);
+              html = `
+                <div class="popup-header">Zone: ${zone} (${city})</div>
+                <div class="popup-content">
+                  ${zoneLabel != null ? `Allowed density: ${zoneLabel}` : 'No available data.'}
                 </div>`;
-            break;
+              break;
             }
+
+            case "zoning-allowable-housing": {
+              const zone = attributes.ZONE_D;
+              const city = attributes.layer;
+              const zoneLabel = getLabelFromPalette(geoId, attributes.HousingTyp);
+              html = `
+                <div class="popup-header">Zone: ${zone} (${city})</div>
+                <div class="popup-content">
+                  ${zoneLabel != null ? `Allowed housing type(s): ${zoneLabel}` : 'No available data.'}
+                </div>`;
+              break;
+            }
+
 
             case "parcels-value": {
                 const normVal = attributes.acreVal != null ? Math.round(attributes.acreVal) : null;
@@ -2134,33 +2150,52 @@ const descriptionEl = document.getElementById('layer-description');
 const layerDescriptions = { //edit as needed; some base text should be re-useable!!
   'tracts-medIncome': `
     <p><strong>Median household income</strong> (2023 USD) by Census block group.
-    Area median income, as defined by HUD, is <strong>$118,200</strong>.</p><br>
-    <p><em>Source(s):</em> Table B19013, 2023 ACS 5-year estimates; HUD; CommunityScale.</p>
+    Area median income, as defined by HUD, is <strong>$114,600</strong>.</p><br>
+    <p><em>Source(s):</em> Table B19013, 2023 ACS 5-year estimates; 2024 HUD FMR; CommunityScale</p>
   `,
   'tracts-pctCostBurdenedRenters': `
     <p><strong>Cost-burdened renters</strong>: Percent of renters spending more than 30% of income on housing costs.</p><br>
-    <p><em>Source(s):</em> Table B25140, 2023 ACS 5-year estimates; CommunityScale.</p>
+    <p><em>Source(s):</em> Table B25140, 2023 ACS 5-year estimates; CommunityScale</p>
   `,
   'tracts-pctCostBurdenedOwners': `
     <p><strong>Cost-burdened owners</strong>: Percent of homeowners, with and without mortgages, spending more than 30% of income on housing.</p><br>
-    <p><em>Source(s):</em> Table B25140, 2023 ACS 5-year estimates; CommunityScale.</p>
+    <p><em>Source(s):</em> Table B25140, 2023 ACS 5-year estimates; CommunityScale</p>
   `,
-  'parcels-pctLV': `
-    <p><strong>Land value as a percent of total parcel value</strong>. Higher percentages may indicate urban blight, vacant land, or aging housing stock in urban areas. In rural contexts, higher values may simply indicate agricultural land use.</p><br>
-    <p><em>Source:</em> 2024 Johnson County, IA Assessor's Office parcel database; CommunityScale.</p>
+  'parcels-revenue': `
+    <p><strong>Tax revenue per acre</strong> visualizes estimates, by parcel, of tax revenue. Higher density areas, as well as mixed use and multi-family development, will yield more revenue per acre than lower density residential development.</p><br>
+    <p><em>Source:</em> 2024 Johnson County, IA Assessor's Office parcel database; CommunityScale</p>
   `,
   'parcels-landuse': `
     <p><strong>Land use classifications</strong> from local parcel data.</p><br>
-    <p><em>Source:</em> 2024 Johnson County, IA Assessor's Office parcel database; CommunityScale.</p>
+    <p><em>Source:</em> 2024 Johnson County, IA Assessor's Office parcel database; CommunityScale</p>
   `,
   'parcels-ownership': `
     <p><strong>Property tax credit</strong> data reveals which parcels are owner-occupied and/or certain types of development of incentivized.</p><br>
-    <p><em>Source:</em> 2024 Johnson County, IA Assessor's Office parcel database; CommunityScale.</p>
+    <p><em>Source:</em> 2024 Johnson County, IA Assessor's Office parcel database; CommunityScale</p>
   `,
   'parcels-value': `
     <p><strong>Parcel value per acre</strong> normalizes parcel value over the acre and may provide insight into development value, potential tax revenue, and land prices.</p><br>
+    <p><em>Source:</em> 2024 Johnson County, IA Assessor's Office parcel database; CommunityScale</p>
+  `,
+  'future-land-use': `
+    <p>Johnson County designates certain areas of the county for particular future uses. This layer shows the most recent <strong>Future Land Use</strong> map, developed in 2018.</p><br>
+    <p><em>Source:</em> Johnson County Department of Planning, Development, and Sustainability</p>
+  `,
+  'zoning-allowable-density': `
+    <p>This layer interprets <strong>zoning as allowable housing density</strong> across the non-metro area.</p><br>
+    <p><em>Source:</em> Johnson County Department of Planning, Development, and Sustainability; Hills; Lone Tree; Oxford; Shueyville; Solon; Swisher; CommunityScale</p>
+  `,
+  'zoning-allowable-use': `
+    <p>This allowable use layer interprets <strong>non-metro zoning by allowable residential uses</strong>.</p><br>
+    <p><em>Source:</em> Johnson County Department of Planning, Development, and Sustainability; Hills; Lone Tree; Oxford; Shueyville; Solon; Swisher; CommunityScale</p>
+  `,
+  'zoning': `
+    <p><strong>Property tax credit</strong> data reveals which parcels are owner-occupied and/or certain types of development of incentivized.</p><br>
     <p><em>Source:</em> 2024 Johnson County, IA Assessor's Office parcel database; CommunityScale.</p>
-  `
+  `,
+  'admin-layer': `
+    <p>Johnson County, IA</p><br>
+  `,
 };
 
 let descriptionVisible = false;
