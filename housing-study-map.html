@@ -513,19 +513,19 @@
    
         map.addSource("cities", {    
             type: "geojson",
-            data: "https://raw.githubusercontent.com/CommunityScale/JohnsonCounty/main/jc_politicalBoundaries.geojson",
+            data: "/jc_politicalBoundaries.geojson",
             promoteId: "OBJECTID"
         })
 
         map.addSource("admin", {
             type: "geojson",
-            data: "https://raw.githubusercontent.com/CommunityScale/JohnsonCounty/main/adminBoundaries_jcia.geojson",
+            data: "/adminBoundaries_jcia.geojson",
             promoteId: "OBJECTID"
         })
 
         map.addSource("counties", {    
             type: "geojson",
-            data: "https://raw.githubusercontent.com/CommunityScale/JohnsonCounty/main/iaCounties.geojson",
+            data: "/iaCounties.geojson",
             promoteId: "GEOID"
         })
 
@@ -537,25 +537,25 @@
 
         map.addSource("parcels", {
             type: "geojson",
-            data: 'jcia_uninc_parcels_251017.geojson', //replace with a tileset if feeling nice 
+            data: '/jcia_uninc_parcels_251017.geojson', //replace with a tileset if feeling nice 
             promoteId: "PPN"
         })
 
         map.addSource("flu-2018", {
             type: "geojson",
-            data: "future_land_use_2018.geojson",
+            data: "/future_land_use_2018.geojson",
             promoteId: "OBJECTID"
         })
 
         map.addSource("growthAreas", {
             type: "geojson",
-            data: "targetedGrowthAreas_jcia.geojson",
+            data: "/targetedGrowthAreas_jcia.geojson",
             promoteId: "OBJECTID"
         })
 
         map.addSource("zoning-non-metro", {
             type: 'geojson',
-            data: 'JCIA_Merged_Zoning_File_251017.geojson',
+            data: '/JCIA_Merged_Zoning_File_251017.geojson',
             promoteId: 'OBJECTID'
         })
 
@@ -972,43 +972,6 @@ const interpolateLayers = [
         }},
             labelLayerId
     )
-
-    // map.addLayer({ 
-    //         id: "parcels-value", 
-    //         type: "fill",
-    //         source: "parcels",
-    //         paint: {
-    //             "fill-color": [
-    //                 "case", ["==", ["get", "acreVal"], null], communityScaleGray,
-    //                 ["interpolate", 
-    //                 ["linear"],
-    //                 ["get", "acreVal"],
-    //                 24000,
-    //                 parcelValuePalette[0], 
-    //                 175000,
-    //                 parcelValuePalette[1],
-    //                 327000,
-    //                 parcelValuePalette[2],
-    //                 575000,
-    //                 parcelValuePalette[3],
-    //                 850000,
-    //                 parcelValuePalette[4]]],
-    //             "fill-outline-color": "#545453",
-    //             "fill-opacity": [
-    //                 "case", ["==", ["get", "acreVal"], null], 0.3,
-    //                 ["case",
-    //                 ["boolean", ["feature-state", "hover"], false],
-    //                 0.95,
-    //                 0.66
-    //         ]]
-    //          },
-    //          layout: {
-    //             visibility: "none"
-    //          }},
-    //         "settlement-major-label", 
-    //         "settlement-subdivision-label", 
-    //         "settlement-minor-label"
-    // ) 
 
     map.addLayer({
             id: "smallCities-layer",
