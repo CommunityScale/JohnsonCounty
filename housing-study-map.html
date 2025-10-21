@@ -1790,21 +1790,21 @@ layerSelect.addEventListener('change', (e) => {
               const city = attributes.layer;
               const zoneLabel = getLabelFromPalette(geoId, attributes.Density);
               html = `
-                <div class="popup-header">Zone: ${zone} (${city})</div>
+                <div class="popup-header">Zone: ${zone}</div>
                 <div class="popup-content">
-                  ${zoneLabel != null ? `Allowed density: ${zoneLabel}` : 'No available data.'}
+                  ${zoneLabel != null ? `Allowed density: ${zoneLabel}.<br> This area is under ${city} zoning jurisdiction.` : 'No available data.'}
                 </div>`;
               break;
             }
 
-            case "zoning-allowable-housing": {
+            case "zoning-allowable-use": {
               const zone = attributes.ZONE_D;
               const city = attributes.layer;
               const zoneLabel = getLabelFromPalette(geoId, attributes.HousingTyp);
               html = `
-                <div class="popup-header">Zone: ${zone} (${city})</div>
+                <div class="popup-header">Zone: ${zone}</div>
                 <div class="popup-content">
-                  ${zoneLabel != null ? `Allowed housing type(s): ${zoneLabel}` : 'No available data.'}
+                  ${zoneLabel != null ? `Allowed housing type(s): ${zoneLabel}.<br> This area is under ${city} zoning jurisdiction.` : 'No available data.'}
                 </div>`;
               break;
             }
