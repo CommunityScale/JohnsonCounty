@@ -513,19 +513,19 @@
    
         map.addSource("cities", {    
             type: "geojson",
-            data: "/jc_politicalBoundaries.geojson",
+            data: "jc_politicalBoundaries.geojson",
             promoteId: "OBJECTID"
         })
 
         map.addSource("admin", {
             type: "geojson",
-            data: "/adminBoundaries_jcia.geojson",
+            data: "adminBoundaries_jcia.geojson",
             promoteId: "OBJECTID"
         })
 
         map.addSource("counties", {    
             type: "geojson",
-            data: "/iaCounties.geojson",
+            data: "iaCounties.geojson",
             promoteId: "GEOID"
         })
 
@@ -537,25 +537,25 @@
 
         map.addSource("parcels", {
             type: "geojson",
-            data: '/jcia_uninc_parcels_251017.geojson', //replace with a tileset if feeling nice 
+            data: 'jcia_uninc_parcels_251017.geojson', //replace with a tileset if feeling nice 
             promoteId: "PPN"
         })
 
         map.addSource("flu-2018", {
             type: "geojson",
-            data: "/future_land_use_2018.geojson",
+            data: "future_land_use_2018.geojson",
             promoteId: "OBJECTID"
         })
 
         map.addSource("growthAreas", {
             type: "geojson",
-            data: "/targetedGrowthAreas_jcia.geojson",
+            data: "targetedGrowthAreas_jcia.geojson",
             promoteId: "OBJECTID"
         })
 
         map.addSource("zoning-non-metro", {
             type: 'geojson',
-            data: '/JCIA_Merged_Zoning_File_251017.geojson',
+            data: 'JCIA_Merged_Zoning_File_251017.geojson',
             promoteId: 'OBJECTID'
         })
 
@@ -653,7 +653,7 @@ const interpolateLayers = [
             id: "parcels-revenue",
             property: "revperacre",
             data_source: "parcels",
-            source_url: "/jcia_uninc_parcels_251017.geojson",
+            source_url: "jcia_uninc_parcels_251017.geojson",
             colors: medIncomePalette,
             defaultViz: "none"
         },
@@ -661,7 +661,7 @@ const interpolateLayers = [
             id: "parcels-value",
             property: "acreVal",
             data_source: "parcels",
-            source_url: "/jcia_uninc_parcels_251017.geojson",
+            source_url: "jcia_uninc_parcels_251017.geojson",
             colors: medIncomePalette,
             defaultViz: "none"
         }
